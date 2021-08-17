@@ -19,32 +19,15 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    // /**
-    //  * @return Sortie[] Returns an array of Sortie objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    public function getSorties(int $page = 1, int $nbElementsByPage = 10): array{
+        $req = $this->createQueryBuilder('sortie')-> addSelect('su')
+            ->innerJoin('sortie.sortie_id', 'su')
+            ->orderBy('sortie.dateheuredebut', 'DESC');
 
-    /*
-    public function findOneBySomeField($value): ?Sortie
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        // Pagination de la première page et le nombre d'éléments par page
+        $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
+        $req->setMaxResults($nbElementsByPage);
+
+        return $req->getQuery()->getResult();
     }
-    */
 }
