@@ -5,12 +5,15 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"mail"}, message="There is already an account with this mail")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -53,6 +56,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password;
 
     /**
+     * @var string|null The hashed password
+     *
+     * @Assert\NotBlank(message="Le mot de passe est requis !", groups={"register"})
+     * @Assert\Length(min=8, max=50, minMessage="Le mot de passe doit contenir au minimum {{ limit }} caractères", maxMessage="Le mot de passe doit contenir au maximum {{ limit }} caractères", groups={"register"})
+     */
+    private ?string $plainPassword;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private ?bool $administrateur;
@@ -78,9 +89,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private ?Campus $campus;
 
+    /**
+     * @ORM\Column(type="binary", nullable=true)
+     */
+    private $photo;
+
+    /**
+     * User constructor.
+     * Par défaut, les users sont actifs et non admin.
+     */
     public function __construct()
     {
         $this->sortiesOrganisees = new ArrayCollection();
+        $this->actif = true;
+        $this->administrateur = false;
     }
 
     /**
@@ -296,7 +318,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto($photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param string|null $plainPassword
+     */
+    public function setPlainPassword(?string $plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+
 }
+
