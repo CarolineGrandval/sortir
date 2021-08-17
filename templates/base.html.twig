@@ -25,8 +25,10 @@
         <nav>
             <ul>
                 <!-- mettre à jour les liens !! -->
-
-                <li><a href="{{ url('app_register') }}" title="Bucket-List | Home">Accueil</a></li>
+                <a class="site-title" href="{{ url('app_register') }}" title="Bucket-List | Home">
+                    <img src="{{ asset('') }}" alt="Bucket-List"> Bucket-List
+                </a>
+                <li><a href="{{ url('app_register') }}" title="Sortir | Home">Accueil</a></li>
 
                 {% if not app.user %}
                     <li><a href="{{ url('app_register') }}" title="Login">Se connecter</a></li>

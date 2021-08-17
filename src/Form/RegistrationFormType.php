@@ -66,7 +66,7 @@ class RegistrationFormType extends AbstractType
             'choice_label' => 'nom',
         ]);
 
-        $builder->add('password', RepeatedType::class, [
+        $builder->add('plainPassword', RepeatedType::class, [
             'type' => PasswordType::class,
             'invalid_message' => 'Les mots de passe ne correspondent pas.',
             'required' => true,
