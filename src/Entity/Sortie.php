@@ -31,14 +31,14 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     *
+     * @Assert\NotBlank
      * @Assert\GreaterThan("today", message="La date de début doit être dans le futur !")
      */
     private ?DateTime $dateHeureDebut;
 
     /**
      * @ORM\Column(type="integer")
-     *
+     * @Assert\NotBlank
      * @Assert\GreaterThanOrEqual(1, message="La sortie doit durer au moins une heure !")
      * @Assert\LessThanOrEqual(24, message="La sortie doit durer au maximum 24 heures !")
      */
@@ -46,7 +46,7 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     *
+     * @Assert\NotBlank
      * @Assert\LessThanOrEqual(propertyPath="dateHeureDebut", message="La date de fin des inscriptions doit être avant la date de début de sortie")
      */
     private ?DateTime $dateLimiteInscription;
@@ -66,6 +66,7 @@ class Sortie
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Veuillez indiquer un nombre maximal de participants à la sortie ")
      */
     private ?int $nbParticipantsMax;
 
@@ -73,24 +74,25 @@ class Sortie
      * @ORM\ManyToOne(targetEntity=Etat::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private Etat $etat;
+    private ?Etat $etat;
 
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sortiesCampus")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Veuillez indiquer un campus")
      */
-    private Campus $campus;
+    private ?Campus $campus;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
      */
-    private User $participants;
+    private Collection $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganisees")
      * @ORM\JoinColumn(nullable=false)
      */
-    private User $organisateur;
+    private ?User $organisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
@@ -103,7 +105,7 @@ class Sortie
      */
     public function __construct()
     {
-        $this->etat = new Etat(1);
+       // $this->setEtat(1); // géré dans le controller.
         $this->participants = new ArrayCollection();
     }
 

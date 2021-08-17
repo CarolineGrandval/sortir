@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SortieController!{% endblock %}
+
+{% block body %}
+
+    {{ form_start(formSortie) }}
+
+    <div class="mb-3">
+        {{ form_label(formSortie.nom) }}
+        {{ form_widget(formSortie.nom) }}
+        {{ form_errors(formSortie.nom) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.dateHeureDebut) }}
+        {{ form_widget(formSortie.dateHeureDebut) }}
+        {{ form_errors(formSortie.dateHeureDebut) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.duree) }}
+        {{ form_widget(formSortie.duree) }}
+        {{ form_errors(formSortie.duree) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.dateLimiteInscription) }}
+        {{ form_widget(formSortie.dateLimiteInscription) }}
+        {{ form_errors(formSortie.dateLimiteInscription) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.infosSortie) }}
+        {{ form_widget(formSortie.infosSortie) }}
+        {{ form_errors(formSortie.infosSortie) }}
+    </div>
+
+<!--
+    <div class="mb-3">
+{#        {{ form_label(formSortie.motifAnnulation) }}#}
+{#        {{ form_widget(formSortie.motifAnnulation) }}#}
+{#        {{ form_errors(formSortie.motifAnnulation) }}#}
+    </div>
+-->
+
+    <div class="mb-3">
+        {{ form_label(formSortie.nbParticipantsMax) }}
+        {{ form_widget(formSortie.nbParticipantsMax) }}
+        {{ form_errors(formSortie.nbParticipantsMax) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.campus) }}
+        {{ form_widget(formSortie.campus) }}
+        {{ form_errors(formSortie.campus) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.participants) }}
+        {{ form_widget(formSortie.participants) }}
+        {{ form_errors(formSortie.participants) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.lieu) }}
+        {{ form_widget(formSortie.lieu) }}
+        {{ form_errors(formSortie.lieu) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_widget(formSortie.submit) }}
+    </div>
+    {{ form_end(formSortie) }}
+
+{% endblock %}

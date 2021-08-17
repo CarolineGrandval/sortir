@@ -4,13 +4,17 @@ namespace App\Form;
 
 use App\Entity\Campus;
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Repository\CampusRepository;
+use App\Repository\LieuRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
@@ -63,19 +67,22 @@ class SortieType extends AbstractType
                 'choice_label' => 'nom',
             ])
 
-            ->add('participants', EntityType::class, [
-                'label' => 'User : ',
+            ->add('lieu', EntityType::class, [
+                'label' => 'Lieu : ',
                 'required' => true,
-                'class' => Campus::class,
-                'query_builder' => function (UserRepository $cr) {
-                    return $cr->createQueryBuilder('user');
+                'class' => Lieu::class,
+                'query_builder' => function (LieuRepository $cr) {
+                    return $cr->createQueryBuilder('lieu')->orderBy('lieu.nom', 'ASC');
                 },
                 'choice_label' => 'nom',
             ])
-
-            ->add('organisateur')
-            ->add('lieu')
         ;
+
+        //TODO Ajouter ville, rue code postal, longitude, latitude (voir maquette)
+
+        $builder->add('submit', SubmitType::class, [
+            'label' => 'Créer la sortie',
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
