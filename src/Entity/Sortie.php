@@ -103,6 +103,7 @@ class Sortie
      */
     public function __construct()
     {
+        $this->etat = new Etat(1);
         $this->participants = new ArrayCollection();
     }
 
