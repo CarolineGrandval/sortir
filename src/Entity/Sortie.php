@@ -65,18 +65,24 @@ class Sortie
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
      */
-    private Particpant $participants;
+    private User $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganisees")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Participant $organisateur;
+    private User $organisateur;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?integer $nbParticipantsMax;
+    private ?int $nbParticipantsMax;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Lieu::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Lieu $lieu;
 
     /**
      * Constructeur
@@ -312,6 +318,18 @@ class Sortie
     public function setNbParticipantsMax(?int $nbParticipantsMax): self
     {
         $this->nbParticipantsMax = $nbParticipantsMax;
+
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
 
         return $this;
     }

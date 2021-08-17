@@ -25,11 +25,6 @@ class Campus
     private ?string $nom;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="campus")
-     */
-    private ?Sortie $sorties;
-
-    /**
      * Constructeur
      */
     public function __construct()
@@ -64,41 +59,4 @@ class Campus
         return $this;
     }
 
-    /**
-     * @return Collection|Sortie[]
-     */
-    public function getSorties(): Collection
-    {
-        return $this->sorties;
-    }
-
-    /**
-     * @param Sortie $sorty
-     * @return $this
-     */
-    public function addSorty(Sortie $sorty): self
-    {
-        if (!$this->sorties->contains($sorty)) {
-            $this->sorties[] = $sorty;
-            $sorty->setCampus($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Sortie $sorty
-     * @return $this
-     */
-    public function removeSorty(Sortie $sorty): self
-    {
-        if ($this->sorties->removeElement($sorty)) {
-            // set the owning side to null (unless already changed)
-            if ($sorty->getCampus() === $this) {
-                $sorty->setCampus(null);
-            }
-        }
-
-        return $this;
-    }
 }
