@@ -14,11 +14,13 @@
     <h3>Participant : </h3>
     <div>
         <h3>Filtrer les sorties</h3>
-        <div></div>
-        <ul>
-    {#        <li>Your controller at <code><a href="{{ 'D:/wamp64/www/sortir/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code></li>#}
-    {#        <li>Your template at <code><a href="{{ 'D:/wamp64/www/sortir/templates/main/home.html.twig'|file_link(0) }}">templates/main/index.html.twig</a></code></li>#}
-        </ul>
+        <div>
+            <select class="form-control" id="campus">
+                {%  for camp in campus %}
+
+                {% endfor %}
+            </select>
+        </div>
     </div>
     <div>
         <table class="table">

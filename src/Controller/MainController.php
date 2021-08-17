@@ -21,10 +21,12 @@ class MainController extends AbstractController
 
         //Récupération de la page
         $page = $request->get('page', 1);
-
+        //Requête ramenant toutes les sorties
         $sorties = $entityManager->getRepository('App:Sortie')->getSorties($page, 10);
+        //Requête ramenant tous les campus
+        $campus = $entityManager->getRepository('App:Campus')->findAll();
 
-        return $this->render('main/home.html.twig', ['sorties' => $sorties]);
+        return $this->render('main/home.html.twig', ['sorties' => $sorties, 'campus' => $campus]);
 
     }
 }
