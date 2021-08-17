@@ -27,7 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=80)
      * @Assert\NotBlank
-     * @Assert\Length(max=80, maxMessage="Le nom doit contenir au maximum {{ limit }} caractères""
+     * @Assert\Length(max=80, maxMessage="Le nom doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $nom;
 

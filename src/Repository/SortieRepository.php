@@ -19,6 +19,12 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    /**
+     * Liste toutes les sorties en arrivant sur la page d'accueil
+     * @param int $page
+     * @param int $nbElementsByPage
+     * @return array
+     */
     public function getSorties(int $page = 1, int $nbElementsByPage = 10): array{
         $req = $this->createQueryBuilder('sortie') //-> addSelect('su')
 //            ->innerJoin('sortie.sortie_id', 'su')
@@ -29,5 +35,16 @@ class SortieRepository extends ServiceEntityRepository
         $req->setMaxResults($nbElementsByPage);
 
         return $req->getQuery()->getResult();
+    }
+
+    /**
+     * Liste les sorties en fonction des différentes infos saisies par l'utilisateur
+     * @param int $page
+     * @param int $nbElementsByPage
+     * @param User $user
+     * @param array|null $searchData
+     */
+    public function search(int $page = 1, int $nbElementsByPage = 10, User $user, ?array $searchData){
+
     }
 }

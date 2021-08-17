@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -22,26 +23,39 @@ class Sortie
 
     /**
      * @ORM\Column(type="string", length=250)
+     *
+     * @Assert\NotBlank(message="Veuillez donner un nom à votre sortie")
+     * @Assert\Length(min=2, minMessage="Le nom doit contenir au minimum {{ limit }} caractères", max=250, maxMessage="Le nom doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $nom;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Assert\GreaterThan("today", message="La date de début doit être dans le futur !")
      */
     private ?DateTime $dateHeureDebut;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @Assert\GreaterThanOrEqual(1, message="La sortie doit durer au moins une heure !")
+     * @Assert\LessThanOrEqual(24, message="La sortie doit durer au maximum 24 heures !")
      */
     private ?int $duree;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @Assert\LessThanOrEqual(propertyPath="dateHeureDebut", message="La date de fin des inscriptions doit être avant la date de début de sortie")
      */
     private ?DateTime $dateLimiteInscription;
 
     /**
      * @ORM\Column(type="text", length=5000)
+     *
+     * @Assert\NotBlank(message="Veuillez donner une description de la sortie ")
+     * @Assert\Length(min=2, minMessage="La description doit contenir au minimum {{ limit }} caractères", max=5000, maxMessage="La description doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $infosSortie;
 
@@ -51,13 +65,18 @@ class Sortie
     private ?string $motifAnnulation;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $nbParticipantsMax;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Etat::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private Etat $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sorties")
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sortiesCampus")
      * @ORM\JoinColumn(nullable=false)
      */
     private Campus $campus;
@@ -74,12 +93,7 @@ class Sortie
     private User $organisateur;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private ?int $nbParticipantsMax;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Lieu::class)
+     * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Lieu $lieu;
