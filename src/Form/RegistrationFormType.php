@@ -27,37 +27,37 @@ class RegistrationFormType extends AbstractType
     {
 
         $builder->add('pseudo', TextType::class, [
-            'label' => 'Pseudo: ',
+            'label' => 'Pseudo : ',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('mail', EmailType::class, [
-            'label' => 'Email: ',
+            'label' => 'Email : ',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('nom', TextType::class, [
-            'label' => 'Nom: ',
+            'label' => 'Nom : ',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('prenom', TextType::class, [
-            'label' => 'Prenom: ',
+            'label' => 'Prénom : ',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('telephone', TelType::class, [
-            'label' => 'Telephone: ',
+            'label' => 'Téléphone : ',
             'trim' => true,
             'required' => true,
         ]);
 
         $builder->add('campus', EntityType::class, [
-            'label' => 'Campus: ',
+            'label' => 'Campus : ',
             'required' => true,
             'class' => Campus::class,
             'query_builder' => function (CampusRepository $cr) {
@@ -70,8 +70,8 @@ class RegistrationFormType extends AbstractType
             'type' => PasswordType::class,
             'invalid_message' => 'Les mots de passe ne correspondent pas.',
             'required' => true,
-            'first_options'  => ['label' => 'Mot de passe: '],
-            'second_options' => ['label' => 'Confirmez le mot de passe: '],
+            'first_options'  => ['label' => 'Mot de passe : '],
+            'second_options' => ['label' => 'Confirmez le mot de passe : '],
         ]);
 
         $builder->add('photo', FileType::class, [
@@ -89,7 +89,7 @@ class RegistrationFormType extends AbstractType
         ]);
 
         $builder->add('submit', SubmitType::class, [
-            'label' => 'S\'inscrire',
+            'label' => 'Valider l\'inscription',
         ]);
 
     }

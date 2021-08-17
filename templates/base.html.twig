@@ -8,7 +8,6 @@
         <link rel="icon" href="{{ asset('img/favicon.png') }}">
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script type="application/javascript" src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 
         {% block stylesheets %}
@@ -23,34 +22,62 @@
 
     <header>
 
-        <nav>
-            <ul>
-                <!-- mettre à jour les liens !! -->
-                <a class="site-title" href="{{ url('app_register') }}" title="Sortir | Home">
-                    <img src="{{ asset('img/logo.png') }}" alt="Bucket-List">
-                </a>
-                <li><a href="{{ url('app_register') }}" title="Sortir | Home">Accueil</a></li>
+        <!-- NAVBAR - mettre à jour les liens !! -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
 
-                {% if not app.user %}
-                    <li><a href="{{ url('app_register') }}" title="Login">Se connecter</a></li>
-                {% endif %}
+                <div class="d-flex">
+                <a class="navbar-brand" href="{{ url('app_register') }}">
+                    <img class="me-md-5" src="{{ asset('img/logo.png') }}" alt="Logo Sortir" width="145em"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
 
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="{{ url('app_register') }}" title="Register">Inscription </a></li>
-                    <li><a href="{{ url('app_register') }}" title="Campus">Campus</a></li>
-                    <li><a href="{{ url('app_register') }}" title="Villes">Villes</a></li>
-                {% endif %}
+                    <div class="collapse navbar-collapse " id="navbarColor01">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ url('app_register') }}" title="Home">Accueil
+                                    <span class="visually-hidden">Accueil</span>
+                                </a>
+                            </li>
 
-                {% if app.user %}
-                    <li><a href="{{ url('app_register') }}" title="Mon profil">Mon Profil</a></li>
-                    <li><a href="{{ url('app_register') }}" title="Logout">Logout</a></li>
-                {% endif %}
-            </ul>
+                            {% if app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ url('app_logout') }}" title="Déconnexion">Se déconnecter
+                                    <span class="visually-hidden">Se connecter</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                        {% if not app.user %}
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ url('app_register') }}" title="Connexion">Se connecter</a>
+                            </li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item"><a href="{{ url('app_register') }}" title="Campus">Campus</a></li>
+                            <li class="nav-item"><a href="{{ url('app_register') }}" title="Villes">Villes</a></li>
+                            <li class="nav-item"><a href="{{ url('app_register') }}" title="Register">Inscription </a></li>
+                        {% endif %}
+
+                        {% if app.user %}
+                            <li class="nav-item"><a href="{{ url('app_register') }}" title="Mon profil">Mon Profil</a></li>
+                            <li class="nav-item"><a href="{{ url('app_register') }}" title="Logout">Logout</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+            </div>
         </nav>
 
     </header>
 
     <main>
+        <div class="container">
+
         {% block body %}
             {# for message in app.flashes('success') #}
             {% for group, messages in app.flashes %}
@@ -61,6 +88,7 @@
                 {% endfor %}
             {% endfor %}
         {% endblock body %}
+        </div>
     </main>
 
     <footer>

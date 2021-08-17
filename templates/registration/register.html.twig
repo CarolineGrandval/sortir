@@ -5,8 +5,29 @@
 
 {% block body %}
 
-    <h2>Register</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+        <h2>Inscription</h2>
+    {% endif %}
 
+    {% if app.user %}
+        <h2>Modifiez votre profil {{ app.user.pseudo|capitalize }}</h2>
+    {% endif %}
+
+    <!-- affichage des messages d'erreur -->
+    {% for group, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ group }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <!-- affichage du formulaire -->
     {{ form(registrationForm) }}
+
+    <!-- photo de profil -->
+    {% if app.user %}
+        <p>{{ app.user.photo |imagine_filter('carre') }}</p>
+    {% endif %}
 
 {% endblock %}
