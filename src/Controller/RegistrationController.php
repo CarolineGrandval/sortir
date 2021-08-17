@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class RegistrationController extends AbstractController
 {
@@ -39,4 +39,25 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/login", name="app_login", methods={"GET", "POST"})
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        // Récupération des erreurs de traitement de connexion
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        // Récupération de l'identifiant de l'utilisateur
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        exit();
+
+//        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout", methods={"GET"})
+     */
+    public function logout() {}
 }

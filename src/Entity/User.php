@@ -26,6 +26,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=80)
+     * @Assert\NotBlank
+     * @Assert\Length(max=80, maxMessage="Le nom doit contenir au maximum {{ limit }} caractères""
      */
     private ?string $nom;
 
@@ -313,14 +315,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-         $this->plainPassword = null;
-    }
-
     public function getPhoto()
     {
         return $this->photo;
@@ -334,7 +328,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getPlainPassword(): ?string
     {
@@ -349,6 +343,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->plainPassword = $plainPassword;
     }
 
-
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
+    }
 }
 
