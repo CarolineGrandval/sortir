@@ -33,16 +33,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=80)
+     * @Assert\NotBlank
+     * @Assert\Length(max=80, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $prenom;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank
+     * @Assert\Length(max=20, maxMessage="Le téléphone doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $telephone;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(max=180, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $mail;
 
@@ -77,6 +83,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(max=50, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $pseudo;
 

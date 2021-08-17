@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +17,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="app_register", methods={"GET", "POST"})
+     * @Route("/adminregister", name="app_register", methods={"GET", "POST"})
      */
     public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder): Response
     {
@@ -60,4 +62,41 @@ class RegistrationController extends AbstractController
      * @Route("/logout", name="app_logout", methods={"GET"})
      */
     public function logout() {}
+
+    /**
+     * @Route(path="{id}/editprofile", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     */
+    public function edit(Request $request, EntityManagerInterface $entityManager) {
+
+        // Récupération de l'entité à modifier
+        try {
+            $user = $entityManager->getRepository('App:User')->find((int) $request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('User Not Found !');
+        }
+
+        // Création du formulaire
+        $formEdit = $this->createForm('RegistrationFormType::class', $user);
+
+        // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
+        $formEdit->handleRequest($request);
+
+        // Vérifier les données du formulaire
+        if ($formEdit->isSubmitted() && $formEdit->isValid()) {
+
+            // Enregistrement de l'entité dans la BDD
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // Ajout d'un message de confirmation
+            $this->addFlash('success', 'User successfully updated !');
+
+            // Redirection sur le controlleur
+            return $this->redirectToRoute('app_register', ['id' => $user->getId()]);
+        }
+
+        return $this->render('registration/register.html.twig', [
+            'form' => $formEdit->createView(),
+        ]);
+    }
 }
