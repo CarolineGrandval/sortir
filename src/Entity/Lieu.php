@@ -15,33 +15,33 @@ class Lieu
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $nom;
+    private ?string $nom;
 
     /**
      * @ORM\Column(type="string", length=250)
      */
-    private $rue;
+    private ?string $rue;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $latitude;
+    private ?float $latitude;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $longitude;
+    private ?float $longitude;
 
     /**
      * @ORM\ManyToOne(targetEntity=Ville::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $ville;
+    private ?string $ville;
 
     public function getId(): ?int
     {
@@ -53,7 +53,7 @@ class Lieu
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -65,7 +65,7 @@ class Lieu
         return $this->rue;
     }
 
-    public function setRue(string $rue): self
+    public function setRue(?string $rue): self
     {
         $this->rue = $rue;
 

@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -17,12 +19,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
+
+    /**
+     * @ORM\Column(type="string", length=80)
+     */
+    private ?string $nom;
+
+    /**
+     * @ORM\Column(type="string", length=80)
+     */
+    private ?string $prenom;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private ?string $telephone;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $mail;
+    private ?string $mail;
 
     /**
      * @ORM\Column(type="json")
@@ -33,7 +50,166 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private ?string $password;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $administrateur;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $actif;
+
+    /**
+     * @ORM\Column(type="string", length=50, unique=true)
+     */
+    private ?string $pseudo;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur", orphanRemoval=true)
+     */
+    private ?Collection $sortiesOrganisees;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Campus $campus;
+
+    public function __construct()
+    {
+        $this->sortiesOrganisees = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * @param mixed $nom
+     */
+    public function setNom(?string $nom): void
+    {
+        $this->nom = $nom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * @param mixed $prenom
+     */
+    public function setPrenom(?string $prenom): void
+    {
+        $this->prenom = $prenom;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    /**
+     * @param mixed $telephone
+     */
+    public function setTelephone(?string $telephone): void
+    {
+        $this->telephone = $telephone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdministrateur()
+    {
+        return $this->administrateur;
+    }
+
+    /**
+     * @param mixed $administrateur
+     */
+    public function setAdministrateur(?bool $administrateur): void
+    {
+        $this->administrateur = $administrateur;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActif()
+    {
+        return $this->actif;
+    }
+
+    /**
+     * @param mixed $actif
+     */
+    public function setActif(?bool $actif): void
+    {
+        $this->actif = $actif;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPseudo()
+    {
+        return $this->pseudo;
+    }
+
+    /**
+     * @param mixed $pseudo
+     */
+    public function setPseudo(?string $pseudo): void
+    {
+        $this->pseudo = $pseudo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSortiesOrganisees()
+    {
+        return $this->sortiesOrganisees;
+    }
+
+    /**
+     * @param mixed $sortiesOrganisees
+     */
+    public function setSortiesOrganisees($sortiesOrganisees): void
+    {
+        $this->sortiesOrganisees = $sortiesOrganisees;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCampus()
+    {
+        return $this->campus;
+    }
+
+    /**
+     * @param mixed $campus
+     */
+    public function setCampus(?Campus $campus): void
+    {
+        $this->campus = $campus;
+    }
 
     public function getId(): ?int
     {
@@ -45,7 +221,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->mail;
     }
 
-    public function setMail(string $mail): self
+    public function setMail(?string $mail): self
     {
         $this->mail = $mail;
 
@@ -97,7 +273,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
