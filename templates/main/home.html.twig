@@ -17,7 +17,11 @@
         <div>
             <select class="form-control" id="campus">
                 {%  for camp in campus %}
-
+                    {% set selected = '' %}
+{#                    {% if (camp.nom ~ ' ' ~ oneSupervisor.lname) == user.supervisor %}#}
+{#                        {% set selected = 'selected' %}#}
+{#                    {% endif %}#}
+                    <option value="{{ camp.nom }}" {{ selected }}>{{camp.nom}}</option>
                 {% endfor %}
             </select>
         </div>
