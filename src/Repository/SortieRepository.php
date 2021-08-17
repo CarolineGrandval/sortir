@@ -26,9 +26,15 @@ class SortieRepository extends ServiceEntityRepository
      * @return array
      */
     public function getSorties(int $page = 1, int $nbElementsByPage = 10): array{
-        $req = $this->createQueryBuilder('sortie') //-> addSelect('su')
-//            ->innerJoin('sortie.sortie_id', 'su')
+
+        $req = $this->createQueryBuilder('sortie')->addSelect('user')
+            ->leftJoin('sortie.participants', 'user')
+            ->addSelect('campus')
+            ->innerJoin('user.campus', 'campus')
+            ->addSelect('etat')
+            ->innerJoin('sortie.etat', 'etat')
             ->orderBy('sortie.dateHeureDebut', 'DESC');
+
 
         // Pagination de la première page et le nombre d'éléments par page
         $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
