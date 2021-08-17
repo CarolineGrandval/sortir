@@ -17,34 +17,47 @@ class Campus
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $nom;
+    private ?string $nom;
 
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="campus")
      */
-    private $sorties;
+    private ?Sortie $sorties;
 
+    /**
+     * Constructeur
+     */
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getNom(): ?string
     {
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    /**
+     * @param string|null $nom
+     * @return $this
+     */
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -59,6 +72,10 @@ class Campus
         return $this->sorties;
     }
 
+    /**
+     * @param Sortie $sorty
+     * @return $this
+     */
     public function addSorty(Sortie $sorty): self
     {
         if (!$this->sorties->contains($sorty)) {
@@ -69,6 +86,10 @@ class Campus
         return $this;
     }
 
+    /**
+     * @param Sortie $sorty
+     * @return $this
+     */
     public function removeSorty(Sortie $sorty): self
     {
         if ($this->sorties->removeElement($sorty)) {

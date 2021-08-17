@@ -15,27 +15,34 @@ class Etat
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $libelle;
+    private ?string $libelle;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLibelle(): ?string
     {
         return $this->libelle;
     }
 
-    public function setLibelle(string $libelle): self
+    /**
+     * @param string|null $libelle
+     */
+    public function setLibelle(?string $libelle): void
     {
         $this->libelle = $libelle;
-
-        return $this;
     }
 }
