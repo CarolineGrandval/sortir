@@ -33,8 +33,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_register');
-//            return $this->redirectToRoute('main'); //TODO à décommenter quand fichier home créé
+            return $this->redirectToRoute('main_home');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -53,9 +52,7 @@ class RegistrationController extends AbstractController
         // Récupération de l'identifiant de l'utilisateur
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        exit();
-
-//        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     /**
