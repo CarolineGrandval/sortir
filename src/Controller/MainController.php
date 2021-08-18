@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use DateTime;
+use App\Entity\Rechercher;
+use App\Entity\User;
+use App\Form\SortieRechercheType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Sortie;
 
 /**
  * @Route(path="/", name="main_")
@@ -20,34 +21,60 @@ class MainController extends AbstractController
      */
     public function list(Request $request, EntityManagerInterface $entityManager){
 
-        //création tableau de données
-        $donneesRecherche = [
-            'est_organisateur'=>true,
-            'inscrit_a'=>true,
-            'pas_inscrit'=>true,
-            'passees'=>false,
-            'date_debut'=>new DateTime("-1 month"),
-            'date_fin'=>new DateTime("+ 25 days"),
-            ];
+        /** @var User $user */
+        $user = $this->getUser();
 
-        //création formulaire
-        $formSearch = $this->createForm('App\Form\SortieRechercheType',$donneesRecherche);
-        $formSearch->handleRequest($request);
+        //Instanciation de l'objet Rechercher Request $request, EventRepository $eventRepository, Security $security, SessionInterface $session
+        $search = new Rechercher();
+        //ajout par défaut du Campus de l'utilisateur
+        $search->setCampus($this->getUser()->getCampus());
 
-        //Récupération de la recherche
-        $query= null;
-        if($formSearch->isSubmitted() && $formSearch->isValid()){
+        //Création du formulaire
+        $searchForm = $this->createForm(SortieRechercheType::class, $search);
+        $searchForm->handleRequest($request);
 
+        $events = [];
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $events=$searchForm->get('campus','motclef', 'dateDebut')->getData();//récupération
         }
-
-        //Récupération de la page
         $page = $request->get('page', 1);
-        //Requête ramenant toutes les sorties
-        $sorties = $entityManager->getRepository('App:Sortie')->getSorties($page, 10);
-        //Requête ramenant tous les campus
-        $campus = $entityManager->getRepository('App:Campus')->findAll();
 
-        return $this->render('main/home.html.twig', ['sorties' => $sorties, 'campus' => $campus]);
+        $sorties = $entityManager->getRepository('App:Rechercher')->search($page, 10, $events, $user);
+        //$events = $eventRepository->search($search, $security->getUser());
+
+        return $this->render('main/home.html.twig', [
+            'searchForm' => $searchForm->createView(),
+            'events' => $sorties
+        ]);
+
+//        //création tableau de données
+//        $donneesRecherche = [
+//            'organisateur'=>true,
+//            'inscrit'=>true,
+//            'pasInscrit'=>true,
+//            'passees'=>false,
+//            'dateDebut'=>new DateTime("-1 month"),
+//            'dateFin'=>new DateTime("+ 25 days"),
+//            ];
+//
+//        //création formulaire
+//        $formSearch = $this->createForm('App\Form\SortieRechercheType',$donneesRecherche);
+//        $formSearch->handleRequest($request);
+//
+//        //Récupération de la recherche
+//        $query= null;
+//        if($formSearch->isSubmitted() && $formSearch->isValid()){
+//
+//        }
+//
+//        //Récupération de la page
+//        $page = $request->get('page', 1);
+//        //Requête ramenant toutes les sorties
+//        $sorties = $entityManager->getRepository('App:Sortie')->getSorties($page, 10);
+//        //Requête ramenant tous les campus
+//        $campus = $entityManager->getRepository('App:Campus')->findAll();
+//
+//        return $this->render('main/home.html.twig', ['sorties' => $sorties, 'campus' => $campus]);
 
     }
 }

@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use DateTime;
 
-class Search
+class Rechercher
 {
     private ?Campus $campus;
     private ?string $motclef;

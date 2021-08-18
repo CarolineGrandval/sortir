@@ -11,19 +11,20 @@
 <div class="example-wrapper">
     <h1>Accueil</h1>
     <h3>Date du jour : {{ "now"|date("d/m/Y") }}</h3>
-    <h3>Participant : </h3>
+    <h3>Participant : {{ app.user.pseudo }}</h3>
     <div>
         <h3>Filtrer les sorties</h3>
-        <div>
-{#            {{ form_start(formSearch) }}#}
-{#            <div class="mb-3 col col-lg-12">#}
-{#                {{ form_widget(formSearch.query) }}#}
-{#                {{ form_errors(formSearch.query) }}#}
-{#            </div>#}
-{#            <div class="mb-3 col col-lg-2">#}
-{#                {{ form_widget(formSearch.submit) }}#}
-{#            </div>#}
-{#            {{ form_end(formSearch) }}#}
+        <div id="search">
+            {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
+                {{ form_row(searchForm.campus) }}
+                {{ form_row(searchForm.motclef) }}
+                {{ form_row(searchForm.dateDebut) }}
+                {{ form_row(searchForm.dateFin) }}
+                {{ form_row(searchForm.organisateur) }}
+                {{ form_row(searchForm.inscrit) }}
+                {{ form_row(searchForm.pasInscrit) }}
+                {{ form_row(searchForm.passees) }}
+           {{ form_end(formSearch) }}
         </div>
     </div>
     <div>
@@ -48,9 +49,22 @@
                     <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
                     <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
                     <td>{{ sortie.etat }}</td>
-                    <td></td>
+                    <td>X</td>
                     <td>{{ sortie.organisateur }}</td>
-                    <td></td>
+                    <td>
+                        {# Afficher #}
+                        {%  if sortie.etat == 2
+                            or sortie.etat == 3
+                            or sortie.etat == 4
+                            or sortie.etat == 5
+                            or sortie.etat == 6 %}
+                            <a href="{{ url('index', {'id': sortie.id}) }}" title="Afficher une sortie"></a>
+                        {% endif %}
+                        {# Modifier #}
+                        {% if app.user == sortie.organisateur and sortie.etat == 1 %}
+                            <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie"></a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
