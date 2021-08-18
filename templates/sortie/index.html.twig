@@ -2,6 +2,10 @@
 
 {% block title %}Hello SortieController!{% endblock %}
 
+{% block stylesheets %}
+    <script src="{{ asset('js/scripts.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 
     {{ form_start(formSortie) }}
@@ -57,20 +61,88 @@
     </div>
 
     <div class="mb-3">
-        {{ form_label(formSortie.participants) }}
-        {{ form_widget(formSortie.participants) }}
-        {{ form_errors(formSortie.participants) }}
-    </div>
-
-    <div class="mb-3">
         {{ form_label(formSortie.lieu) }}
         {{ form_widget(formSortie.lieu) }}
         {{ form_errors(formSortie.lieu) }}
     </div>
+
+    <!-- imbriquer le formulaire de création d'un lieu -->
+
+{#    {% form_theme formLieu 'bootstrap_4_horizontal_layout.html.twig' %}#}
+{#    {{ form_start(formLieu) }}#}
+
+{#    <div class="mb-3">#}
+{#        {{ form_row(formLieu.nom) }}#}
+{#    </div>#}
+
+{#    <div class="mb-3">#}
+{#        <div class="row js-lieu-wrapper" data-prototype="{{ form_widget(formLieu.sorties.vars.propotype)|e('html_attr') }}">#}
+{#            {% for formLieu in formLieu.sorties %}#}
+{#                <hr/>#}
+{#                <div class="col-xs-4">#}
+{#                    {{ form_row(formLieu.nom) }}#}
+{#                    {{ form_row(formLieu.rue) }}#}
+{#                    {{ form_row(formLieu.ville) }}#}
+{#                    {{ form_row(formLieu.longitude) }}#}
+{#                    {{ form_row(formLieu.latitude) }}#}
+{#                    <a href="#" style="width:100%;" class="js-lieu-remove btn-danger btn">Remove</a><hr/>#}
+{#                </div>#}
+{#            {% endfor %}#}
+
+{#            <div class="mb-3" style="text-align: right;">#}
+{#                <a href="#" class="js-lieu-add btn-secondary btn">Add Another Wish</a>#}
+{#                {{ form_widget(formLieu.submit) }}#}
+{#            </div>#}
+
+
+{#        </div>#}
+{#    </div>#}
+
+{#    {{ form_end(formLieu) }}#}
+
+<!-- bouton submit -->
 
     <div class="mb-3">
         {{ form_widget(formSortie.submit) }}
     </div>
     {{ form_end(formSortie) }}
 
+    <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button>
+
+    <div id="ajoutFormLieu" class="cache">
+    {{ form(formLieu) }}
+    </div>
+
 {% endblock %}
+
+
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function(){
+            $(".btn-info").click(function(){
+                $(".cache").toggleClass("clique");
+            });
+        });
+    </script>
+
+    <!-- js lié au formulaire imbriqué -->
+{#    <script>#}
+{#        jQuery(document).ready(function() {#}
+{#            let $wrapper = $('.js-lieu-wrapper');#}
+{#            $wrapper.on('click', '.js-lieu-add', function(e) {#}
+{#                e.preventDefault();#}
+{#                let prototype = $wrapper.data('prototype');#}
+{#                let index = $wrapper.data('index');#}
+{#                let newForm = ((index === 0) ? '<hr/>' : '') + prototype.replace(/__name__/g, index) + '<a href="#" style="width:100%;" class="js-lieu-remove btn-danger btn">Remove Wish</a><hr/>';#}
+{#                newForm += '<span class="mb-3 mt-3"></span>';#}
+{#                $wrapper.data('index', index + 1);#}
+{#                $(this).before(newForm);#}
+{#            });#}
+{#            $wrapper.on('click', '.js-lieu-remove', function(e) {#}
+{#                alert("A vous de jouer !");#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+{% endblock javascripts %}

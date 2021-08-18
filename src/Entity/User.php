@@ -87,6 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=50, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Unique(message="Ce pseudo est déjà pris, veuillez en choisir un autre.")
      */
     private ?string $pseudo;
 

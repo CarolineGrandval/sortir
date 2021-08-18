@@ -6,17 +6,14 @@
         <link rel="icon" href="{{ asset('img/logo.png') }}">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
         <link rel="icon" href="{{ asset('img/favicon.png') }}">
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <script type="application/javascript" src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 
         {% block stylesheets %}
             {#{{ encore_entry_link_tags('app') }}#}
         {% endblock %}
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
     </head>
     <body>
 
@@ -96,6 +93,9 @@
         © {{ "now"|date("Y") }} Anne-Laure Jouhanneau - Caroline Grandval - Driss Hananne
     </footer>
 
+    {% block javascripts %}
+        {#{{ encore_entry_script_tags('app') }}#}
+    {% endblock %}
 
     </body>
 </html>

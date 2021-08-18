@@ -105,7 +105,6 @@ class Sortie
      */
     public function __construct()
     {
-       // $this->setEtat(1); // géré dans le controller.
         $this->participants = new ArrayCollection();
     }
 
@@ -347,6 +346,18 @@ class Sortie
     public function setLieu(?Lieu $lieu): self
     {
         $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    public function getNouveaulieu(): ?Lieu
+    {
+        return $this->nouveaulieu;
+    }
+
+    public function setNouveaulieu(?Lieu $nouveaulieu): self
+    {
+        $this->nouveaulieu = $nouveaulieu;
 
         return $this;
     }

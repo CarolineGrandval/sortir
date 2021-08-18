@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,13 +24,13 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $etat = $entityManager->find(Etat::class, 1); // par défaut, l'état est mis à "créée"
 
-        // Création de l'entité à créer
+        // Création de l'entité sortie
         $sortie = new Sortie();
         $sortie->setOrganisateur($user);
         $sortie->setEtat($etat);
 
         // Création du formulaire
-        $formSortie = $this->createForm('App\Form\SortieType');
+        $formSortie = $this->createForm('App\Form\SortieType', $sortie);
 
         // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
         $formSortie->handleRequest($request);
@@ -45,11 +46,35 @@ class SortieController extends AbstractController
             $this->addFlash('success', 'Sortie successfully added !');
 
             // Redirection sur le controlleur
-            return $this->redirectToRoute('sortie_create', );
+            return $this->redirectToRoute('sortie_create');
+        }
+
+        // Création de l'entité lieu
+        $lieu = new Lieu();
+
+        // Création du formulaire
+        $formLieu = $this->createForm('App\Form\LieuType', $lieu);
+
+        // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
+        $formLieu->handleRequest($request);
+
+        // Vérifier les données du formulaire
+        if ($formLieu->isSubmitted() && $formLieu->isValid()) {
+
+            // Enregistrement de l'entité dans la BDD
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+
+            // Ajout d'un message de confirmation
+            $this->addFlash('success', 'Lieu successfully added !');
+
+            // Redirection sur le controlleur
+            return $this->redirectToRoute('sortie_create');
         }
 
         return $this->render('sortie/index.html.twig', [
             'formSortie' => $formSortie->createView(),
+            'formLieu' => $formLieu->createView(),
         ]);
     }
 }

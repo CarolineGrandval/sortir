@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VilleRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +27,13 @@ class Ville
      * @ORM\Column(type="integer")
      */
     private int $codePostal;
+
+    //relation bidirectionnelle pour pouvoir choisir les lieux à partir de la ville (page créer une sortie)
+    /**
+     * @ORM\OneToMany(targetEntity=Lieu::class, mappedBy="ville")
+     */
+    private Collection $lieux;
+
 
     /**
      * @return int|null
@@ -73,5 +81,21 @@ class Ville
         return $this;
     }
 
-    
+    /**
+     * @return Collection
+     */
+    public function getLieux(): Collection
+    {
+        return $this->lieux;
+    }
+
+    /**
+     * @param Collection $lieux
+     */
+    public function setLieux(Collection $lieux): void
+    {
+        $this->lieux = $lieux;
+    }
+
+
 }
