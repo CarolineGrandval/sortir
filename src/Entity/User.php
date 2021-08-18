@@ -231,9 +231,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return mixed
+     * @return Campus|null
      */
-    public function getCampus()
+    public function getCampus(): ?Campus
     {
         return $this->campus;
     }

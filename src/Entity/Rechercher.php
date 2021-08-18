@@ -2,10 +2,21 @@
 
 namespace App\Entity;
 
+use App\Repository\RechercherRepository;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
-class Search
+/**
+ * @ORM\Entity(repositoryClass=RechercherRepository::class,readOnly=true)
+ */
+class Rechercher
 {
+    /**
+     * Id
+     * GeneratedValue
+     * Column(type="integer")
+     */
+    private ?int $id;
     private ?Campus $campus;
     private ?string $motclef;
     private ?DateTime $dateDebut;
@@ -15,6 +26,13 @@ class Search
     private bool $pasInscrit = true;
     private bool $passees = false;
 
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
     /**
      * @return Campus|null
      */

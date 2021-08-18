@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -19,6 +18,7 @@ class SortieRechercheType extends AbstractType
     {
         $builder
             ->setMethod('get')
+            //ajout ComboBox
             ->add('campus', EntityType::class, [
                 'label' => 'Campus : ',
                 'class' => Campus::class,
@@ -26,11 +26,13 @@ class SortieRechercheType extends AbstractType
                 'required' => false,
                 'mapped'=> false,
             ])
+            //ajout TextBox
             ->add('motclef', SearchType::class, [
                 'label' => 'Mot-clefs : ',
                 'required' => false,
                 'mapped'=> false,
             ])
+            //ajout DatePicker pour date de début
             ->add('dateDebut', DateType::class, [
                 'label' => 'Entre le',
                 'html5' => false,
@@ -39,29 +41,34 @@ class SortieRechercheType extends AbstractType
                 'format' => 'dd/MM/yyyy',
                 'mapped'=> false,
             ])
+            //ajout DatePicker pour date de fin
             ->add('dateFin', DateType::class, [
                 'label' => 'Et le',
                 'html5' => false,
                 'widget' => 'single_text',
-                'attr' => ['class' => 'datepicker'],
+                'attr' => ['class' => 'js-datepicker'],
                 'format' => 'dd/MM/yyyy',
                 'mapped'=> false,
             ])
+            //ajout CheckBox pour organisateur
             ->add('organisateur', CheckboxType::class, [
-                'label' => 'Sorties dont je suis l\'organisateur',
+                'label' => 'Sorties dont je suis l\'organisateur/trice',
                 'required' => false,
                 'mapped'=> false,
             ])
+            //ajout CheckBox déjà inscrit
             ->add('inscrit', CheckboxType::class, [
-                'label' => 'Sorties auxquelles je suis inscrit',
+                'label' => 'Sorties auxquelles je suis inscrit/e',
                 'required' => false,
                 'mapped'=> false,
             ])
+            //ajout CheckBox pour demander inscription
             ->add('pasInscrit', CheckboxType::class, [
-                'label' => 'Sorties auxquelles je ne suis pas inscrit',
+                'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
                 'required' => false,
                 'mapped'=> false,
             ])
+            //ajout CheckBox pour sorties passées
             ->add('passees', CheckboxType::class, [
                 'label' => 'Sorties passées',
                 'required' => false,
