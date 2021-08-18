@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder): Response
     {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm('App\Form\RegistrationFormType', $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,19 +42,19 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/login", name="app_login", methods={"GET", "POST"})
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // Récupération des erreurs de traitement de connexion
-        $error = $authenticationUtils->getLastAuthenticationError();
-
-        // Récupération de l'identifiant de l'utilisateur
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
+//    /**
+//     * @Route("/login", name="app_login", methods={"GET", "POST"})
+//     */
+//    public function login(AuthenticationUtils $authenticationUtils): Response
+//    {
+//        // Récupération des erreurs de traitement de connexion
+//        $error = $authenticationUtils->getLastAuthenticationError();
+//
+//        // Récupération de l'identifiant de l'utilisateur
+//        $lastUsername = $authenticationUtils->getLastUsername();
+//
+//        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+//    }
 
     /**
      * @Route("/logout", name="app_logout", methods={"GET"})
@@ -61,7 +62,7 @@ class RegistrationController extends AbstractController
     public function logout() {}
 
     /**
-     * @Route(path="{id}/editprofile", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @Route(path="/editprofile/{id}", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function edit(Request $request, EntityManagerInterface $entityManager) {
 
@@ -72,8 +73,11 @@ class RegistrationController extends AbstractController
             throw $this->createNotFoundException('User Not Found !');
         }
 
+//        dump($user);
+//        exit();
+
         // Création du formulaire
-        $formEdit = $this->createForm('RegistrationFormType::class', $user);
+        $formEdit = $this->createForm('App\Form\RegistrationFormType', $user);
 
         // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
         $formEdit->handleRequest($request);
@@ -93,7 +97,7 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
-            'form' => $formEdit->createView(),
+            'registrationForm' => $formEdit->createView(),
         ]);
     }
 }

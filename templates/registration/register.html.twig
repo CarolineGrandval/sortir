@@ -10,7 +10,7 @@
     {% endif %}
 
     {% if app.user %}
-        <h2>Modifiez votre profil {{ app.user.pseudo|capitalize }}</h2>
+        <h2>Modifiez votre profil {{ app.user.pseudo }}</h2>
     {% endif %}
 
     <!-- affichage des messages d'erreur -->
@@ -23,11 +23,67 @@
     {% endfor %}
 
     <!-- affichage du formulaire -->
-    {{ form(registrationForm) }}
+    {{ form_start(registrationForm) }}
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.nom) }}
+        {{ form_widget(registrationForm.nom) }}
+        {{ form_errors(registrationForm.nom) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.prenom) }}
+        {{ form_widget(registrationForm.prenom) }}
+        {{ form_errors(registrationForm.prenom) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.mail) }}
+        {{ form_widget(registrationForm.mail) }}
+        {{ form_errors(registrationForm.mail) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.telephone) }}
+        {{ form_widget(registrationForm.telephone) }}
+        {{ form_errors(registrationForm.telephone) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.pseudo) }}
+        {{ form_widget(registrationForm.pseudo) }}
+        {{ form_errors(registrationForm.pseudo) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.campus) }}
+        {{ form_widget(registrationForm.campus) }}
+        {{ form_errors(registrationForm.campus) }}
+    </div>
+
+    <div class="mb-3">
+{#        {{ form_label(registrationForm.plainPassword) }}#}
+        {{ form_widget(registrationForm.plainPassword) }}
+        {{ form_errors(registrationForm.plainPassword) }}
+    </div>
 
     <!-- photo de profil -->
     {% if app.user %}
-        <p>{{ app.user.photo |imagine_filter('carre') }}</p>
+        {#        <p>{{ app.user.photo |imagine_filter('carre') }}</p>#}
     {% endif %}
+
+    <div class="mb-3">
+        {{ form_label(registrationForm.photo) }}
+        {{ form_widget(registrationForm.photo) }}
+        {{ form_errors(registrationForm.photo) }}
+    </div>
+
+    {% if not is_granted("ROLE_ADMIN") %}
+    {% endif %}
+
+    <div class="mb-3">
+        {{ form_widget(registrationForm.submit) }}
+    </div>
+    {{ form_end(registrationForm) }}
 
 {% endblock %}
