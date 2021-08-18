@@ -73,24 +73,24 @@ class Sortie
      * @ORM\ManyToOne(targetEntity=Etat::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private Etat $etat;
+    private ?Etat $etat;
 
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sortiesCampus")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Campus $campus;
+    private ?Campus $campus;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class)
      */
-    private User $participants;
+    private Collection $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganisees")
      * @ORM\JoinColumn(nullable=false)
      */
-    private User $organisateur;
+    private ?User $organisateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties")
