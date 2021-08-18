@@ -46,7 +46,7 @@ class SortieRechercheType extends AbstractType
                 'label' => 'Et le',
                 'html5' => false,
                 'widget' => 'single_text',
-                'attr' => ['class' => 'datepicker'],
+                'attr' => ['class' => 'js-datepicker'],
                 'format' => 'dd/MM/yyyy',
                 'mapped'=> false,
             ])

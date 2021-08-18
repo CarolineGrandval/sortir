@@ -1,6 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil{% endblock title%}
+{% block stylesheets %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
+{% endblock stylesheets%}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+{#    <script>#}
+{#        $(document).ready(function() {#}
+{#            // you may need to change this code if you are not using Bootstrap Datepicker#}
+{#            $('.js-datepicker').datepicker({#}
+{#                format: 'yyyy-mm-dd'#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+{% endblock %}
 
 {% block body %}
 <style>
@@ -10,21 +24,27 @@
 
 <div class="example-wrapper">
     <h1>Accueil</h1>
-    <h3>Date du jour : {{ "now"|date("d/m/Y") }}</h3>
-    <h3>Participant : {{ app.user.pseudo }}</h3>
+    <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+    <h5>Participant : {{ app.user.pseudo }}</h5>
     <div>
         <h3>Filtrer les sorties</h3>
         <div id="search">
             {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
-                {{ form_row(searchForm.campus) }}
-                {{ form_row(searchForm.motclef) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(searchForm.campus) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(searchForm.motclef) }}
+                </div>
                 {{ form_row(searchForm.dateDebut) }}
                 {{ form_row(searchForm.dateFin) }}
                 {{ form_row(searchForm.organisateur) }}
                 {{ form_row(searchForm.inscrit) }}
                 {{ form_row(searchForm.pasInscrit) }}
                 {{ form_row(searchForm.passees) }}
-           {{ form_end(formSearch) }}
+                {{ form_widget(searchForm.submit) }}
+           {{ form_end(searchForm) }}
         </div>
     </div>
     <div>
@@ -45,7 +65,7 @@
             {% for sortie in sorties %}
                 <tr>
                     <th scope="row">{{ sortie.nom }}</th>
-                    <td><a href="{{ url('wish_detail', {"id": wish.id }) }}">{{ wish.title|capitalize }}</a></td>
+                    <td><a href="{{ url('sortie_detail', {"id": sortie.id }) }}">{{ sortie.nom|capitalize }}</a></td>
                     <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
                     <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
                     <td>{{ sortie.etat }}</td>
@@ -69,6 +89,7 @@
             {% endfor %}
             </tbody>
         </table>
+        <button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button>
     </div>
 </div>
 {% endblock body %}
