@@ -42,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank
      * @Assert\Length(max=20, maxMessage="Le téléphone doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Regex(pattern="/^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/", message="le format du numéro de téléphone n'est pas valide.")
      */
     private ?string $telephone;
 
@@ -49,6 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=180, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Email(message="Le mail fourni n'a pas un format valide")
      */
     private ?string $mail;
 
@@ -64,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password;
 
     /**
-     * @var string|null The hashed password
+     * @var string|null The plain password
      *
      * @Assert\NotBlank(message="Le mot de passe est requis !", groups={"register"})
      * @Assert\Length(min=8, max=50, minMessage="Le mot de passe doit contenir au minimum {{ limit }} caractères", maxMessage="Le mot de passe doit contenir au maximum {{ limit }} caractères", groups={"register"})

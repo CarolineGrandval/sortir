@@ -79,17 +79,8 @@ class RegistrationFormType extends AbstractType
             'required' => false,
         ]);
 
-        $builder->add('cgu', CheckboxType::class, [
-            'mapped' => false,
-            'label' => 'J\'accepte les CGU',
-            'required' => false,
-            'constraints' => [
-                new IsTrue(['message' => 'Vous devez accepter les CGU.', 'groups' => ['register']]),
-            ],
-        ]);
-
         $builder->add('submit', SubmitType::class, [
-            'label' => 'Valider l\'inscription',
+            'label' => 'Valider',
         ]);
 
     }
