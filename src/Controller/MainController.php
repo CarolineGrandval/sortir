@@ -30,7 +30,9 @@ class MainController extends AbstractController
         $search = new Rechercher();
 
         //ajout par défaut du Campus de l'utilisateur
-        $search->setCampus($user->getCampus());
+        if (!empty($user)){
+            $search->setCampus($user->getCampus());
+
         $search->setOrganisateur(true);
         $search->setPasInscrit(true);
         $search->setInscrit(true);
@@ -58,6 +60,8 @@ class MainController extends AbstractController
 
         //Création formulaire avec des données
         return $this->render('main/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties]);
+        }
 
+        return  $this->redirectToRoute('app_login');
     }
 }

@@ -128,6 +128,6 @@ class SortieRepository extends ServiceEntityRepository
 //        }
 
         return $req->getQuery()->getResult();
+        }
 
-    }
 }
