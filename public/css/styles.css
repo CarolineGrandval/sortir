@@ -72,3 +72,11 @@ footer {
     padding: 20px 0;
     text-align: center;
 }
+
+.cache {
+    display: none;
+ }
+
+.clique {
+    display: block;
+}

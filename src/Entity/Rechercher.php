@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Rechercher
 {
     /**
-     * Id
-     * GeneratedValue
-     * Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private ?int $id;
     private ?Campus $campus;

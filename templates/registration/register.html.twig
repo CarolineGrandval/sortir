@@ -1,15 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 
 {% block body %}
 
     {% if is_granted('ROLE_ADMIN') %}
-        <h2>Inscription</h2>
     {% endif %}
 
-    {% if app.user %}
+    {% if app.request.attributes.get('_route') == 'app_register' %}
+        <h2>Créer un nouvel utilisateur </h2>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route') == 'edit_profile' %}
         <h2>Modifiez votre profil {{ app.user.pseudo }}</h2>
     {% endif %}
 

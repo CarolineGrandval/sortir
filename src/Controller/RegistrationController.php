@@ -59,7 +59,9 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/logout", name="app_logout", methods={"GET"})
      */
-    public function logout() {}
+    public function logout() {
+        return $this->render('security/login.html.twig');
+    }
 
     /**
      * @Route(path="/editprofile/{id}", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
@@ -72,9 +74,6 @@ class RegistrationController extends AbstractController
         } catch (NonUniqueResultException | NoResultException $e) {
             throw $this->createNotFoundException('User Not Found !');
         }
-
-//        dump($user);
-//        exit();
 
         // Création du formulaire
         $formEdit = $this->createForm('App\Form\RegistrationFormType', $user);

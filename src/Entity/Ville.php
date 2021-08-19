@@ -34,7 +34,6 @@ class Ville
      */
     private Collection $lieux;
 
-
     /**
      * @return int|null
      */

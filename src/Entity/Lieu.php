@@ -20,9 +20,9 @@ class Lieu
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(name="nom_lieu", type="string", length=50)
      */
-    private ?string $nom;
+    private ?string $nomLieu;
 
     /**
      * @ORM\Column(type="string", length=250)
@@ -62,14 +62,14 @@ class Lieu
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getNomLieu(): ?string
     {
-        return $this->nom;
+        return $this->nomLieu;
     }
 
-    public function setNom(?string $nom): self
+    public function setNomLieu(?string $nomLieu): self
     {
-        $this->nom = $nom;
+        $this->nomLieu = $nomLieu;
 
         return $this;
     }

@@ -1,12 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SortieController!{% endblock %}
+{% block title %}Sortons casqués !{% endblock %}
 
 {% block stylesheets %}
     <script src="{{ asset('js/scripts.js') }}"></script>
 {% endblock %}
 
 {% block body %}
+
+    <h2>Créer une sortie</h2>
+
+    <!-- affichage des messages d'erreur et de confirmation -->
+    {% for group, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ group }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
     {{ form_start(formSortie) }}
 
@@ -61,44 +72,38 @@
     </div>
 
     <div class="mb-3">
+        {{ form_label(formSortie.ville) }}
+        {{ form_widget(formSortie.ville) }}
+        {{ form_errors(formSortie.ville) }}
+    </div>
+
+    <div class="mb-3">
         {{ form_label(formSortie.lieu) }}
         {{ form_widget(formSortie.lieu) }}
         {{ form_errors(formSortie.lieu) }}
     </div>
 
-    <!-- imbriquer le formulaire de création d'un lieu -->
+    <!-- formulaire ajouter un lieu // méthode avec js mais ne fonctionne pas -->
+{#    <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button>#}
 
-{#    {% form_theme formLieu 'bootstrap_4_horizontal_layout.html.twig' %}#}
-{#    {{ form_start(formLieu) }}#}
-
-{#    <div class="mb-3">#}
-{#        {{ form_row(formLieu.nom) }}#}
+{#    <div id="ajoutFormLieu" class="cache">#}
+{#        {{ form(formLieu) }}#}
 {#    </div>#}
 
-{#    <div class="mb-3">#}
-{#        <div class="row js-lieu-wrapper" data-prototype="{{ form_widget(formLieu.sorties.vars.propotype)|e('html_attr') }}">#}
-{#            {% for formLieu in formLieu.sorties %}#}
-{#                <hr/>#}
-{#                <div class="col-xs-4">#}
-{#                    {{ form_row(formLieu.nom) }}#}
-{#                    {{ form_row(formLieu.rue) }}#}
-{#                    {{ form_row(formLieu.ville) }}#}
-{#                    {{ form_row(formLieu.longitude) }}#}
-{#                    {{ form_row(formLieu.latitude) }}#}
-{#                    <a href="#" style="width:100%;" class="js-lieu-remove btn-danger btn">Remove</a><hr/>#}
-{#                </div>#}
-{#            {% endfor %}#}
 
-{#            <div class="mb-3" style="text-align: right;">#}
-{#                <a href="#" class="js-lieu-add btn-secondary btn">Add Another Wish</a>#}
-{#                {{ form_widget(formLieu.submit) }}#}
-{#            </div>#}
-
-
+    <!-- ajouter un lieu en formulaire imbriqué / méthode M. Racine mais pas adapté-->
+{#    <div class="mb-3" style="text-align: right;">#}
+{#        <div class="col-xs-4">#}
+{#            {{ form_row(formLieu.nom) }}#}
+{#            {{ form_row(formLieu.ville) }}#}
+{#            {{ form_row(formLieu.rue) }}#}
+{#            {{ form_row(formLieu.longitude) }}#}
+{#            {{ form_row(formLieu.latitude) }}#}
+{#            <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/>#}
+{#        </div>#}
+{#        <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a>#}
 {#        </div>#}
 {#    </div>#}
-
-{#    {{ form_end(formLieu) }}#}
 
 <!-- bouton submit -->
 
@@ -107,25 +112,21 @@
     </div>
     {{ form_end(formSortie) }}
 
-    <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button>
-
-    <div id="ajoutFormLieu" class="cache">
-    {{ form(formLieu) }}
-    </div>
+<!-- Ajouter un lieu -->
+    <a href="{{ path('lieu') }}"><button name='lieu' value='lieu' class='btn btn-secondary'>Créer un lieu</button></a>
 
 {% endblock %}
 
 
-
 {% block javascripts %}
 
-    <script>
-        $(document).ready(function(){
-            $(".btn-info").click(function(){
-                $(".cache").toggleClass("clique");
-            });
-        });
-    </script>
+{#    <script>#}
+{#        $(document).ready(function(){#}
+{#            $(".btn-info").click(function(){#}
+{#                $(".cache").toggleClass("clique");#}
+{#            });#}
+{#        });#}
+{#    </script>#}
 
     <!-- js lié au formulaire imbriqué -->
 {#    <script>#}

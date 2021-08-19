@@ -1,20 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LieuController!{% endblock %}
+{% block title %}Créer un nouveau lieu{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h2>Créer un lieu</h2>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/wamp/www/sortir/src/Controller/LieuController.php'|file_link(0) }}">src/Controller/LieuController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/wamp/www/sortir/templates/lieu/index.html.twig'|file_link(0) }}">templates/lieu/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <!-- affichage des messages d'erreur et de confirmation -->
+    {% for group, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ group }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(formLieu) }}
+
+    <div class="mb-3">
+        {{ form_label(formLieu.nomLieu) }}
+        {{ form_widget(formLieu.nomLieu) }}
+        {{ form_errors(formLieu.nomLieu) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formLieu.rue) }}
+        {{ form_widget(formLieu.rue) }}
+        {{ form_errors(formLieu.rue) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formLieu.ville) }}
+        {{ form_widget(formLieu.ville) }}
+        {{ form_errors(formLieu.ville) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formLieu.latitude) }}
+        {{ form_widget(formLieu.latitude) }}
+        {{ form_errors(formLieu.latitude) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formLieu.longitude) }}
+        {{ form_widget(formLieu.longitude) }}
+        {{ form_errors(formLieu.longitude) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_widget(formLieu.submit) }}
+    </div>
+    {{ form_end(formLieu) }}
+
 {% endblock %}

@@ -20,13 +20,13 @@ class LieuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', TextType::class, [
+            ->add('nomLieu', TextType::class, [
                 'label' => 'Nom du lieu : ',
                 'trim' => true,
                 'required' => true,
             ])
             ->add('rue', TextType::class, [
-                'label' => 'Nom du lieu : ',
+                'label' => 'Rue : ',
                 'trim' => true,
                 'required' => true,
             ])
@@ -49,17 +49,17 @@ class LieuType extends AbstractType
                     return $cr->createQueryBuilder('ville')->orderBy('ville.nom', 'ASC');
                 },
                 'choice_label' => 'nom',
-            ])
-            ->add('sorties', CollectionType::class, [
-                       'entry_type' => SortieType::class,
-                       'allow_add' => true,
-                       'by_reference' => false,
-                       'entry_options' => [
+            ]);
+//            ->add('sorties', CollectionType::class, [
+//                       'entry_type' => SortieType::class,
+//                       'allow_add' => true,
+//                       'by_reference' => false,
+//                       'entry_options' => [
 //                           'embedded' => true,
-                       ],
-                       'label' => false,
-                   ]);
-        ;
+//                       ],
+//                       'label' => false,
+//                   ]);
+
         $builder->add('submit', SubmitType::class, [
             'label' => 'Créer un lieu',
         ]);

@@ -89,7 +89,7 @@
             {% endfor %}
             </tbody>
         </table>
-        <button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button>
+        <a href="{{ path('sortie_create') }}"><button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button></a>
     </div>
 </div>
 {% endblock body %}
