@@ -8,6 +8,7 @@ use App\Form\SortieRechercheType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,7 @@ class MainController extends AbstractController
      * @Route(path="{page}", requirements={"page": "\d+"}, defaults={"page": 1}, name="home", methods={"GET","POST"})
      *
      */
-    public function list(Request $request, EntityManagerInterface $entityManager)
+    public function list(Request $request, EntityManagerInterface $entityManager, SessionInterface $session)
     {
 
         /** @var User $user */
@@ -33,7 +34,11 @@ class MainController extends AbstractController
         if (!empty($user)){
             $search->setCampus($user->getCampus());
 
-        $search->setOrganisateur(true);
+            //on enregistre le campus de l'utilisateur en session
+            $campus = $user->getCampus();
+            $session->set('campus', $campus->getNom());
+
+            $search->setOrganisateur(true);
         $search->setPasInscrit(true);
         $search->setInscrit(true);
 

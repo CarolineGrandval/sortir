@@ -19,6 +19,7 @@
             <span class="pull-right">
                 <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
                 <h5>Participant : {{ app.user.pseudo }}</h5>
+                <h5>{{ app.session.get('campus') }}</h5>
             </span>
         </div>
     </div>
@@ -32,6 +33,8 @@
                 </div>
             {% endfor %}
         {% endfor %}
+
+        {{ app.session.get('campus.nom') }}
 
         <h3>Filtrer les sorties</h3>
         <div id="search">
