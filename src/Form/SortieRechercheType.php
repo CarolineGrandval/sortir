@@ -37,7 +37,10 @@ class SortieRechercheType extends AbstractType
                 'label' => 'Entre le',
                 'html5' => false,
                 'widget' => 'single_text',
-                'attr' => ['class' => 'datepicker'],
+                'attr' => [
+                    'class' => 'form-control datetimepicker-input',
+                    'data-toggle'=>'datetimepicker',
+                    ],
                 'format' => 'dd/MM/yyyy',
                 'required' => false,
                 'mapped'=> false,
@@ -56,18 +59,21 @@ class SortieRechercheType extends AbstractType
             ->add('organisateur', CheckboxType::class, [
                 'label' => 'Sorties dont je suis l\'organisateur/trice',
                 'required' => false,
+                'data' => true, // Default checked
                 'mapped'=> false,
             ])
             //ajout CheckBox déjà inscrit
             ->add('inscrit', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je suis inscrit/e',
                 'required' => false,
+                'data' => true, // Default checked
                 'mapped'=> false,
             ])
             //ajout CheckBox pour demander inscription
             ->add('pasInscrit', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
                 'required' => false,
+                'data' => true, // Default checked
                 'mapped'=> false,
             ])
             //ajout CheckBox pour sorties passées

@@ -18,9 +18,9 @@ class Rechercher
      */
     private ?int $id;
     private ?Campus $campus;
-    private ?string $motclef;
-    private ?DateTime $dateDebut;
-    private ?DateTime $dateFin;
+    private ?string $motclef = null;
+    private ?DateTime $dateDebut = null;
+    private ?DateTime $dateFin = null;
     private bool $organisateur = true;
     private bool $inscrit = true;
     private bool $pasInscrit = true;
