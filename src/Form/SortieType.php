@@ -25,69 +25,68 @@ class SortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('nom', TextType::class, [
-             'label' => 'Nom de la sortie : ',
-            'trim' => true,
-            'required' => true,
-            ])
-            ->add('dateHeureDebut', DateTimeType::class, [
-                'label' => 'Date et heure de début : ',
-                'required' => true,
-            ])
-            ->add('duree', IntegerType::class, [
-                'label' => 'Durée : ',
-                'required' => true,
-            ])
-            ->add('dateLimiteInscription', DateType::class, [
-                'label' => 'Date et heure de fin d\'inscription : ',
-                'required' => true,
-            ])
-            ->add('infosSortie', TextareaType::class, [
-                'label' => 'Description et infos : ',
-                'required' => true,
-            ])
-            ->add('motifAnnulation', TextareaType::class, [
+
+            $builder
+                ->add('nom', TextType::class, [
+                    'label' => 'Nom de la sortie : ',
+                    'trim' => true,
+                    'required' => true,
+                ])
+                ->add('dateHeureDebut', DateTimeType::class, [
+                    'label' => 'Date et heure de début : ',
+                    'required' => true,
+                ])
+                ->add('duree', IntegerType::class, [
+                    'label' => 'Durée : ',
+                    'required' => true,
+                ])
+                ->add('dateLimiteInscription', DateType::class, [
+                    'label' => 'Date et heure de fin d\'inscription : ',
+                    'required' => true,
+                ])
+                ->add('infosSortie', TextareaType::class, [
+                    'label' => 'Description et infos : ',
+                    'required' => true,
+                ])
+                ->add('nbParticipantsMax', IntegerType::class, [
+                    'label' => 'Nombre de participants : ',
+                    'required' => true,
+                ])
+                ->add('campus', EntityType::class, [
+                    'label' => 'Campus : ',
+                    'required' => true,
+                    'class' => Campus::class,
+                    'query_builder' => function (CampusRepository $cr) {
+                        return $cr->createQueryBuilder('campus')->orderBy('campus.nom', 'ASC');
+                    },
+                    'choice_label' => 'nom',
+                ])
+                ->add('ville', EntityType::class, [
+                    'label' => 'Ville : ',
+                    'required' => true,
+                    'class' => Ville::class,
+                    'mapped' => false,
+                    'query_builder' => function (VilleRepository $cr) {
+                        return $cr->createQueryBuilder('ville')
+                            ->orderBy('ville.nom', 'ASC');
+                    },
+                    'choice_label' => 'nom',
+                ])
+                ->add('lieu', EntityType::class, [
+                    'label' => 'Lieu : ',
+                    'required' => true,
+                    'class' => Lieu::class,
+                    'query_builder' => function (LieuRepository $cr) {
+                        return $cr->createQueryBuilder('lieu')->orderBy('lieu.nomLieu', 'ASC');
+                    },
+                    'choice_label' => 'nomLieu',
+                ]);
+
+            $builder->
+            add('motifAnnulation', TextareaType::class, [
                 'label' => 'Motif d\'annulation : ',
                 'required' => false,
-            ])
-
-            ->add('nbParticipantsMax', IntegerType::class, [
-                'label' => 'Nombre de participants : ',
-                'required' => true,
-            ])
-
-            ->add('campus', EntityType::class, [
-                'label' => 'Campus : ',
-                'required' => true,
-                'class' => Campus::class,
-                'query_builder' => function (CampusRepository $cr) {
-                    return $cr->createQueryBuilder('campus')->orderBy('campus.nom', 'ASC');
-                },
-                'choice_label' => 'nom',
-            ])
-
-            ->add('ville', EntityType::class, [
-            'label' => 'Ville : ',
-            'required' => true,
-            'class' => Ville::class,
-            'mapped' => false,
-            'query_builder' => function (VilleRepository $cr) {
-                return $cr->createQueryBuilder('ville')
-                    ->orderBy('ville.nom', 'ASC');
-            },
-            'choice_label' => 'nom',
-        ])
-
-            ->add('lieu', EntityType::class, [
-            'label' => 'Lieu : ',
-            'required' => true,
-            'class' => Lieu::class,
-            'query_builder' => function (LieuRepository $cr) {
-                return $cr->createQueryBuilder('lieu')->orderBy('lieu.nomLieu', 'ASC');
-            },
-            'choice_label' => 'nomLieu',
-        ]);
+            ]);
 
         //proposition M. Racine
 //        if (!$options['embedded']) {

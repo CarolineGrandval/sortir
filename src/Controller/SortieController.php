@@ -56,7 +56,7 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('sortie_create');
         }
 
-        return $this->render('sortie/index.html.twig', [
+        return $this->render('sortie/create.html.twig', [
             'formSortie' => $formSortie->createView(),
 //            'formLieu' => $formLieu->createView(),
         ]);
@@ -95,8 +95,9 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('sortie_modifier', ['id' => $sortie->getId()]);
         }
 
-        return $this->render('sortie/index.html.twig', [
+        return $this->render('sortie/create.html.twig', [
             'formSortie' => $formSortie->createView(),
+            'id' => $request->get('id')
         ]);
     }
 
@@ -119,6 +120,65 @@ class SortieController extends AbstractController
 
         // Ajout d'un message de confirmation
         $this->addFlash('success', 'La sortie a bien été publiée !');
+        // Redirection sur le controlleur
+        return $this->redirectToRoute('main_home');
+    }
+
+    /**
+     * @Route(path="/motifannulation/{id}", name="motifannulation", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     */
+    public function motifannulation(Request $request, EntityManagerInterface $entityManager)
+    {
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('User Not Found !');
+        }
+
+        // Création du formulaire
+        $formSortie = $this->createForm('App\Form\SortieType', $sortie);
+
+        // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
+        $formSortie->handleRequest($request);
+
+        // Vérifier les données du formulaire
+        if ($formSortie->isSubmitted() && $formSortie->isValid()) {
+
+            // Enregistrement de l'entité dans la BDD
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            // Redirection sur le controlleur
+            return $this->redirectToRoute('sortie_motifannulation', ['id' => $sortie->getId()]);
+        }
+
+        return $this->render('sortie/annuler.html.twig', [
+            'formSortie' => $formSortie->createView(),
+            'id' => $request->get('id'),
+            'sortie' => $sortie,
+        ]);
+
+    }
+
+    /**
+     * @Route(path="/annuler/{id}", name="annuler", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     */
+    public function annuler(Request $request, EntityManagerInterface $entityManager)
+    {
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('User Not Found !');
+        }
+
+        $etat = $entityManager->find(Etat::class, 6); // état changé à "annulée"
+        $sortie->setEtat($etat);
+        // Enregistrement de l'entité dans la BDD
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        // Ajout d'un message de confirmation
+        $this->addFlash('success', 'La sortie a bien été annulée !');
         // Redirection sur le controlleur
         return $this->redirectToRoute('main_home');
     }
