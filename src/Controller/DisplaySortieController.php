@@ -22,7 +22,7 @@ class DisplaySortieController extends AbstractController
     public function index(): Response
     {
         //On appelle une sortie en particulier
-        $numerosortie=1;
+
         $sortie=$this->getDoctrine()->getRepository(Sortie::class)->find(1);
         $campus=$this->getDoctrine()->getRepository(Campus::class)->find(1);
         $lieu=$this->getDoctrine()->getRepository(Lieu::class)->find(1);
