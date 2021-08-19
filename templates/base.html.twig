@@ -61,7 +61,7 @@
                             </li>
                         {% endif %}
 
-                        {% if is_granted('ROLE_ADMIN') %}
+                            {% if is_granted('ROLE_ADMIN') %}
                             <li class="nav-item"><a class="nav-link active" href="{{ url('main_home') }}" title="Campus">Campus</a></li>
                             <li class="nav-item"><a class="nav-link active" href="{{ url('main_home') }}" title="Villes">Villes</a></li>
                             <li class="nav-item"><a class="nav-link active" href="{{ url('app_register') }}" title="Register">Inscription </a></li>
@@ -91,7 +91,7 @@
     </main>
 
     <footer>
-        © {{ "now"|date("Y") }} Anne-Laure Jouhanneau - Caroline Grandval - Driss Hananne
+        © {{ "now"|date("Y") }} Anne-Laure Jouhanneau - Caroline Grandval - Driss Hannane
     </footer>
 
     {% block javascripts %}
