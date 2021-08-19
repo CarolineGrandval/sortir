@@ -73,6 +73,10 @@
     <!-- photo de profil -->
     {% if app.user %}
         {#        <p>{{ app.user.photo |imagine_filter('carre') }}</p>#}
+        {{ user.nom }}
+
+    <img src="{{ asset(user.photo) }}">
+
     {% endif %}
 
     <div class="mb-3">

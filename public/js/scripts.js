@@ -7,10 +7,12 @@ window.addEventListener('load' , init);
 
 function init(){
     document.getElementById('btnAjoutLieu')
-        .addEventListener('click', afficherFormulaire);
-    document.getElementById('btnAnnulerSortie')
-        .addEventListener('click', afficherFormulaire);
+        .addEventListener('click', messageAlerte);
+}
 
+function messageAlerte(){
+    let isExecuted = confirm("Voulez-vous créer un nouveau lieu ?");
+    console.log(isExecuted);
 }
 
 $(document).ready(function(){
