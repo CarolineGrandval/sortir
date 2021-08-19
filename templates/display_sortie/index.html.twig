@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afficher une Sortie!{% endblock %}
+
+{% block body %}
+
+
+    <h1>Afficher une sortie</h1>
+
+    Nom de la sortie: {{ sortie.nom }}
+    Campus:
+    <br><br>
+    Date et heure de la sortie: {# {{ sortie.date_heure_debut }}#}<br><br>
+    Lieu:
+    Date limite d'inscription:{# {{  sortie.date_limite_inscription}} #}<br><br>
+    Rue:
+    Nombre de places:{#{{ sortie.nb_participants_max }}#}<br><br>
+    Code postal:
+    Durée:{{ sortie.duree }} minutes<br><br>
+    Lattitude:
+    Description et Infos: {#{{ sortie.infos_sortie }}#}<br><br>
+    Longitude:<br><br><br>
+    <b>Liste des participants inscrits</b><br>
+{% endblock %}
