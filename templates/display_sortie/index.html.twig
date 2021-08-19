@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afficher une Sortie!{% endblock %}
+
+{% block body %}
+
+
+    <h1>Afficher une sortie</h1>
+<table class ="table table-borderless">
+    <tr><td>Nom de la sortie: {{ sortie.nom }}</td><td>Campus: {{ campus.nom }}</td></tr>
+    <tr><td>Date et heure de la sortie: {{ sortie.dateHeureDebut|date("m/d/Y") }}</td><td>Lieu: {{ lieu.nomLieu }}</td></tr>
+    <tr><td>Date limite d'inscription: {{  sortie.dateLimiteInscription|date("m/d/Y") }}</td><td>Ville: {{ ville.nom }}</td></tr>
+    <tr><td>Nombre de places: {{ sortie.nbParticipantsMax }}</td><td>Rue: {{ lieu.rue }}</td></tr>
+    <tr><td>Durée: {{ sortie.duree }} minutes</td><td>Code postal: {{  ville.codePostal}}</td></tr>
+    <tr><td>Description et Infos: {{ sortie.infosSortie }}</td><td>Latitude: {{ lieu.latitude }}</td></tr>
+    <tr><td>Longitude: {{ lieu.longitude }}</td></tr>
+
+</table>
+
+    <br><br><br>
+    <b>Liste des participants inscrits: </b><br>
+    <table class ="table table-bordered table-striped">
+        <tr >
+            <td>Pseudo</td>
+            <td>Nom</td>
+        </tr>
+
+
+   {% for user in users %}
+       <tr>
+    <td>{{ user.pseudo }}</td><td>{{ user.nom }} {{ user.prenom }}</td>
+       </tr>
+
+    {% endfor %}
+    </table>
+    <input type="submit" name="isncriptionParticipant" value ="S'inscrire"/><br><br>
+
+{% endblock %}
