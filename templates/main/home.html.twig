@@ -6,15 +6,8 @@
           rel="stylesheet"/>
 {% endblock stylesheets %}
 {% block javascripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
-     <script>
-         jQuery(document).ready(function() {
-             // you may need to change this code if you are not using Bootstrap Datepicker
-             $('.js-datepicker').datepicker({
-                format: 'yyyy-mm-dd'
-             });
-         });
-     </script>
+        {#{{ insertion du fichier js }}#}
+        <script src="{{ asset('js/datepicker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -24,8 +17,8 @@
     <div class="row">
         <div class="col-md-push-6">
             <span class="pull-right">
-            <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
-            <h5>Participant : {{ app.user.pseudo }}</h5>
+                <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+                <h5>Participant : {{ app.user.pseudo }}</h5>
             </span>
         </div>
     </div>
@@ -33,35 +26,21 @@
         <h3>Filtrer les sorties</h3>
         <div id="search">
             {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
-            <div class="row">
-                <div class="col-md-6">
-                    {{ form_row(searchForm.campus) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_row(searchForm.motclef) }}
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row mb-3">
-                            <div class="col-2 inline-label">{{ form_label(searchForm.dateDebut) }}</div>
-                            <div class="col-10">{{ form_widget(searchForm.dateDebut) }}{{ form_errors(searchForm.dateDebut) }}</div>
-                            {# {{ form_row(searchForm.dateDebut) }} #}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row mb-3">
-                            <div class="col-2 inline-label">{{ form_label(searchForm.dateFin) }}</div>
-                            <div class="col-10">{{ form_widget(searchForm.dateFin) }}{{ form_errors(searchForm.dateFin) }}</div>
-                            {# {{ form_row(searchForm.dateFin) }} #}
-                        </div>
-                    </div>
-                </div>
+            <div class="row justify-content-between custom-line">
 
-                {{ form_row(searchForm.organisateur) }}
-                {{ form_row(searchForm.inscrit) }}
-                {{ form_row(searchForm.pasInscrit) }}
-                {{ form_row(searchForm.passees) }}
-                {{ form_widget(searchForm.submit) }}
+                <div class="col-4">
+                    <p>{{ form_row(searchForm.campus) }}</p>
+                    <p>{{ form_row(searchForm.motclef) }}</p>
+                    <p>{{ form_row(searchForm.dateDebut) }} {{ form_row(searchForm.dateFin) }}</p>
+                </div>
+                <div class="col-4">
+                    <p>{{ form_row(searchForm.organisateur) }}</p>
+                    <p>{{ form_row(searchForm.inscrit) }}</p>
+                    <p>{{ form_row(searchForm.pasInscrit) }}</p>
+                    <p>{{ form_row(searchForm.passees) }}</p>
+                </div>
+                <div class="col-4"><p>{{ form_widget(searchForm.submit) }}</p></div>
+            </div>
                 {{ form_end(searchForm) }}
             </div>
         </div>
@@ -81,6 +60,12 @@
                 </thead>
                 <tbody>
                 {% for sortie in sorties %}
+                    {# Récupérer les différentes variables afin de faire des filtres en conséquence #}
+                    {% set dateDebut = sortie.dateHeureDebut|date('Y-m-d') %}
+                    {% set dateDifference = "now"|date('Y-m-d') %}
+                    {% set dateEcart = date(dateDifference).diff(date(dateDebut)) %}
+                    {% if dateEcart.days <= 30 %}
+                    {% else %}
                     <tr>
                         <th scope="row">{{ sortie.nom }}</th>
                         <td>{{ sortie.nom|capitalize }}</td>
@@ -124,6 +109,11 @@
                                 Se désinscrire
                             {% endif %}
                         </td>
+                    </tr>
+                        {% endif %}
+                {% else %}
+                    <tr class="text-center">
+                        <th class="text-center text-muted" scope="row" colspan="8">Aucune événement trouvé...</th>
                     </tr>
                 {% endfor %}
                 </tbody>

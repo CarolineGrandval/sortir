@@ -72,61 +72,62 @@ class SortieRepository extends ServiceEntityRepository
 //            ->join('s.etat', 'e')
 //            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
 //            ->andWhere('e.libelle= :created')->setParameter('created', 'Créée')
-//            ->getQuery()
-//            ->getResult();
+//            ->getQuery()->getResult();
 //
 //        //Ajout de la requête d'exclusion
 //        $req->andWhere('e NOT IN (:eventscreatedToExclude)')
 //            ->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
-//
-//        //par mots-clefs
-//        if($search->getMotclef()!=''){
-//            $req->andWhere('s.nom LIKE :motclef')
-//                ->setParameter('motclef', '%' . $search->getMotclef() . '%');
-//        }
-//
-//        //par date de début
-//        if (!is_null($search->getDateDebut())) {
-//            $req->andWhere('s.dateHeureDebut > :dateDebut or s.dateHeureDebut = :dateDebut')
-//                ->setParameter('startDate', $search->getDateDebut());
-//        }
-//
-//        //par date de fin
-//        if (!is_null($search->getDateFin())) {
-//            $req->andWhere('s.dateHeureDebut < :dateFin or s.dateHeureDebut = :dateFin')
-//                ->setParameter('endDate', $search->getDateFin());
-//        }
-//
-//        //si organisateur de la sortie
-//        if ($search->isOrganisateur()) {
-//            $req->andWhere('s.organisateur = :organisateur')
-//                ->setParameter('organisateur', $user);
-//        }
-//
-//        //sur les sorties passées
-//        if ($search->isPassees()) {
-//            $req->andWhere('e.libelle = :passees')
-//                ->setParameter('passees', State::PASSED);
-//        }
-//
-//        //Utilisateur inscrit
-//        if ($search->isInscrit()) {
-//            $req->andWhere('p = :inscrit')
-//                ->setParameter('inscrit', $user);
-//        }
-//
-//        //Utilisateur pas inscrit
-//        if ($search->isPasInscrit()) {
-//            $eventsToExclude = $this->createQueryBuilder('e')
-//                ->join('e.participants', 'p')
-//                ->where('p = :signedUpUser')
-//                ->setParameter('signedUpUser', $user)
-//                ->getQuery()
-//                ->getResult();
-//            $req->andWhere('e NOT IN (:eventsToExclude)')
-//                ->setParameter('eventsToExclude', $eventsToExclude);
-//        }
 
+        //par mots-clefs
+        if(!empty($search->getMotclef())){
+            $req->andWhere('s.nom LIKE :motclef')
+                ->setParameter('motclef', '%' . $search->getMotclef() . '%');
+        }
+
+        //par date de début
+        if (!is_null($search->getDateDebut())) {
+            $req->andWhere('s.dateHeureDebut > :dateDebut or s.dateHeureDebut = :dateDebut')
+                ->setParameter('startDate', $search->getDateDebut());
+        }
+
+        //par date de fin
+        if (!is_null($search->getDateFin())) {
+            $req->andWhere('s.dateHeureDebut < :dateFin or s.dateHeureDebut = :dateFin')
+                ->setParameter('endDate', $search->getDateFin());
+        }
+
+        //si organisateur de la sortie
+        if ($search->isOrganisateur()) {
+            $req->andWhere('s.organisateur = :organisateur')
+                ->setParameter('organisateur', $user);
+        }
+
+        //sur les sorties passées
+        if ($search->isPassees()) {
+            $req->andWhere('e.libelle = :passees')
+                ->setParameter('passees', State::PASSED);
+        }
+
+        //Utilisateur inscrit
+        if ($search->isInscrit()) {
+            $req->andWhere('p = :inscrit')
+                ->setParameter('inscrit', $user);
+        }
+
+        //Utilisateur pas inscrit
+        if ($search->isPasInscrit()) {
+            $eventsToExclude = $this->createQueryBuilder('e')
+                ->join('e.participants', 'p')
+                ->where('p = :signedUpUser')->setParameter('signedUpUser', $user)
+                ->getQuery()->getResult();
+
+            if(!empty($eventsToExclude)){
+                $req->andWhere('e NOT IN (:eventsToExclude)')
+                    ->setParameter('eventsToExclude', $eventsToExclude);
+            }
+        }
+
+        //Retourne la requête selon les filtres ajoutés
         return $req->getQuery()->getResult();
 
     }
