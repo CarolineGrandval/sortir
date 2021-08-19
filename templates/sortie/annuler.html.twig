@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annuler une Sortie{% endblock %}
+
+{% block body %}
+
+    <h1>Annuler une sortie</h1>
+
+    <table>
+        <tr>
+            <td>Nom de la sortie :</td>
+            <td>{{ sortie.nom }}</td>
+        </tr>
+        <tr>
+            <td>Date et heure de la sortie :</td>
+            <td>{{ sortie.dateHeureDebut|date("m/d/Y") }}</td>
+        </tr>
+         <tr>
+            <td>Lieu :</td>
+            <td>{{ sortie.lieu.nomLieu }}</td>
+         </tr>
+         <tr>
+             <td>Campus :</td>
+             <td>{{ sortie.campus.nom }}</td>
+         </tr>
+    </table>
+
+    {# {{ form(formSortie.motifAnnulation) }} #}
+    {{ form_start(formSortie) }}
+
+    {{ form_label(formSortie.motifAnnulation, 'Motif d\'annulation* :', {'label_attr': {'class': 'foo'}}) }}
+    {{ form_widget(formSortie.motifAnnulation, {'attr': {'class': 'form-control', 'required' : 'required' }}) }}
+    {{ form_errors(formSortie.motifAnnulation) }}
+
+    <div class="cache">
+    {{ form_row(formSortie.nom) }}
+    {{ form_row(formSortie.campus) }}
+    {{ form_row(formSortie.ville) }}
+    {{ form_row(formSortie.dateHeureDebut) }}
+    {{ form_row(formSortie.dateLimiteInscription) }}
+    {{ form_row(formSortie.duree) }}
+    {{ form_row(formSortie.nbParticipantsMax) }}
+    {{ form_row(formSortie.lieu) }}
+    {{ form_row(formSortie.infosSortie) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_widget(formSortie.submit) }}
+    </div>
+    {{ form_end(formSortie) }}
+
+    <!-- Annuler -->
+    <a href="{{ url('sortie_annuler', { "id": id }) }}">
+        <button type="submit" id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button>
+    </a>
+
+    <!-- Retour accueil-->
+    <a href="{{ url('sortie_modifier', { "id": id }) }}">
+        <button class='btn btn-secondary'>Retour</button>
+    </a>
+
+{% endblock %}

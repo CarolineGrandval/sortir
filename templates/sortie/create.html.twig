@@ -51,14 +51,6 @@
         {{ form_errors(formSortie.infosSortie) }}
     </div>
 
-<!--
-    <div class="mb-3">
-{#        {{ form_label(formSortie.motifAnnulation) }}#}
-{#        {{ form_widget(formSortie.motifAnnulation) }}#}
-{#        {{ form_errors(formSortie.motifAnnulation) }}#}
-    </div>
--->
-
     <div class="mb-3">
         {{ form_label(formSortie.nbParticipantsMax) }}
         {{ form_widget(formSortie.nbParticipantsMax) }}
@@ -105,28 +97,43 @@
 {#        </div>#}
 {#    </div>#}
 
+    <div class="mb-3 cache" >
+        {{ form_label(formSortie.motifAnnulation) }}
+        {{ form_widget(formSortie.motifAnnulation) }}
+        {{ form_errors(formSortie.motifAnnulation) }}
+    </div>
+
 <!-- bouton submit -->
 
     <div class="mb-3">
         {{ form_widget(formSortie.submit) }}
     </div>
+
     {{ form_end(formSortie) }}
 
 <!-- Ajouter un lieu -->
     <a href="{{ path('lieu') }}"><button name='lieu' value='lieu' class='btn btn-secondary'>Créer un lieu</button></a>
+
+    <!-- Si on arrive pas la route modifier-->
+    <!-- Publier -->
+    {% if app.request.attributes.get('_route') == 'modifier' %}
+        <a href="{{ url('sortie_publier', { "id": id }) }}"><button name='publier' value='publier' class='btn btn-primary'>Publier</button></a>
+    <!-- Annuler -->
+        <a href="{{ url('sortie_motifannulation', { "id": id }) }}"><button id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button></a>
+    {% endif %}
 
 {% endblock %}
 
 
 {% block javascripts %}
 
-{#    <script>#}
-{#        $(document).ready(function(){#}
-{#            $(".btn-info").click(function(){#}
-{#                $(".cache").toggleClass("clique");#}
-{#            });#}
-{#        });#}
-{#    </script>#}
+    <script>
+        $(document).ready(function(){
+            $(".btn-info").click(function(){
+                $(".cache").toggleClass("clique");
+            });
+        });
+    </script>
 
     <!-- js lié au formulaire imbriqué -->
 {#    <script>#}

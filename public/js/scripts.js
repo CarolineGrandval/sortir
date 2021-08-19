@@ -8,6 +8,9 @@ window.addEventListener('load' , init);
 function init(){
     document.getElementById('btnAjoutLieu')
         .addEventListener('click', afficherFormulaire);
+    document.getElementById('btnAnnulerSortie')
+        .addEventListener('click', afficherFormulaire);
+
 }
 
 $(document).ready(function(){

@@ -23,6 +23,16 @@
         </div>
     </div>
     <div>
+
+        <!-- affichage des messages d'erreur et de confirmation -->
+        {% for group, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ group }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         <h3>Filtrer les sorties</h3>
         <div id="search">
             {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
@@ -85,16 +95,15 @@
                                 Afficher
                             {% endif %}
                             {# Modifier #}
-                            {% if app.user == sortie.organisateur and sortie.etat.id == 1 %}
-{#                                <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}"#}
-{#                                   title="Modifier la sortie">Modifier</a>#}
-                                Modifier
+                            {% if app.user == sortie.organisateur and sortie.etat.id == 1 or sortie.etat.id == 2 %}
+                                <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}"
+                                   title="Modifier la sortie">Modifier</a>
+
                             {% endif %}
                             {# Publier #}
-                            {%  if app.user == sortie.organisateur and sortie.etat.id == 1 %}
-{#                                <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}"#}
-{#                                   title="Publier la sortie">Publier</a>#}
-                                Publier
+                            {%  if app.user == sortie.organisateur and sortie.etat.id == 1 or sortie.etat.id == 2 %}
+                                <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}"
+                                   title="Publier la sortie">Publier</a>
                             {% endif %}
                             {# Annuler #}
                             {% if app.user == sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 1) %}
@@ -118,7 +127,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button>
+            <a href="{{ path('sortie_create') }}"><button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button></a>
         </div>
     </div>
 </div>

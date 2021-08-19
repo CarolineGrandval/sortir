@@ -129,6 +129,6 @@ class SortieRepository extends ServiceEntityRepository
 
         //Retourne la requête selon les filtres ajoutés
         return $req->getQuery()->getResult();
+        }
 
-    }
 }
