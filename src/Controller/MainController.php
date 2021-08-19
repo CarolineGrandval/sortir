@@ -41,6 +41,7 @@ class MainController extends AbstractController
 
         //Récupération et initialisation des attributs de Recherche
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $search->setCampus($searchForm->get('campus')->getData());
             $search->setMotclef($searchForm->get('motclef')->getData());
             $search->setDateDebut($searchForm->get('dateDebut')->getData());
             $search->setDateFin($searchForm->get('dateFin')->getData());

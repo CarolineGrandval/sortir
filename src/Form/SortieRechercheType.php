@@ -39,6 +39,7 @@ class SortieRechercheType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => ['class' => 'datepicker'],
                 'format' => 'dd/MM/yyyy',
+                'required' => false,
                 'mapped'=> false,
             ])
             //ajout DatePicker pour date de fin
@@ -48,6 +49,7 @@ class SortieRechercheType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => ['class' => 'js-datepicker'],
                 'format' => 'dd/MM/yyyy',
+                'required' => false,
                 'mapped'=> false,
             ])
             //ajout CheckBox pour organisateur
