@@ -8,13 +8,14 @@
     <h1>Afficher une sortie</h1>
     L'utilisateur courant est: {{ app.user.nom }}
 <table class ="table table-borderless">
-    <tr><td>Nom de la sortie: {{ sortie.nom }}</td><td>Campus: {{ campus.nom }}</td></tr>
-    <tr><td>Date et heure de la sortie: {{ sortie.dateHeureDebut|date("m/d/Y") }}</td><td>Lieu: {{ lieu.nomLieu }}</td></tr>
-    <tr><td>Date limite d'inscription: {{  sortie.dateLimiteInscription|date("m/d/Y") }}</td><td>Ville: {{ ville.nom }}</td></tr>
-    <tr><td>Nombre de places: {{ sortie.nbParticipantsMax }}</td><td>Rue: {{ lieu.rue }}</td></tr>
-    <tr><td>Durée: {{ sortie.duree }} minutes</td><td>Code postal: {{  ville.codePostal}}</td></tr>
-    <tr><td>Description et Infos: {{ sortie.infosSortie }}</td><td>Latitude: {{ lieu.latitude }}</td></tr>
-    <tr><td>Longitude: {{ lieu.longitude }}</td></tr>
+    <tr><td>Nom de la sortie: {{ sortie.nom }}</td>
+        <td>Campus: {{ sortie.getCampus().nom }}{# {{ campus.nom }} #}</td></tr>
+    <tr><td>Date et heure de la sortie: {{ sortie.dateHeureDebut|date("m/d/Y") }}</td><td>Lieu: {{ sortie.getLieu().nomLieu }}</td></tr>
+    <tr><td>Date limite d'inscription: {{  sortie.dateLimiteInscription|date("m/d/Y") }}</td><td>Ville: {{ sortie.getLieu().getVille().nom }}</td></tr>
+    <tr><td>Nombre de places: {{ sortie.nbParticipantsMax }}</td><td>Rue: {{ sortie.getLieu().rue }}</td></tr>
+    <tr><td>Durée: {{ sortie.duree }} minutes</td><td>Code postal: {{  sortie.getLieu().getVille().codePostal}}</td></tr>
+    <tr><td>Description et Infos: {{ sortie.infosSortie }}</td><td>Latitude: {{ sortie.getLieu().latitude }}</td></tr>
+    <tr><td>Longitude: {{ sortie.getLieu().longitude }}</td></tr>
 
 </table>
 
@@ -27,9 +28,9 @@
         </tr>
 
 
-   {% for user in users %}
+   {% for user in sortie.getParticipants() %}
        <tr>
-    <td>{{ user.pseudo }}</td><td>{{ user.nom }} {{ user.prenom }}</td>
+    <td>{{ user.pseudo }}</td><td>{{ user.prenom }} {{ user.nom }}</td>
        </tr>
 
     {% endfor %}

@@ -14,11 +14,12 @@
 
 <div class="mb-3">
     <h1>Accueil</h1>
-    <div>
-        <div>
-            <h5 class="col-12 d-flex justify-content-end">Date du jour : {{ "now"|date("d/m/Y") }}</h5>
-            <h5 class="col-12 d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
-
+    <div class="row">
+        <div class="col-md-push-6">
+            <span class="pull-right">
+                <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+                <h5>Participant : {{ app.user.pseudo }}</h5>
+            </span>
         </div>
     </div>
     <div class="mb-3">
@@ -134,7 +135,11 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{{ path('sortie_create') }}"><button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button></a>
+
+            <div class="row justify-content-center">
+                <a href="{{ path('sortie_create') }}"><button name='create' type='submit' value='create' class="col-2 btn btn-primary mt-4">Créer une sortie</button></a>
+            </div>
+
         </div>
     </div>
 </div>

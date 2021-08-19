@@ -149,7 +149,7 @@ class SortieController extends AbstractController
             $entityManager->flush();
 
             // Redirection sur le controlleur
-            return $this->redirectToRoute('sortie_motifannulation', ['id' => $sortie->getId()]);
+            return $this->redirectToRoute('sortie_annuler', ['id' => $sortie->getId()]);
         }
 
         return $this->render('sortie/annuler.html.twig', [

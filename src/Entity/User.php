@@ -13,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"mail"}, message="There is already an account with this mail")
+ * @UniqueEntity(fields={"mail"}, message="Cet email est déjà lié à un compte")
+ * @UniqueEntity(fields={"pseudo"}, message="Ce pseudo est déjà pris, veuillez en choisir un autre")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -87,7 +88,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max=50, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
-     * @Assert\Unique(message="Ce pseudo est déjà pris, veuillez en choisir un autre.")
      */
     private ?string $pseudo;
 
