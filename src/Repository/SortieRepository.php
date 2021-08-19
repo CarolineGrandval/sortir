@@ -57,11 +57,13 @@ class SortieRepository extends ServiceEntityRepository
 
         //requete avec seulement le campus de sélectionner
         $req= $this->createQueryBuilder('s')
-            ->leftjoin('s.etat', 'e')
+            ->innerJoin('s.etat', 'e')
             ->addSelect('e')
             ->leftJoin('s.participants', 'p')
             ->addSelect('p')
-            ->andWhere('s.campus = :campus')->setParameter('campus', $search->getCampus());
+            ->andWhere('s.campus = :campus')->setParameter('campus', $search->getCampus())
+            ->andWhere('e.libelle != :annulees')->setParameter('annulees', 'Annulée')
+        ;
 
         // Pagination de la première page et le nombre d'éléments par page
         $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
@@ -87,48 +89,48 @@ class SortieRepository extends ServiceEntityRepository
         //par date de début
         if (!is_null($search->getDateDebut())) {
             $req->andWhere('s.dateHeureDebut > :dateDebut or s.dateHeureDebut = :dateDebut')
-                ->setParameter('startDate', $search->getDateDebut());
+                ->setParameter('dateDebut', $search->getDateDebut());
         }
 
         //par date de fin
         if (!is_null($search->getDateFin())) {
             $req->andWhere('s.dateHeureDebut < :dateFin or s.dateHeureDebut = :dateFin')
-                ->setParameter('endDate', $search->getDateFin());
+                ->setParameter('dateFin', $search->getDateFin());
         }
 
         //si organisateur de la sortie
         if ($search->isOrganisateur()) {
-            $req->andWhere('s.organisateur = :organisateur')
-                ->setParameter('organisateur', $user);
+            $req->andWhere('s.organisateur = :organisateur')->setParameter('organisateur', $user);
         }
 
         //sur les sorties passées
         if ($search->isPassees()) {
-            $req->andWhere('e.libelle = :passees')
-                ->setParameter('passees', State::PASSED);
+            $req->andWhere('e.libelle = :passees')->setParameter('passees', 'Passee'); //State::PASSED
         }
 
         //Utilisateur inscrit
         if ($search->isInscrit()) {
-            $req->andWhere('p = :inscrit')
-                ->setParameter('inscrit', $user);
+            $req->andWhere('p = :inscrit')->setParameter('inscrit', $user);
         }
 
         //Utilisateur pas inscrit
         if ($search->isPasInscrit()) {
-            $eventsToExclude = $this->createQueryBuilder('e')
-                ->join('e.participants', 'p')
+            $sortiesPasInscrit = $this->createQueryBuilder('e')
+                ->innerJoin('e.participants', 'p')
                 ->where('p = :signedUpUser')->setParameter('signedUpUser', $user)
                 ->getQuery()->getResult();
 
-            if(!empty($eventsToExclude)){
-                $req->andWhere('e NOT IN (:eventsToExclude)')
-                    ->setParameter('eventsToExclude', $eventsToExclude);
+            if(!empty($sortiesPasInscrit)){
+                $req->andWhere('e NOT IN (:sortiesPasInscrit)')
+                    ->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
             }
         }
 
+        //Ordonner par date
+        $req->orderBy('s.dateHeureDebut', 'DESC');
+
         //Retourne la requête selon les filtres ajoutés
         return $req->getQuery()->getResult();
-        }
+    }
 
 }

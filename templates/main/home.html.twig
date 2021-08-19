@@ -12,18 +12,16 @@
 
 {% block body %}
 
-<div class="example-wrapper">
+<div class="mb-3">
     <h1>Accueil</h1>
-    <div class="row">
-        <div class="col-md-push-6">
-            <span class="pull-right">
-                <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
-                <h5>Participant : {{ app.user.pseudo }}</h5>
-            </span>
+    <div>
+        <div>
+            <h5 class="col-12 d-flex justify-content-end">Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+            <h5 class="col-12 d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
+
         </div>
     </div>
-    <div>
-
+    <div class="mb-3">
         <!-- affichage des messages d'erreur et de confirmation -->
         {% for group, messages in app.flashes %}
             {% for message in messages %}
@@ -38,18 +36,25 @@
             {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
             <div class="row justify-content-between custom-line">
 
-                <div class="col-4">
-                    <p>{{ form_row(searchForm.campus) }}</p>
-                    <p>{{ form_row(searchForm.motclef) }}</p>
-                    <p>{{ form_row(searchForm.dateDebut) }} {{ form_row(searchForm.dateFin) }}</p>
+                <div class="col-5">
+                    {{ form_row(searchForm.campus) }}
+                    {{ form_row(searchForm.motclef) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(searchForm.dateDebut) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(searchForm.dateFin) }}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-4">
-                    <p>{{ form_row(searchForm.organisateur) }}</p>
-                    <p>{{ form_row(searchForm.inscrit) }}</p>
-                    <p>{{ form_row(searchForm.pasInscrit) }}</p>
-                    <p>{{ form_row(searchForm.passees) }}</p>
+                <div class="col-5">
+                    {{ form_row(searchForm.organisateur) }}
+                    {{ form_row(searchForm.inscrit) }}
+                    {{ form_row(searchForm.pasInscrit) }}
+                    {{ form_row(searchForm.passees) }}
                 </div>
-                <div class="col-4"><p>{{ form_widget(searchForm.submit) }}</p></div>
+                <div class="col-2"><p>{{ form_widget(searchForm.submit) }}</p></div>
             </div>
                 {{ form_end(searchForm) }}
             </div>
@@ -58,6 +63,7 @@
             <table class="table">
                 <thead>
                 <tr>
+                    {# Nom des colonnes #}
                     <th scope="col">Nom de la sortie</th>
                     <th scope="col">Date de la sortie</th>
                     <th scope="col">Clôture</th>
@@ -74,13 +80,14 @@
                     {% set dateDebut = sortie.dateHeureDebut|date('Y-m-d') %}
                     {% set dateDifference = "now"|date('Y-m-d') %}
                     {% set dateEcart = date(dateDifference).diff(date(dateDebut)) %}
+                    {# Affichage des sorties de moins de 30 jours #}
                     {% if dateEcart.days <= 30 %}
                     {% else %}
                     <tr>
-                        <th scope="row">{{ sortie.nom }}</th>
                         <td>{{ sortie.nom|capitalize }}</td>
                         <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
                         <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+                        <td> {{ sortie.participants.count() }}/ {{ sortie.nbParticipantsMax }}</td>
                         <td>{{ sortie.etat.libelle }}</td>
                         <td>X</td>
                         <td>{{ sortie.organisateur.pseudo }}</td>

@@ -29,37 +29,37 @@ class MainController extends AbstractController
         //Instanciation de l'objet Rechercher Request $request, EventRepository $eventRepository, Security $security, SessionInterface $session
         $search = new Rechercher();
 
-        //ajout par défaut du Campus de l'utilisateur
+        //si utilisateur connecté
         if (!empty($user)){
+            //ajout par défaut du Campus de l'utilisateur
             $search->setCampus($user->getCampus());
+            $search->setOrganisateur(true);
+            $search->setPasInscrit(true);
+            $search->setInscrit(true);
 
-        $search->setOrganisateur(true);
-        $search->setPasInscrit(true);
-        $search->setInscrit(true);
+            //Création du formulaire
+            $searchForm = $this->createForm(SortieRechercheType::class, $search);
+            $searchForm->handleRequest($request);
 
-        //Création du formulaire
-        $searchForm = $this->createForm(SortieRechercheType::class, $search);
-        $searchForm->handleRequest($request);
+            //Récupération et initialisation des attributs de Recherche
+            if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+                $search->setCampus($searchForm->get('campus')->getData());
+                $search->setMotclef($searchForm->get('motclef')->getData());
+                $search->setDateDebut($searchForm->get('dateDebut')->getData());
+                $search->setDateFin($searchForm->get('dateFin')->getData());
+                $search->setOrganisateur($searchForm->get('organisateur')->getData());
+                $search->setInscrit($searchForm->get('inscrit')->getData());
+                $search->setPasInscrit($searchForm->get('pasInscrit')->getData());
+                $search->setPassees($searchForm->get('passees')->getData());
+            }
+            //pagination
+            $page = $request->get('page', 1);
 
-        //Récupération et initialisation des attributs de Recherche
-        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $search->setCampus($searchForm->get('campus')->getData());
-            $search->setMotclef($searchForm->get('motclef')->getData());
-            $search->setDateDebut($searchForm->get('dateDebut')->getData());
-            $search->setDateFin($searchForm->get('dateFin')->getData());
-            $search->setOrganisateur($searchForm->get('organisateur')->getData());
-            $search->setInscrit($searchForm->get('inscrit')->getData());
-            $search->setPasInscrit($searchForm->get('pasInscrit')->getData());
-            $search->setPassees($searchForm->get('passees')->getData());
-        }
-        //pagination
-        $page = $request->get('page', 1);
+            //Envoi de la requete
+            $sorties = $entityManager->getRepository('App:Sortie')->search($page,10, $search, $user);
 
-        //Envoi de la requete
-        $sorties = $entityManager->getRepository('App:Sortie')->search($page,10, $search, $user);
-
-        //Création formulaire avec des données
-        return $this->render('main/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties]);
+            //Création formulaire avec des données
+            return $this->render('main/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties]);
         }
 
         return  $this->redirectToRoute('app_login');
