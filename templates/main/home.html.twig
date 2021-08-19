@@ -1,31 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock title%}
+{% block title %}Accueil - Sortons casqués{% endblock title %}
 {% block stylesheets %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" rel="stylesheet"/>
-{% endblock stylesheets%}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"
+          rel="stylesheet"/>
+{% endblock stylesheets %}
 {% block javascripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
-{#    <script>#}
-{#        $(document).ready(function() {#}
-{#            // you may need to change this code if you are not using Bootstrap Datepicker#}
-{#            $('.js-datepicker').datepicker({#}
-{#                format: 'yyyy-mm-dd'#}
-{#            });#}
-{#        });#}
-{#    </script>#}
+    {# <script> #}
+    {# $(document).ready(function() { #}
+    {# // you may need to change this code if you are not using Bootstrap Datepicker #}
+    {# $('.js-datepicker').datepicker({ #}
+    {# format: 'yyyy-mm-dd' #}
+    {# }); #}
+    {# }); #}
+    {# </script> #}
 {% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .example-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+    }
+
+    .example-wrapper code {
+        background: #F5F5F5;
+        padding: 2px 6px;
+    }
 </style>
 
 <div class="example-wrapper">
     <h1>Accueil</h1>
-    <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
-    <h5>Participant : {{ app.user.pseudo }}</h5>
+    <div class="row">
+        <div class="col-md-push-6">
+            <span class="pull-right">
+            <h5>Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+            <h5>Participant : {{ app.user.pseudo }}</h5>
+            </span>
+        </div>
+    </div>
     <div>
         <h3>Filtrer les sorties</h3>
         <div id="search">
@@ -37,59 +53,96 @@
                 <div class="col-md-6">
                     {{ form_row(searchForm.motclef) }}
                 </div>
-                {{ form_row(searchForm.dateDebut) }}
-                {{ form_row(searchForm.dateFin) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <div class="col-2 inline-label">{{ form_label(searchForm.dateDebut) }}</div>
+                            <div class="col-10">{{ form_widget(searchForm.dateDebut) }}{{ form_errors(searchForm.dateDebut) }}</div>
+                            {# {{ form_row(searchForm.dateDebut) }} #}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <div class="col-2 inline-label">{{ form_label(searchForm.dateFin) }}</div>
+                            <div class="col-10">{{ form_widget(searchForm.dateFin) }}{{ form_errors(searchForm.dateFin) }}</div>
+                            {# {{ form_row(searchForm.dateFin) }} #}
+                        </div>
+                    </div>
+                </div>
+
                 {{ form_row(searchForm.organisateur) }}
                 {{ form_row(searchForm.inscrit) }}
                 {{ form_row(searchForm.pasInscrit) }}
                 {{ form_row(searchForm.passees) }}
                 {{ form_widget(searchForm.submit) }}
-           {{ form_end(searchForm) }}
+                {{ form_end(searchForm) }}
+            </div>
         </div>
-    </div>
-    <div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Nom de la sortie</th>
-                <th scope="col">Date de la sortie</th>
-                <th scope="col">Clôture</th>
-                <th scope="col">inscrits/places</th>
-                <th scope="col">Etat</th>
-                <th scope="col">Inscrit</th>
-                <th scope="col">Organisateur</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for sortie in sorties %}
+        <div>
+            <table class="table">
+                <thead>
                 <tr>
-                    <th scope="row">{{ sortie.nom }}</th>
-                    <td><a href="{{ url('sortie_detail', {"id": sortie.id }) }}">{{ sortie.nom|capitalize }}</a></td>
-                    <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
-                    <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
-                    <td>{{ sortie.etat }}</td>
-                    <td>X</td>
-                    <td>{{ sortie.organisateur }}</td>
-                    <td>
-                        {# Afficher #}
-                        {%  if sortie.etat == 2
-                            or sortie.etat == 3
-                            or sortie.etat == 4
-                            or sortie.etat == 5
-                            or sortie.etat == 6 %}
-                            <a href="{{ url('index', {'id': sortie.id}) }}" title="Afficher une sortie"></a>
-                        {% endif %}
-                        {# Modifier #}
-                        {% if app.user == sortie.organisateur and sortie.etat == 1 %}
-                            <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie"></a>
-                        {% endif %}
-                    </td>
+                    <th scope="col">Nom de la sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clôture</th>
+                    <th scope="col">inscrits/places</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Inscrit</th>
+                    <th scope="col">Organisateur</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button>
+                </thead>
+                <tbody>
+                {% for sortie in sorties %}
+                    <tr>
+                        <th scope="row">{{ sortie.nom }}</th>
+                        <td>{{ sortie.nom|capitalize }}</td>
+                        <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
+                        <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+                        <td>{{ sortie.etat.libelle }}</td>
+                        <td>X</td>
+                        <td>{{ sortie.organisateur.nom }}</td>
+                        <td>
+                            {# Afficher #}
+                            {% if sortie.etat.id == 2
+                                or sortie.etat.id == 3
+                                or sortie.etat.id == 4
+                                or sortie.etat.id == 5
+                                or sortie.etat.id == 6 %}
+{#                                <a href="{{ url('index', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>#}
+                                Afficher
+                            {% endif %}
+                            {# Modifier #}
+                            {% if app.user == sortie.organisateur and sortie.etat.id == 1 %}
+{#                                <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}"#}
+{#                                   title="Modifier la sortie">Modifier</a>#}
+                                Modifier
+                            {% endif %}
+                            {# Publier #}
+                            {%  if app.user == sortie.organisateur and sortie.etat.id == 1 %}
+{#                                <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}"#}
+{#                                   title="Publier la sortie">Publier</a>#}
+                                Publier
+                            {% endif %}
+                            {# Annuler #}
+                            {% if app.user == sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 1) %}
+{#                                <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}"#}
+{#                                   title="Annuler la sortie">Annuler</a>#}
+                                Annuler
+                            {% endif %}
+                            {# Se désister #}
+                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 4) %}
+{#                                <a href="{{ url('sortie_désister', { 'id': sortie.id }) }}"#}
+{#                                   title="Se désinscrire de la sortie">Se désister</a>#}
+                                Se désinscrire
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button name='create' type='submit' value='create' class='btn btn-primary'>Créer une sortie</button>
+        </div>
     </div>
 </div>
 {% endblock body %}

@@ -57,7 +57,7 @@ class SortieRepository extends ServiceEntityRepository
 
         //requete avec seulement le campus de sélectionner
         $req= $this->createQueryBuilder('s')
-            ->join('s.etat', 'e')
+            ->leftjoin('s.etat', 'e')
             ->addSelect('e')
             ->leftJoin('s.participants', 'p')
             ->addSelect('p')
@@ -67,13 +67,13 @@ class SortieRepository extends ServiceEntityRepository
         $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
         $req->setMaxResults($nbElementsByPage);
 
-        //Requete sur les sorties pas créés par l'utilisateur
-        $eventsCreatedToExclude = $this->createQueryBuilder('s')
-            ->join('s.etat', 'e')
-            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
-            ->andWhere('e.libelle= :created')->setParameter('created', 'Créée')
-            ->getQuery()
-            ->getResult();
+//        //Requete sur les sorties pas créés par l'utilisateur
+//        $eventsCreatedToExclude = $this->createQueryBuilder('s')
+//            ->join('s.etat', 'e')
+//            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
+//            ->andWhere('e.libelle= :created')->setParameter('created', 'Créée')
+//            ->getQuery()
+//            ->getResult();
 //
 //        //Ajout de la requête d'exclusion
 //        $req->andWhere('e NOT IN (:eventscreatedToExclude)')
