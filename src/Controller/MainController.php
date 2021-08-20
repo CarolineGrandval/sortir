@@ -58,10 +58,11 @@ class MainController extends AbstractController
             //Envoi de la requete
             $sorties = $entityManager->getRepository('App:Sortie')->search($page,10, $search, $user);
 
-            //Ajout du valeur inscrit
+            //Requete d'inscription aux sorties en fonction de l'utilisateur connecté
+            $inscrits = $entityManager->getRepository('App:Sortie')->inscritSortie($search, $user);
 
             //Création formulaire avec des données
-            return $this->render('main/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties]);
+            return $this->render('main/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties, 'inscrits' => $inscrits]);
         }
 
         return  $this->redirectToRoute('app_login');

@@ -85,11 +85,6 @@ class Sortie
     private ?Campus $campus;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class)
-     */
-    private Collection $participants;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortiesOrganisees")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -100,6 +95,11 @@ class Sortie
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Lieu $lieu;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties")
+     */
+    private $participants;
 
     /**
      * Constructeur
@@ -266,38 +266,6 @@ class Sortie
     }
 
     /**
-     * @return Collection|User[]
-     */
-    public function getParticipants(): Collection
-    {
-        return $this->participants;
-    }
-
-    /**
-     * @param User $participant
-     * @return $this
-     */
-    public function addParticipant(User $participant): self
-    {
-        if (!$this->participants->contains($participant)) {
-            $this->participants[] = $participant;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param User $participant
-     * @return $this
-     */
-    public function removeParticipant(User $participant): self
-    {
-        $this->participants->removeElement($participant);
-
-        return $this;
-    }
-
-    /**
      * @return User|null
      */
     public function getOrganisateur(): ?User
@@ -355,6 +323,30 @@ class Sortie
     public function setNouveaulieu(?Lieu $nouveaulieu): self
     {
         $this->nouveaulieu = $nouveaulieu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(User $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(User $participant): self
+    {
+        $this->participants->removeElement($participant);
 
         return $this;
     }

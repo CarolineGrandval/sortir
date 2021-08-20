@@ -23,30 +23,6 @@ class SortieRepository extends ServiceEntityRepository
     }
 
     /**
-     * Liste toutes les sorties en arrivant sur la page d'accueil
-     * @param int $page
-     * @param int $nbElementsByPage
-     * @return array
-     */
-    public function getSorties(int $page = 1, int $nbElementsByPage = 10): array{
-
-        $req = $this->createQueryBuilder('sortie')->addSelect('user')
-            ->leftJoin('sortie.participants', 'user')
-            ->addSelect('campus')
-            ->innerJoin('user.campus', 'campus')
-            ->addSelect('etat')
-            ->innerJoin('sortie.etat', 'etat')
-            ->orderBy('sortie.dateHeureDebut', 'DESC');
-
-
-        // Pagination de la première page et le nombre d'éléments par page
-        $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
-        $req->setMaxResults($nbElementsByPage);
-
-        return $req->getQuery()->getResult();
-    }
-
-    /**
      * Liste les sorties en fonction des différentes infos saisies par l'utilisateur
      * @param int $page
      * @param int $nbElementsByPage
@@ -140,4 +116,21 @@ class SortieRepository extends ServiceEntityRepository
         return $req->getQuery()->getResult();
     }
 
+    /**
+     * Liste des sorties sur lequelles l'utilisateur est inscrit
+     * @param Rechercher $search
+     * @param User $user
+     * @return array
+     */
+    public function inscritSortie(Rechercher $search, User $user): array{
+
+        //Création de la requête pour savoir si l'utilisateur est inscrit à l'évènement
+        $req = $this->createQueryBuilder('s')
+                    ->select('s.id')
+                    ->innerjoin('s.participants', 'user')
+                    ->andWhere('user.id = :id')->setParameter('id', $user->getId());
+
+        //retourne le tableau du résultat de la requête
+        return $req->getQuery()->getResult();
+    }
 }

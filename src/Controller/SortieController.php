@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\User;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -193,6 +194,29 @@ class SortieController extends AbstractController
 
         // Ajout d'un message de confirmation
         $this->addFlash('success', 'La sortie a bien été annulée !');
+        // Redirection sur le controlleur
+        return $this->redirectToRoute('main_home');
+    }
+
+    /**
+     * @Route(path="/desister/{id}", name="desister", requirements={"id": "\d+"}, methods={"GET"})
+     */
+    public function desister(Request $request, EntityManagerInterface $entityManager)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('La sortie n\'a pas été trouvé !');
+        }
+        // Remove by Elements
+        $sortie->removeParticipant($user);
+
+        // Ajout d'un message de confirmation de désistement
+        $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
+
         // Redirection sur le controlleur
         return $this->redirectToRoute('main_home');
     }

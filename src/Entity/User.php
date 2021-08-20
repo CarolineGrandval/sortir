@@ -108,6 +108,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $photo;
 
     /**
+     * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
+     */
+    private $sorties;
+
+    /**
      * User constructor.
      * Par défaut, les users sont actifs et non admin.
      */
@@ -116,6 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->sortiesOrganisees = new ArrayCollection();
         $this->actif = true;
         $this->administrateur = false;
+        $this->sorties = new ArrayCollection();
     }
 
     /**
@@ -360,6 +366,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Sortie[]
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): self
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties[] = $sorty;
+            $sorty->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): self
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            $sorty->removeParticipant($this);
+        }
+
+        return $this;
     }
 }
 

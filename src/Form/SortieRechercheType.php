@@ -21,14 +21,6 @@ class SortieRechercheType extends AbstractType
         $builder
             ->setMethod('get')
             //ajout ComboBox
-//            ->add('campus', EntityType::class, [
-//                'label' => 'Campus : ',
-//                'class' => Campus::class,
-//                'choice_label' => 'nom',
-//                'required' => true,
-//                'mapped'=> false,
-//            ])
-
             ->add('campus', EntityType::class, [
                 'label' => 'Campus : ',
                 'required' => true,
