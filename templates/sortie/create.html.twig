@@ -8,7 +8,11 @@
 
 {% block body %}
 
-    <h2>Créer une sortie</h2>
+    {% if app.request.attributes.get('_route') == 'sortie_create' %}
+        <h2>Créer une sortie</h2>
+    {% else %}
+        <h2>Modifiez une sortie</h2>
+    {% endif %}
 
     <!-- affichage des messages d'erreur et de confirmation -->
     {% for group, messages in app.flashes %}
@@ -121,6 +125,8 @@
     <!-- Annuler -->
         <a href="{{ url('sortie_motifannulation', { "id": id }) }}"><button id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button></a>
     {% endif %}
+
+    <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info'>Retour accueil</button></a>
 
 {% endblock %}
 

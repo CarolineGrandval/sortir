@@ -73,17 +73,17 @@
     <!-- photo de profil -->
     {% if app.user %}
         {#        <p>{{ app.user.photo |imagine_filter('carre') }}</p>#}
-        {{ user.nom }}
+{#        {{ user.nom }}#}
 
-    <img src="{{ asset(user.photo) }}">
+{#    <img src="{{ asset(user.photo) }}">#}
 
     {% endif %}
 
-    <div class="mb-3">
-        {{ form_label(registrationForm.photo) }}
-        {{ form_widget(registrationForm.photo) }}
-        {{ form_errors(registrationForm.photo) }}
-    </div>
+{#    <div class="mb-3">#}
+{#        {{ form_label(registrationForm.photo) }}#}
+{#        {{ form_widget(registrationForm.photo) }}#}
+{#        {{ form_errors(registrationForm.photo) }}#}
+{#    </div>#}
 
     {% if not is_granted("ROLE_ADMIN") %}
     {% endif %}
@@ -92,5 +92,8 @@
         {{ form_widget(registrationForm.submit) }}
     </div>
     {{ form_end(registrationForm) }}
+
+    <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info'>Retour accueil</button></a>
+
 
 {% endblock %}

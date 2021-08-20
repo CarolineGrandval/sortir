@@ -38,7 +38,7 @@ class MainController extends AbstractController
             $search->setInscrit(true);
 
             //Création du formulaire
-            $searchForm = $this->createForm(SortieRechercheType::class, $search);
+            $searchForm = $this->createForm('App\Form\SortieRechercheType', $search);
             $searchForm->handleRequest($request);
 
             //Récupération et initialisation des attributs de Recherche

@@ -19,8 +19,8 @@ class Rechercher
     private ?int $id;
     private ?Campus $campus;
     private ?string $motclef = null;
-    private ?DateTime $dateDebut = null;
-    private ?DateTime $dateFin = null;
+    private ?\DateTimeInterface $dateDebut = null;
+    private ?\DateTimeInterface $dateFin = null;
     private bool $organisateur = true;
     private bool $inscrit = true;
     private bool $pasInscrit = true;
@@ -66,36 +66,38 @@ class Rechercher
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTimeInterface|null
      */
-    public function getDateDebut(): ?DateTime
+    public function getDateDebut(): ?\DateTimeInterface
     {
         return $this->dateDebut;
     }
 
     /**
-     * @param DateTime|null $dateDebut
+     * @param \DateTimeInterface|null $dateDebut
      */
-    public function setDateDebut(?DateTime $dateDebut): void
+    public function setDateDebut(?\DateTimeInterface $dateDebut): void
     {
         $this->dateDebut = $dateDebut;
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTimeInterface|null
      */
-    public function getDateFin(): ?DateTime
+    public function getDateFin(): ?\DateTimeInterface
     {
         return $this->dateFin;
     }
 
     /**
-     * @param DateTime|null $dateFin
+     * @param \DateTimeInterface|null $dateFin
      */
-    public function setDateFin(?DateTime $dateFin): void
+    public function setDateFin(?\DateTimeInterface $dateFin): void
     {
         $this->dateFin = $dateFin;
     }
+
+
 
     /**
      * @return bool

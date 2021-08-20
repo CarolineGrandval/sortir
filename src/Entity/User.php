@@ -50,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
-     * @Assert\Length(max=180, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Length(max=180, maxMessage="Le mail doit contenir au maximum {{ limit }} caractères")
      * @Assert\Email(message="Le mail fourni n'a pas un format valide")
      */
     private ?string $mail;
@@ -87,7 +87,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      * @Assert\NotBlank
-     * @Assert\Length(max=50, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Length(min=3, minMessage="Le pseudo doit contenir au moins {{ limit }} caractères", max=50, maxMessage="Le pseudo doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $pseudo;
 

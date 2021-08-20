@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -30,6 +31,7 @@ class SortieController extends AbstractController
         $sortie = new Sortie();
         $sortie->setOrganisateur($user);
         $sortie->setEtat($etat);
+        $sortie->setCampus($this->getUser()->getCampus());
 //        $lieu = new Lieu();
 
         // Création du formulaire
@@ -71,8 +73,15 @@ class SortieController extends AbstractController
         // Récupération de l'entité à modifier
         try {
             $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+
+            $dateDebut = (\DateTimeImmutable::createFromMutable($sortie->getDateHeureDebut()));
+            $dateInscr = (\DateTimeImmutable::createFromMutable($sortie->getDateLimiteInscription()));
+
+            $sortie->setDateHeureDebut($dateDebut);
+            $sortie->setDateLimiteInscription($dateInscr);
+
         } catch (NonUniqueResultException | NoResultException $e) {
-            throw $this->createNotFoundException('User Not Found !');
+            throw $this->createNotFoundException('Sortie Not Found !');
         }
 
         // Création du formulaire
@@ -131,6 +140,11 @@ class SortieController extends AbstractController
     {
         try {
             $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+            //on caste les dates pour éviter des erreurs dans l'affichage du formulaire.
+            $dateDebut = (\DateTimeImmutable::createFromMutable($sortie->getDateHeureDebut()));
+            $dateInscr = (\DateTimeImmutable::createFromMutable($sortie->getDateLimiteInscription()));
+            $sortie->setDateHeureDebut($dateDebut);
+            $sortie->setDateLimiteInscription($dateInscr);
         } catch (NonUniqueResultException | NoResultException $e) {
             throw $this->createNotFoundException('User Not Found !');
         }
