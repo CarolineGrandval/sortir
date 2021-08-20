@@ -19,6 +19,15 @@ class VilleRepository extends ServiceEntityRepository
         parent::__construct($registry, Ville::class);
     }
 
+    public function findAllWithPagination(int $page = 1, int $nbElementsByPage = 10): array{
+
+        $req = $this->createQueryBuilder('ville')
+            ->orderBy('ville.codePostal', 'ASC');
+//        $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
+
+        return $req->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Ville[] Returns an array of Ville objects
     //  */

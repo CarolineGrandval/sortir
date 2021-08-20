@@ -192,7 +192,7 @@ class SortieController extends AbstractController
         $entityManager->flush();
 
         // Ajout d'un message de confirmation
-        $this->addFlash('success', 'La sortie a bien été annulée !');
+        $this->addFlash('success', 'La sortie a bien été annulée');
         // Redirection sur le controlleur
         return $this->redirectToRoute('main_home');
     }

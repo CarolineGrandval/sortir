@@ -56,7 +56,7 @@ class SortieRepository extends ServiceEntityRepository
      */
     public function search(int $page = 1, int $nbElementsByPage = 10, Rechercher $search, User $user): array{
 
-        //requete avec seulement le campus de sélectionner
+        //requete avec seulement le campus de sélectionné
         $req= $this->createQueryBuilder('s')
             ->innerJoin('s.etat', 'e')
             ->addSelect('e')

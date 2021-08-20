@@ -90,10 +90,10 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // Ajout d'un message de confirmation
-            $this->addFlash('success', 'User successfully updated !');
+            $this->addFlash('success', 'Votre profil a bien été modifié !');
 
             // Redirection sur le controlleur
-            return $this->redirectToRoute('app_register', ['id' => $user->getId()]);
+            return $this->redirectToRoute('main_home', ['id' => $user->getId()]);
         }
 
         return $this->render('registration/register.html.twig', [
