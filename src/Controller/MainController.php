@@ -58,6 +58,8 @@ class MainController extends AbstractController
             //Envoi de la requete
             $sorties = $entityManager->getRepository('App:Sortie')->search($page,10, $search, $user);
 
+            //Ajout du valeur inscrit
+
             //Création formulaire avec des données
             return $this->render('main/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties]);
         }

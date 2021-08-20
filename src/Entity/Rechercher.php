@@ -25,7 +25,6 @@ class Rechercher
     private bool $inscrit = true;
     private bool $pasInscrit = true;
     private bool $passees = false;
-    private ?int $nbinscrit;
 
     /**
      * @return int|null
@@ -160,22 +159,6 @@ class Rechercher
     public function setPassees(bool $passees): void
     {
         $this->passees = $passees;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getNbinscrit(): ?int
-    {
-        return $this->nbinscrit;
-    }
-
-    /**
-     * @param int|null $nbinscrit
-     */
-    public function setNbinscrit(?int $nbinscrit): void
-    {
-        $this->nbinscrit = $nbinscrit;
     }
 
 }
