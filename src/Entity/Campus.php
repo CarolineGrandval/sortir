@@ -25,6 +25,12 @@ class Campus
     private ?string $nom;
 
     /**
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="campus")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private Collection $sorties;
+
+    /**
      * Constructeur
      */
     public function __construct()
@@ -58,5 +64,22 @@ class Campus
 
         return $this;
     }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getSorties()
+    {
+        return $this->sorties;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $sorties
+     */
+    public function setSorties($sorties): void
+    {
+        $this->sorties = $sorties;
+    }
+
 
 }

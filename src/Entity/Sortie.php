@@ -78,7 +78,7 @@ class Sortie
     private ?Etat $etat;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sortiesCampus")
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="sorties")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank(message="Veuillez indiquer un campus")
      */

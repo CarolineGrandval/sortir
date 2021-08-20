@@ -35,7 +35,7 @@ class LieuController extends AbstractController
             $entityManager->flush();
 
             // Ajout d'un message de confirmation
-            $this->addFlash('success', 'Lieu successfully added !');
+            $this->addFlash('success', 'Nouveau lieu ajouté !');
 
             // Redirection sur le controlleur
             return $this->redirectToRoute('lieu');

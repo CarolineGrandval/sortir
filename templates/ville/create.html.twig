@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une ville{% endblock %}
+
+{% block body %}
+
+
+    <h2 class=" d-flex justify-content-center">Créer une ville</h2>
+
+    <!-- affichage des messages d'erreur et de confirmation -->
+    {% for group, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ group }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="mb-3">
+        {{ form_label(formVille.nom) }}
+        {{ form_widget(formVille.nom) }}
+        {{ form_errors(formVille.nom) }}
+    </div>
+
+    <div class="mb-3 ">
+        {{ form_label(formVille.codePostal) }}
+        {{ form_widget(formVille.codePostal) }}
+        {{ form_errors(formVille.codePostal) }}
+    </div>
+
+    <div class="mb-3 d-flex justify-content-center">
+        {{ form_widget(formVille.submit) }}
+    </div>
+
+    <h2 class="mt-4">Liste des villes</h2>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Ville</th>
+            <th scope="col">Code postal</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ville in pagination %}
+            <tr class="table-primary">
+                <th scope="col">{{ ville.nom }}</th>
+                <th scope="col">{{ ville.codePostal }}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class=" d-flex justify-content-center">
+    {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}
