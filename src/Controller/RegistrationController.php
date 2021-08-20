@@ -100,4 +100,18 @@ class RegistrationController extends AbstractController
             'registrationForm' => $formEdit->createView(),
         ]);
     }
+
+    /**
+     * @Route(path="/afficher/{id}", name="afficher_profil", requirements={"id": "\d+"}, methods={"GET"})
+     */
+    public function afficher(Request $request, EntityManagerInterface $entityManager){
+
+        //Récupération de l'identifiant de l'organisateur de la sortie
+        $user = $entityManager->getRepository('App:User')->find((int) $request->get('id'));
+
+        return $this->render('user/affiche.html.twig', [
+            'user' => $user,
+        ]);
+
+    }
 }
