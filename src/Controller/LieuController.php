@@ -41,7 +41,7 @@ class LieuController extends AbstractController
             return $this->redirectToRoute('lieu');
         }
 
-        return $this->render('lieu/index.html.twig', [
+        return $this->render('lieu/create.html.twig', [
             'formLieu' => $formLieu->createView(),
         ]);
     }

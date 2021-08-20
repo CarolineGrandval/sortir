@@ -35,6 +35,8 @@ class SortieType extends AbstractType
                 ->add('dateHeureDebut', DateTimeType::class, [
                     'label' => 'Date et heure de début : ',
                     'required' => true,
+                    'widget' => 'single_text',
+                    'input'  => 'datetime_immutable'
                 ])
                 ->add('duree', IntegerType::class, [
                     'label' => 'Durée : ',
@@ -43,6 +45,8 @@ class SortieType extends AbstractType
                 ->add('dateLimiteInscription', DateType::class, [
                     'label' => 'Date et heure de fin d\'inscription : ',
                     'required' => true,
+                    'widget' => 'single_text',
+                    'input'  => 'datetime_immutable'
                 ])
                 ->add('infosSortie', TextareaType::class, [
                     'label' => 'Description et infos : ',
@@ -60,7 +64,10 @@ class SortieType extends AbstractType
                         return $cr->createQueryBuilder('campus')->orderBy('campus.nom', 'ASC');
                     },
                     'choice_label' => 'nom',
+                    'disabled' => true,
                 ])
+
+                //TODO : afficher la ville liée au lieu par défaut (en édition).
                 ->add('ville', EntityType::class, [
                     'label' => 'Ville : ',
                     'required' => true,
@@ -71,6 +78,7 @@ class SortieType extends AbstractType
                             ->orderBy('ville.nom', 'ASC');
                     },
                     'choice_label' => 'nom',
+
                 ])
                 ->add('lieu', EntityType::class, [
                     'label' => 'Lieu : ',

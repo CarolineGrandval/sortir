@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SortieRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +35,7 @@ class Sortie
      * @Assert\NotBlank
      * @Assert\GreaterThan("today", message="La date de début doit être dans le futur !")
      */
-    private ?DateTime $dateHeureDebut;
+    private ?DateTimeInterface $dateHeureDebut = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -49,7 +50,7 @@ class Sortie
      * @Assert\NotBlank
      * @Assert\LessThanOrEqual(propertyPath="dateHeureDebut", message="La date de fin des inscriptions doit être avant la date de début de sortie")
      */
-    private ?DateTime $dateLimiteInscription;
+    private ?DateTimeInterface $dateLimiteInscription = null;
 
     /**
      * @ORM\Column(type="text", length=5000)
@@ -135,24 +136,6 @@ class Sortie
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getDateHeureDebut(): DateTime
-    {
-        return $this->dateHeureDebut;
-    }
-
-    /**
-     * @param DateTime $dateHeureDebut
-     * @return $this
-     */
-    public function setDateHeureDebut(DateTime $dateHeureDebut): self
-    {
-        $this->dateHeureDebut = $dateHeureDebut;
-
-        return $this;
-    }
 
     /**
      * @return int|null
@@ -174,23 +157,37 @@ class Sortie
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface|null
      */
-    public function getDateLimiteInscription(): DateTime
+    public function getDateHeureDebut(): ?DateTimeInterface
+    {
+        return $this->dateHeureDebut;
+    }
+
+    /**
+     * @param DateTimeInterface|null $dateHeureDebut
+     */
+    public function setDateHeureDebut(?DateTimeInterface $dateHeureDebut): void
+    {
+        $this->dateHeureDebut = $dateHeureDebut;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateLimiteInscription(): ?DateTimeInterface
     {
         return $this->dateLimiteInscription;
     }
 
     /**
-     * @param DateTime $dateLimiteInscription
-     * @return $this
+     * @param DateTimeInterface|null $dateLimiteInscription
      */
-    public function setDateLimiteInscription(DateTime $dateLimiteInscription): self
+    public function setDateLimiteInscription(?DateTimeInterface $dateLimiteInscription): void
     {
         $this->dateLimiteInscription = $dateLimiteInscription;
-
-        return $this;
     }
+
 
     /**
      * @return string|null
