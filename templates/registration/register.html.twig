@@ -9,11 +9,11 @@
     {% endif %}
 
     {% if app.request.attributes.get('_route') == 'app_register' %}
-        <h2>Créer un nouvel utilisateur </h2>
+        <h2 class="d-flex justify-content-center">Créer un nouvel utilisateur </h2>
     {% endif %}
 
     {% if app.request.attributes.get('_route') == 'edit_profile' %}
-        <h2>Modifiez votre profil {{ app.user.pseudo }}</h2>
+        <h2 class="d-flex justify-content-center">Modifiez votre profil {{ app.user.pseudo }}</h2>
     {% endif %}
 
     <!-- affichage des messages d'erreur -->
@@ -70,6 +70,10 @@
         {{ form_errors(registrationForm.plainPassword) }}
     </div>
 
+    <div class="mb-3 cache">
+        {{ form_row(registrationForm.photo) }}
+    </div>
+
     <!-- photo de profil -->
     {% if app.user %}
         {#        <p>{{ app.user.photo |imagine_filter('carre') }}</p>#}
@@ -88,12 +92,13 @@
     {% if not is_granted("ROLE_ADMIN") %}
     {% endif %}
 
-    <div class="mb-3">
+    <div class="mb-3 d-flex justify-content-center">
         {{ form_widget(registrationForm.submit) }}
     </div>
     {{ form_end(registrationForm) }}
 
+<div class="mb-3 d-flex justify-content-center">
     <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info'>Retour accueil</button></a>
-
+</div>
 
 {% endblock %}

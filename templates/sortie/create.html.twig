@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sortons casqués !{% endblock %}
+{% block title %}Créer une sortie{% endblock %}
 
 {% block stylesheets %}
     <script src="{{ asset('js/scripts.js') }}"></script>
@@ -9,9 +9,9 @@
 {% block body %}
 
     {% if app.request.attributes.get('_route') == 'sortie_create' %}
-        <h2>Créer une sortie</h2>
+        <h2 class="d-flex justify-content-center">Créer une sortie</h2>
     {% else %}
-        <h2>Modifiez une sortie</h2>
+        <h2 class="d-flex justify-content-center">Modifiez une sortie</h2>
     {% endif %}
 
     <!-- affichage des messages d'erreur et de confirmation -->
@@ -80,53 +80,64 @@
     </div>
 
     <!-- formulaire ajouter un lieu // méthode avec js mais ne fonctionne pas -->
-{#    <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button>#}
+    {# <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button> #}
 
-{#    <div id="ajoutFormLieu" class="cache">#}
-{#        {{ form(formLieu) }}#}
-{#    </div>#}
+    {# <div id="ajoutFormLieu" class="cache"> #}
+    {# {{ form(formLieu) }} #}
+    {# </div> #}
 
 
     <!-- ajouter un lieu en formulaire imbriqué / méthode M. Racine mais pas adapté-->
-{#    <div class="mb-3" style="text-align: right;">#}
-{#        <div class="col-xs-4">#}
-{#            {{ form_row(formLieu.nom) }}#}
-{#            {{ form_row(formLieu.ville) }}#}
-{#            {{ form_row(formLieu.rue) }}#}
-{#            {{ form_row(formLieu.longitude) }}#}
-{#            {{ form_row(formLieu.latitude) }}#}
-{#            <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/>#}
-{#        </div>#}
-{#        <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a>#}
-{#        </div>#}
-{#    </div>#}
+    {# <div class="mb-3" style="text-align: right;"> #}
+    {# <div class="col-xs-4"> #}
+    {# {{ form_row(formLieu.nom) }} #}
+    {# {{ form_row(formLieu.ville) }} #}
+    {# {{ form_row(formLieu.rue) }} #}
+    {# {{ form_row(formLieu.longitude) }} #}
+    {# {{ form_row(formLieu.latitude) }} #}
+    {# <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/> #}
+    {# </div> #}
+    {# <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a> #}
+    {# </div> #}
+    {# </div> #}
 
-    <div class="mb-3 cache" >
+    <div class="mb-3 cache">
         {{ form_label(formSortie.motifAnnulation) }}
         {{ form_widget(formSortie.motifAnnulation) }}
         {{ form_errors(formSortie.motifAnnulation) }}
     </div>
 
-<!-- bouton submit -->
-    <div class="mb-3">
+    <!-- bouton submit -->
+    <div class="mb-3 d-flex justify-content-center">
         {{ form_widget(formSortie.submit) }}
     </div>
 
-
     {{ form_end(formSortie) }}
 
-<!-- Ajouter un lieu -->
-    <a href="{{ path('lieu') }}"><button id="btnAjoutLieu" name='lieu' value='lieu' class='btn btn-secondary'>Créer un lieu</button></a>
+    <div class="mb-3 d-flex justify-content-center">
+    <!-- Ajouter un lieu -->
+    <a href="{{ path('lieu') }}">
+        <button id="btnAjoutLieu" name='lieu' value='lieu' class='btn btn-secondary'>Créer un lieu</button>
+    </a>
+    </div>
 
-    <!-- Si on arrive pas la route modifier-->
+    <!-- Si on arrive par la route modifier-->
     <!-- Publier -->
+    <div class="mb-3 d-flex justify-content-center">
     {% if app.request.attributes.get('_route') == 'sortie_modifier' %}
-        <a href="{{ url('sortie_publier', { "id": id }) }}"><button name='publier' value='publier' class='btn btn-primary'>Publier</button></a>
-    <!-- Annuler -->
-        <a href="{{ url('sortie_motifannulation', { "id": id }) }}"><button id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button></a>
+        <a href="{{ url('sortie_publier', { "id": id }) }}">
+            <button name='publier' value='publier' class='btn btn-primary'>Publier</button>
+        </a>
+        <!-- Annuler -->
+        <a href="{{ url('sortie_motifannulation', { "id": id }) }}">
+            <button id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button>
+        </a>
     {% endif %}
 
-    <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info'>Retour accueil</button></a>
+    <a class="navbar-brand" href="{{ url('main_home') }}">
+        <button value='annuler' class='btn btn-info'>Retour accueil</button>
+    </a>
+    </div>
 
 {% endblock %}
 
@@ -134,29 +145,29 @@
 {% block javascripts %}
 
     <script>
-        $(document).ready(function(){
-            $(".btn-info").click(function(){
+        $(document).ready(function () {
+            $(".btn-info").click(function () {
                 $(".cache").toggleClass("clique");
             });
         });
     </script>
 
     <!-- js lié au formulaire imbriqué -->
-{#    <script>#}
-{#        jQuery(document).ready(function() {#}
-{#            let $wrapper = $('.js-lieu-wrapper');#}
-{#            $wrapper.on('click', '.js-lieu-add', function(e) {#}
-{#                e.preventDefault();#}
-{#                let prototype = $wrapper.data('prototype');#}
-{#                let index = $wrapper.data('index');#}
-{#                let newForm = ((index === 0) ? '<hr/>' : '') + prototype.replace(/__name__/g, index) + '<a href="#" style="width:100%;" class="js-lieu-remove btn-danger btn">Remove Wish</a><hr/>';#}
-{#                newForm += '<span class="mb-3 mt-3"></span>';#}
-{#                $wrapper.data('index', index + 1);#}
-{#                $(this).before(newForm);#}
-{#            });#}
-{#            $wrapper.on('click', '.js-lieu-remove', function(e) {#}
-{#                alert("A vous de jouer !");#}
-{#            });#}
-{#        });#}
-{#    </script>#}
+    {# <script> #}
+    {# jQuery(document).ready(function() { #}
+    {# let $wrapper = $('.js-lieu-wrapper'); #}
+    {# $wrapper.on('click', '.js-lieu-add', function(e) { #}
+    {# e.preventDefault(); #}
+    {# let prototype = $wrapper.data('prototype'); #}
+    {# let index = $wrapper.data('index'); #}
+    {# let newForm = ((index === 0) ? '<hr/>' : '') + prototype.replace(/__name__/g, index) + '<a href="#" style="width:100%;" class="js-lieu-remove btn-danger btn">Remove Wish</a><hr/>'; #}
+    {# newForm += '<span class="mb-3 mt-3"></span>'; #}
+    {# $wrapper.data('index', index + 1); #}
+    {# $(this).before(newForm); #}
+    {# }); #}
+    {# $wrapper.on('click', '.js-lieu-remove', function(e) { #}
+    {# alert("A vous de jouer !"); #}
+    {# }); #}
+    {# }); #}
+    {# </script> #}
 {% endblock javascripts %}
