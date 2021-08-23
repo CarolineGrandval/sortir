@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VilleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,11 +29,20 @@ class Ville
      */
     private int $codePostal;
 
-    //relation bidirectionnelle pour pouvoir choisir les lieux à partir de la ville (page créer une sortie)
+    // Récupération des données "eager" pour accéder direcement aux lieux quand on récupère la ville.
     /**
-     * @ORM\OneToMany(targetEntity=Lieu::class, mappedBy="ville")
+     * @ORM\OneToMany(targetEntity=Lieu::class, mappedBy="ville", fetch="EAGER")
      */
     private Collection $lieux;
+
+
+    /**
+     * Ville constructor.
+     */
+    public function __construct()
+    {
+        $this->lieux = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -81,19 +91,33 @@ class Ville
     }
 
     /**
-     * @return Collection
+     * @return Collection|Lieu[]
      */
     public function getLieux(): Collection
     {
         return $this->lieux;
     }
 
-    /**
-     * @param Collection $lieux
-     */
-    public function setLieux(Collection $lieux): void
+    public function addLieux(Lieu $lieux): self
     {
-        $this->lieux = $lieux;
+        if (!$this->lieux->contains($lieux)) {
+            $this->lieux[] = $lieux;
+            $lieux->setVille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLieux(Lieu $lieux): self
+    {
+        if ($this->lieux->removeElement($lieux)) {
+            // set the owning side to null (unless already changed)
+            if ($lieux->getVille() === $this) {
+                $lieux->setVille(null);
+            }
+        }
+
+        return $this;
     }
 
 
