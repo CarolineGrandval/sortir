@@ -211,8 +211,9 @@ class SortieController extends AbstractController
         } catch (NonUniqueResultException | NoResultException $e) {
             throw $this->createNotFoundException('La sortie n\'a pas été trouvée !');
         }
-        // Remove by Elements
+        // Enlever le participant de la sortie
         $sortie->removeParticipant($user);
+        // Enregistrement de l'entité dans la BDD
         $entityManager->persist($sortie);
         $entityManager->flush();
 

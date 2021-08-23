@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+
+{% block body %}
+    <div class="mb-3 d-flex justify-content-center">
+        <h2>{{ user.pseudo }}</h2>
+    </div>
+    <div class=" d-flex justify-content-center">
+        <div class="col-6">
+        <table class="table table-hover ">
+            <tr>
+                <td>Prénom : </td> {# colonne #}
+                <td>{{ user.prenom }}</td> {# colonne #}
+            </tr> {# ligne #}
+            <tr>
+                <td>Nom : </td> {# colonne #}
+                <td>{{ user.nom }}</td> {# colonne #}
+            </tr> {# ligne #}
+            <tr>
+                <td>Téléphone : </td> {# colonne #}
+                <td>{{ user.telephone }}</td> {# colonne #}
+            </tr> {# ligne #}
+            <tr>
+                <td>Email : </td> {# colonne #}
+                <td>{{ user.mail }}</td> {# colonne #}
+            </tr> {# ligne #}
+            <tr>
+                <td>Campus : </td> {# colonne #}
+                <td>{{ user.campus.nom }}</td> {# colonne #}
+            </tr> {# ligne #}
+        </table>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <a href="{{ url('main_home') }}">
+            <button class='btn btn-secondary'>Retour</button>
+        </a>
+    </div>
+
+{% endblock %}
