@@ -6,7 +6,11 @@
 
 
     <h1>Afficher une sortie</h1>
-    L'utilisateur courant est: {{ app.user.nom }}
+    L'utilisateur courant est: {{ app.user.nom }}<br>
+La sortie est {{ sortie.id }}<br>
+    L'url est {{ app.request.uri  }}
+    {# La sortie courante est {{ app.sortie.id }}#}
+
 <table class ="table table-borderless">
     <tr><td>Nom de la sortie: {{ sortie.nom }}</td>
         <td>Campus: {{ sortie.getCampus().nom }}{# {{ campus.nom }} #}</td></tr>
@@ -35,6 +39,22 @@
 
     {% endfor %}
     </table>
-    <input type="submit" name="isncriptionParticipant" value ="S'inscrire"/><br><br>
+    L'utilisateur {{  app.user.pseudo }}
+    {% if(sortie.getParticipants().contains(app.user)) %}
+         est inscrit à cette sortie.
+        <button name='add_sortie' type ='submit' value="'_add_sortie" class='btn btn-secondary' disabled>S'inscrire</button>
+        {% else %}
+            n'est pas inscrit à cette sortie.
+            <a href="{{ path('sortie_add_sortie', { 'id': sortie.id }) }}">
+                <button name='add_sortie' type ='submit' value="'_add_sortie" class='btn btn-secondary'>S'inscrire</button>
+            </a>
+
+    {% endif %}
+    {#                              <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie">Modifier</a>
+
+    <a href="{{ path ('\affichersortie', {'id' : app.user.id})}}" class="btn btn-success text-white" href="#">Inscription</a> #}
+    <br><br>
+
+
 
 {% endblock %}

@@ -220,4 +220,27 @@ class SortieController extends AbstractController
         // Redirection sur le controlleur
         return $this->redirectToRoute('main_home');
     }
+
+    /**
+     * @Route(path="/ajouter/{id}", name="add_sortie", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     */
+    function ajouter_Utilisateur(Request $request, EntityManagerInterface $entityManager)
+    {
+        $utilisateur = $this->getUser();
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw createNotFoundException('Sortie non trouvée !');
+        }
+
+        //$sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        //$sortie.addParticipant($this.getUser());
+        $sortie->addParticipant($utilisateur);
+        // Enregistrement de l'entité dans la BDD
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('display_sortie', ['id' => $sortie->getId()]);
+    }
 }
