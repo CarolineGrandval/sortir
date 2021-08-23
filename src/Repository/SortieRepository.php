@@ -40,7 +40,7 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('p')
             ->andWhere('s.campus = :campus')->setParameter('campus', $search->getCampus())
             ->andWhere('e.libelle != :annulees')->setParameter('annulees', 'Annulée')
-            ->andWhere('s.dateHeureDebut <= :date')->setParameter('date', new DateTime('+30 days'))
+            ->andWhere('s.dateHeureDebut >= :date')->setParameter('date', new DateTime('-30 days'))
         ;
 
         // Pagination de la première page et le nombre d'éléments par page
