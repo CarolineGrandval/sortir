@@ -249,10 +249,9 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('main_home');
     }
 
-    //TODO : cette méthode essaie de gérer l'inscription ET la désinscription en Ajax
-
     /**
      * @Route(path="", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     * Cette méthode gère l'inscription et la désinscription en Ajax.
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
@@ -294,7 +293,5 @@ class SortieController extends AbstractController
             'nbPlaces' => $sortie->getNbParticipantsMax()
         ], 200);
 
-//        // Redirection sur le controlleur
-//        return $this->redirectToRoute('main_home');
     }
 }
