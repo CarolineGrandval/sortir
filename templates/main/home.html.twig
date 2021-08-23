@@ -141,8 +141,6 @@
                                     <p class="statut">
                                     {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</p>
                                 </a>
-                            {%  if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
-                                <a href="{{ url('display_sortie', { 'id': sortie.id }) }}" title="S'inscrire à la sortie">S'inscrire</a>
                             {% endif %}
 
                             {# SE DESISTER #}
@@ -164,7 +162,7 @@
 {#                            {% endif %}#}
                         </td>
                     </tr>
-                        {% endif %}
+                    {% endif %} {# dateEcart.days >= nbjours #}
                 {% else %}
                     <tr class="text-center">
                         <th class="text-center text-muted" scope="row" colspan="8">Aucune événement trouvé...</th>
