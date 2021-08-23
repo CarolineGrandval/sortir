@@ -97,7 +97,7 @@ class Sortie
     private ?Lieu $lieu;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="sorties", fetch="EAGER")
      */
     private $participants;
 
@@ -315,18 +315,6 @@ class Sortie
         return $this;
     }
 
-    public function getNouveaulieu(): ?Lieu
-    {
-        return $this->nouveaulieu;
-    }
-
-    public function setNouveaulieu(?Lieu $nouveaulieu): self
-    {
-        $this->nouveaulieu = $nouveaulieu;
-
-        return $this;
-    }
-
     /**
      * @return Collection|User[]
      */
@@ -349,5 +337,14 @@ class Sortie
         $this->participants->removeElement($participant);
 
         return $this;
+    }
+
+    public function isInscrit(User $user): bool
+    {
+        if ($this->getParticipants()->contains($user)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

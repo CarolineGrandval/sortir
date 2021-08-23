@@ -246,4 +246,78 @@ class SortieController extends AbstractController
 
         return $this->redirectToRoute('display_sortie', ['id' => $sortie->getId()]);
     }
+
+    /**
+     * @Route(path="/sinscrire/{id}", name="sinscrire", requirements={"id": "\d+"}, methods={"GET"})
+     */
+    public function sinscrire(Request $request, EntityManagerInterface $entityManager)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('La sortie n\'a pas été trouvée !');
+        }
+
+        //Si le participant n'est pas inscrit, on l'inscrit. S'il est déjà inscrit, on le désinscrit.
+        $sortie->addParticipant($user);
+        $sortie->removeParticipant($user);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+        $this->addFlash('success', 'Vous êtes bien inscrit à la sortie !');
+
+        // Redirection sur le controlleur
+        return $this->redirectToRoute('main_home');
+    }
+
+    //TODO : cette méthode essaie de gérer l'inscription ET la désinscription en Ajax
+
+    /**
+     * @Route(path="", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     */
+    public function inscriptions(Request $request, EntityManagerInterface $entityManager)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('La sortie n\'a pas été trouvée !');
+        }
+
+        //Si le participant n'est pas inscrit, on l'inscrit. S'il est déjà inscrit, on le désinscrit.
+        if ($sortie->isInscrit($user)) {
+            $sortie->removeParticipant($user);
+            $entityManager->persist($sortie);
+//            $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
+
+        } else {
+            $sortie->addParticipant($user);
+            $entityManager->persist($sortie);
+//            $this->addFlash('success', 'Vous êtes bien inscrit à la sortie !');
+        }
+        $entityManager->flush();
+
+        $choix = null;
+        if ($sortie->isInscrit($user)) {
+            $choix = 'Se désinscrire';
+            $inscrit = 'X';
+        } else {
+            $choix = 'S\'inscrire';
+            $inscrit = ' ';
+        }
+
+        return $this->json([
+            'inscrit' => $inscrit,
+            'choix' => $choix,
+            'nbInscrits' => $sortie->getParticipants()->count(),
+            'nbPlaces' => $sortie->getNbParticipantsMax()
+        ], 200);
+
+//        // Redirection sur le controlleur
+//        return $this->redirectToRoute('main_home');
+    }
 }
