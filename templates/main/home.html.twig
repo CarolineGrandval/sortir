@@ -80,17 +80,17 @@
                     {# Affichage des sorties de moins de 30 jours #}
                     {% if dateEcart.days >= 30 %}
                     {% else %}
-                        {% set inscrit = false %}
+                        {% set inscrit = 0 %}
                         {# resultat de requete inscription sortie de l'utilisateur #}
                         {% for inscription in inscrits %}
                             {# si la sortie est égale à l'inscription #}
                             {% if inscription.id == sortie.id %}
-                                {% set inscrit = true %}
+                                {% set inscrit = 1 %}
                             {% endif %}
                         {% endfor %}
                         {# si organisateur alors inscrit d'office #}
                         {% if app.user == sortie.organisateur %}
-                            {% set inscrit = true %}
+                            {% set inscrit = 1 %}
                         {%  endif %}
                     <tr>
                         <td>{{ sortie.nom|capitalize }}</td>
@@ -99,7 +99,7 @@
                         <td>{{ sortie.participants.count() }} / {{ sortie.nbParticipantsMax }}</td>
                         <td>{{ sortie.etat.libelle }}</td>
                         <td>
-                            {% if inscrit %}
+                            {% if inscrit == 1 %}
                                 X
                             {% endif %}
                         </td>
@@ -110,17 +110,15 @@
                             {% else %}
                                 <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
                             {% endif %}
-
                         </td>
                         <td>
                             {# AFFICHER #}
                             {# etat ouvert #}
                             {% if sortie.etat.id == 2 %}
                                 <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                                {# etat en cours ou fermé #}
+                            {# etat en cours ou fermé #}
                             {% elseif (sortie.etat.id == 4 or sortie.etat.id == 3) and app.user != sortie.organisateur %}
                                 <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>
                             {% else %}
                                 Afficher
                             {% endif %}
@@ -141,7 +139,7 @@
                                 <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
                             {% endif %}
                             {# SE DESISTER #}
-                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %}
+                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit == 1 %}
                                 <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>
                             {% endif %}
                         </td>
