@@ -7,15 +7,6 @@
 
     <h2 class=" d-flex justify-content-center">Créer une ville</h2>
 
-    <!-- affichage des messages d'erreur et de confirmation -->
-    {% for group, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ group }}" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     <div class="mb-3">
         {{ form_label(formVille.nom) }}
         {{ form_widget(formVille.nom) }}

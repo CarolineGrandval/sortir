@@ -1,14 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil - Sortons casqués{% endblock title %}
+
 {% block stylesheets %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"
           rel="stylesheet"/>
 {% endblock stylesheets %}
-{% block javascripts %}
-        {#{{ insertion du fichier js }}#}
-        <script src="{{ asset('js/datepicker.js') }}"></script>
-{% endblock %}
 
 {% block body %}
 
@@ -19,15 +16,6 @@
          <h5 class="d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
     </div>
     <div class="mb-3">
-        <!-- affichage des messages d'erreur et de confirmation -->
-        {% for group, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ group }}" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
         <h3>Filtrer les sorties</h3>
         <div id="search">
             {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
@@ -78,7 +66,7 @@
                     {% set dateDuJour = "now"|date('Y-m-d') %}
                     {% set dateEcart = date(dateDuJour).diff(date(dateDebut)) %}
                     {# Affichage des sorties de moins de 30 jours #}
-                    {% if dateEcart.days >= 30 %}
+                    {% if dateEcart.days >= nbjours %}
                     {% else %}
                         {% set inscrit = 0 %}
                         {# resultat de requete inscription sortie de l'utilisateur #}
@@ -114,32 +102,32 @@
                         <td>
                             {# AFFICHER #}
                             {# etat ouvert #}
-                            {% if sortie.etat.id == 2 %}
+                            {% if sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') %}
                                 <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
                             {# etat en cours ou fermé #}
-                            {% elseif (sortie.etat.id == 4 or sortie.etat.id == 3) and app.user != sortie.organisateur %}
+                            {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) and app.user != sortie.organisateur %}
                                 <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
                             {% else %}
                                 Afficher
                             {% endif %}
                             {# MODIFIER #}
-                            {% if app.user == sortie.organisateur and sortie.etat.id == 1 %}
+                            {% if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
                                 <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie">Modifier</a>
                             {% endif %}
                             {# PUBLIER #}
-                            {%  if app.user == sortie.organisateur and sortie.etat.id == 1 %}
+                            {%  if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
                                 <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}" title="Publier la sortie">Publier</a>
                             {% endif %}
                             {# S'INSCRIRE = AFFICHER #}
-                            {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax %}
+                            {%  if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
                                 <a href="{{ url('display_sortie', { 'id': sortie.id }) }}" title="S'inscrire à la sortie">S'inscrire</a>
                             {% endif %}
                             {# ANNULER #}
-                            {% if app.user == sortie.organisateur and sortie.etat.id == 2 or is_granted('ROLE_ADMIN') and sortie.etat.id == 2 or sortie.etat.id == 3 %}
+                            {% if app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or is_granted('ROLE_ADMIN')) and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS')) %}
                                 <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
                             {% endif %}
                             {# SE DESISTER #}
-                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit == 1 %}
+                            {% if app.user != sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS')) and inscrit == 1 %}
                                 <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>
                             {% endif %}
                         </td>

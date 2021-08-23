@@ -1,6 +1,9 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
     form_themes: ['bootstrap_5_layout.html.twig']
+    #Nb de jours pour limiter les activités
+    globals:
+        nbjours: 30
 
 when@test:
     twig:

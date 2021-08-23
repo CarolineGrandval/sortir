@@ -16,15 +16,6 @@
         <h2 class="d-flex justify-content-center">Modifiez votre profil {{ app.user.pseudo }}</h2>
     {% endif %}
 
-    <!-- affichage des messages d'erreur -->
-    {% for group, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ group }}" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     <!-- affichage du formulaire -->
     {{ form_start(registrationForm) }}
 
