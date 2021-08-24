@@ -87,24 +87,6 @@ class SortieType extends AbstractType
                 'placeholder' => '',
             ]);
 
-        //TODO test
-//        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-//            $form = $event->getform();
-//            $ville = $event->getData('ville'); // récupère qqchose ?
-////            dd($ville);
-//
-//            $formOptions = [
-//                'class' => Lieu::class,
-//                'choice_label' => 'nomLieu',
-//                'query_builder' => function (LieuRepository $lieuRepository) use ($ville) {
-//                    // call a method on your repository that returns the query builder
-//                     return $lieuRepository->findLieuxByIdVille($ville);
-//                },
-//            ];
-//            $form->add('lieux', EntityType::class, $formOptions);
-//        });
-
-
         $builder->add('lieu', EntityType::class, [
             'label' => 'Lieu : ',
             'required' => true,
@@ -121,46 +103,10 @@ class SortieType extends AbstractType
             'required' => false,
         ]);
 
-        //proposition M. Racine
-//        if (!$options['embedded']) {
-//
-//            $builder->add('lieu', EntityType::class, [
-//                'label' => 'Lieu: ',
-//                'required' => true,
-//                'class' => Lieu::class,
-//                'query_builder' => function (LieuRepository $cr) {
-//                    return $cr->createQueryBuilder('lieu')->orderBy('lieu.nomLieu', 'ASC');
-//                },
-//                'choice_label' => 'nomLieu',
-//            ]);
-//
-//            $builder->add('submit', SubmitType::class, [
-//                'label' => 'Créer 1',
-//            ]);
-//        }
-
-        //TODO tester avec le collectionType
-//        $builder
-//            ->add('lieu', CollectionType::class,
-//                [
-//                    'entry_type' => LieuType::class, // le formulaire enfant qui doit être répété
-//                    'allow_add' => false, // true si tu veux que l'utilisateur puisse en ajouter
-//                    'allow_delete' => false, // true si tu veux que l'utilisateur puisse en supprimer
-//                    'entry_options' => ['label' => false],
-//                    'by_reference' => false, // voir  https://symfony.com/doc/current/reference/forms/types/collection.html#by-reference
-//                ]
-//            );
-
-//        $builder->add('lieu', CollectionType::class, [
-//            'entry_type' => LieuType::class,
-//            'entry_options' => ['label' => false],
-//        ]);
-
 
         $builder->add('submit', SubmitType::class, [
             'label' => 'Enregistrer',
         ]);
-
     }
 
 

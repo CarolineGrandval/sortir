@@ -74,10 +74,9 @@ class LieuController extends AbstractController
         ], 200); ;
     }
 
-
-//    //TODO méthode test pour AJAX - en cours : afficher la liste des lieux liés à une ville
     /**
      * @Route("/afficher/{id}", name="afficher_ville", methods={"GET"})
+     * méthode test pour AJAX - en cours : afficher la liste des lieux liés à une ville
      */
     public function afficher(Request $request, EntityManagerInterface $entityManager)
     {
