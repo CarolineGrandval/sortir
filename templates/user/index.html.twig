@@ -9,14 +9,8 @@
 </style>
 
 <div class="example-wrapper">
-    {# <h1>Hello {{ controller_name }}! ✅</h1> #}
-    <h1>Tous les utilisateurs!! ✅</h1>
+    <h1>Liste des utilisateurs inscrits ✅</h1>
 
-    {# This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/wamp/www/sortir/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/wamp/www/sortir/templates/user/create.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>#}
     {% if is_granted('ROLE_ADMIN') %}
     <table class ="table table-bordered table-striped">
         <tr >
@@ -39,4 +33,9 @@
     </table>
     {% endif %}
 </div>
+
+    <div class="mb-3 d-flex justify-content-center">
+        <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-secondary'>Retour accueil</button></a>
+    </div>
+
 {% endblock %}

@@ -4,17 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+/**
+ * @Route("/lieu", name="lieu_")
+ */
 class LieuController extends AbstractController
 {
 //    Cette méthode a été déplacée dans Sortie Controller.
     /**
-     * @Route("/lieu", name="lieu_create")
+     * @Route("/create", name="create")
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
@@ -45,4 +54,40 @@ class LieuController extends AbstractController
             'formLieu' => $formLieu->createView(),
         ]);
     }
+
+    /**
+     * @Route("/afficherInfos/{id}", name="afficher_infos", methods={"GET"})
+     * Cette méthode est appelée en Ajax lors de la sélection du lieu dans la page "Créer une sortie", pour afficher les infos du lieu.
+     */
+    public function afficherInfos(Request $request, EntityManagerInterface $entityManager)
+    {
+        $serializer = $this->container->get('serializer');
+
+        //On récupère le lieu par son id. (récupéré du select)
+        $lieu = $entityManager->getRepository(Lieu::class)->find((int)$request->get('id'));
+
+        return $this->json([
+            'nom' => $lieu->getNomLieu(),
+            'rue' => $lieu->getRue(),
+            'latitude' => $lieu->getLatitude(),
+            'longitude' => $lieu->getLongitude(),
+        ], 200); ;
+    }
+
+
+//    //TODO méthode test pour AJAX - en cours : afficher la liste des lieux liés à une ville
+    /**
+     * @Route("/afficher/{id}", name="afficher_ville", methods={"GET"})
+     */
+    public function afficher(Request $request, EntityManagerInterface $entityManager)
+    {
+        $serializer = $this->container->get('serializer');
+
+        $ville = $entityManager->getRepository(Ville::class)->find((int)$request->get('id'));
+        $lieux = $entityManager->getRepository(Lieu::class)->findLieuxByIdVille($ville);
+        $lieuxJson = $serializer->serialize($lieux, 'json', ['groups' => ['lieux_list']]);
+
+        return new JsonResponse($lieuxJson,200, [], true) ;
+    }
+
 }

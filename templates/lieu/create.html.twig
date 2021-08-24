@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h2>Créer un lieu</h2>
+    <h1 class="d-flex justify-content-center">Créer un lieu</h1>
 
     {{ form_start(formLieu) }}
 
@@ -38,11 +38,13 @@
         {{ form_errors(formLieu.longitude) }}
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3 d-flex justify-content-center">
         {{ form_widget(formLieu.submit) }}
     </div>
     {{ form_end(formLieu) }}
 
-    <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info'>Retour accueil</button></a>
+    <div class="d-flex justify-content-center">
+        <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-secondary'>Retour accueil</button></a>
+    </div>
 
 {% endblock %}

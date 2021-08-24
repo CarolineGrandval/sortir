@@ -5,25 +5,11 @@
 {% block body %}
 
 
-    <h2 class=" d-flex justify-content-center">Créer une ville</h2>
-
-    <div class="mb-3">
-        {{ form_label(formVille.nom) }}
-        {{ form_widget(formVille.nom) }}
-        {{ form_errors(formVille.nom) }}
-    </div>
-
-    <div class="mb-3 ">
-        {{ form_label(formVille.codePostal) }}
-        {{ form_widget(formVille.codePostal) }}
-        {{ form_errors(formVille.codePostal) }}
-    </div>
-
-    <div class="mb-3 d-flex justify-content-center">
-        {{ form_widget(formVille.submit) }}
-    </div>
+    <h1 class="d-flex justify-content-center">Créer une ville</h1>
 
     {{ form(formVille) }}
 
-    <a class="d-flex justify-content-center" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info mt-4'>Retour accueil</button></a>
+    <div class="mb-3 d-flex justify-content-center">
+        <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-secondary'>Retour accueil</button></a>
+    </div>
 {% endblock %}

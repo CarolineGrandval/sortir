@@ -9,9 +9,9 @@
 {% block body %}
 
     {% if app.request.attributes.get('_route') == 'sortie_create' %}
-        <h2 class="d-flex justify-content-center">Créer une sortie</h2>
+        <h1 class="d-flex justify-content-center">Créer une sortie</h1>
     {% else %}
-        <h2 class="d-flex justify-content-center">Modifiez une sortie</h2>
+        <h1 class="d-flex justify-content-center">Modifiez une sortie</h1>
     {% endif %}
 
     {{ form_start(formSortie) }}
@@ -68,8 +68,17 @@
 
     <div class="mb-3">
         {{ form_label(formSortie.lieu) }}
-        {{ form_widget(formSortie.lieu) }}
+        {{ form_widget(formSortie.lieu, {'attr': {'class': 'lieu'}}) }}
         {{ form_errors(formSortie.lieu) }}
+    </div>
+
+    <div class="mb-3">
+        <ul id="infosLieuSelect" style="list-style-type: none">
+            <li id="nomLieu"></li>
+            <li id="rueLieu"></li>
+            <li id="longLieu"></li>
+            <li id="latLieu"></li>
+        </ul>
     </div>
 
     <!-- formulaire ajouter un lieu // méthode avec js mais ne fonctionne pas -->
@@ -110,7 +119,7 @@
     <div class="mb-3 d-flex justify-content-center">
     <!-- Ajouter un lieu -->
     <a href="{{ path('lieu_create') }}">
-        <button id="btnAjoutLieu" name='lieu' value='lieu' class='btn btn-secondary'>Créer un lieu</button>
+        <button id="btnAjoutLieu" name='lieu' value='lieu' class='btn btn-info'>Créer un lieu</button>
     </a>
     </div>
 
@@ -128,7 +137,7 @@
     {% endif %}
 
     <a class="navbar-brand" href="{{ url('main_home') }}">
-        <button value='annuler' class='btn btn-info'>Retour accueil</button>
+        <button value='annuler' class='btn btn-secondary'>Retour accueil</button>
     </a>
     </div>
 
@@ -164,31 +173,36 @@
     {# }); #}
     {# </script> #}
 
-{#    Ajax pour lier la liste des lieux au choix de la ville#}
+{#    Ajax pour afficher les infos du lieu sélectionné   #}
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script>
 
-            function onChangeAfficherLieux(event) {
+            function onChangeAfficherInfosLieu(event) {
                 event.preventDefault();
-                var ville = document.getElementById('ville') ;
-                // var valeurselectionnee = ville.value;
-                // var textselectionne = ville.text;
-                // console.log(ville) ;
-                // console.log(textselectionne) ;
+                var idLieu = document.getElementById('sortie_lieu').value ; // on récupère l'id du lieu choisi
 
-                axios.get('/lieu/afficher/' + document.getElementById('ville').valueOf('id')).then(function (response) {
+                axios.get('/lieu/afficherInfos/'+idLieu).then(function (response) {
                     console.log(response.data);
-                    // links.textContent = response.data.choix ;
-                    // nbInscrits.textContent = '';
-                    // nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces ;
-                    // inscr.textContent = response.data.inscrit;
+                    const ul = document.getElementById('infosLieuSelect');
+
+                    //On affiche les lieux du lieu.
+                    var liNom = document.getElementById('nomLieu');
+                    liNom.textContent = 'Nom du lieu : ' + response.data.nom ;
+                    var liRue = document.getElementById('rueLieu');
+                    liRue.textContent = 'Rue : ' + response.data.rue ;
+                    var liLong = document.getElementById('longLieu');
+                    liLong.textContent = 'Longitude : ' + response.data.longitude ;
+                    var liLat = document.getElementById('latLieu');
+                    liLat.textContent = 'Latitude : ' + response.data.latitude ;
+                    ul.appendChild(liNom);
+                    ul.appendChild(liRue);
+                    ul.appendChild(liLong);
+                    ul.appendChild(liLat);
                 })
             }
 
-
-            document.querySelectorAll('.form-select').forEach(function (link) {
-                link.addEventListener('change', onChangeAfficherLieux);
-                // alert('écouteur ok');
+            document.querySelectorAll('.lieu').forEach(function (link) {
+                link.addEventListener('change', onChangeAfficherInfosLieu);
             });
 
         </script>
