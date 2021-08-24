@@ -37,6 +37,7 @@ class SortieRechercheType extends AbstractType
                 'label' => 'Mot-clefs : ',
                 'required' => false,
                 'mapped' => false,
+                'attr' => ['id' => 'motclef'],
             ])
             //ajout DatePicker pour date de début
             ->add('dateDebut', DateType::class, [

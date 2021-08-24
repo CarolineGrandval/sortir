@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afficher une sortie{% endblock %}
+
+{% block body %}
+    <h2 class="d-flex justify-content-center">Afficher une sortie</h2>
+    <br><br>
+    <div class=" d-flex justify-content-center">
+        <div class="col-6">
+            <table class="table table-hover ">
+                <tr>
+                    <td>Nom de la sortie : {{ sortie.nom }}</td> {# colonne #}
+                    <td>Campus: {{ sortie.getCampus().nom }}</td>
+                </tr> {# ligne #}
+                <tr>
+                    <td>Date et heure de la sortie: {{ sortie.dateHeureDebut|date("d/m/Y H:i:s") }}</td> {# colonne #}
+                    <td>Lieu: {{ sortie.getLieu().nomLieu }}</td> {# colonne #}
+                </tr> {# ligne #}
+                <tr>
+                    <td>Date limite d'inscription: {{  sortie.dateLimiteInscription|date("m/d/Y") }}</td> {# colonne #}
+                    <td>Rue: {{ sortie.getLieu().rue }}</td> {# colonne #}
+                </tr> {# ligne #}
+                <tr>
+                    <td>Nombre de places: {{ sortie.nbParticipantsMax }}</td> {# colonne #}
+                    <td>Code postal: {{ sortie.getLieu().getVille().codePostal}}</td> {# colonne #}
+                </tr> {# ligne #}
+                <tr>
+                    <td>Durée: {{ sortie.duree }} minutes</td> {# colonne #}
+                    <td>Latitude: {{ sortie.getLieu().latitude }}</td> {# colonne #}
+                </tr> {# ligne #}
+                <tr>
+                    <td>Description et Infos: {{ sortie.infosSortie }}</td> {# colonne #}
+                    <td>Longitude: {{ sortie.getLieu().longitude }}</td> {# colonne #}
+                </tr> {# ligne #}
+            </table>
+        </div>
+    </div>
+    <br><br><br>
+    <b>Liste des participants inscrits: </b><br>
+    <table class ="table table-bordered table-striped">
+        <tr >
+            <td>Pseudo</td>
+            <td>Nom</td>
+        </tr>
+        {% for user in sortie.getParticipants() %}
+            <tr>
+                <td>{{ user.pseudo }}</td>
+                <td>{{ user.prenom }} {{ user.nom }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="d-flex justify-content-center">
+        {% if(sortie.getParticipants().contains(app.user)) %}
+            <button name='add_sortie' type ='submit' value="'_add_sortie" class='btn btn-secondary' disabled>S'inscrire</button>
+        {% else %}
+            {% if(sortie.getEtat().getLibelle()=='Ouvert' or sortie.getEtat().getLibelle()=='En cours') %}
+                {# L'utilsateur  ne peut s'inscrire que si il n'est pas déjà inscrit à cette sortie et si l'état de la sortie est "Ouvert"(correspondant à l'id 2)
+                 ou "En cours" (correspondant à l(id 4) dans le cas contraire il es disabled #}
+                <a href="{{ path('sortie_add_sortie', { 'id': sortie.id }) }}">
+                    <button name='add_sortie' type ='submit' value="'_add_sortie" class='btn btn-secondary'>S'inscrire</button>
+                </a>
+            {% else %}
+                <button name='add_sortie' type ='submit' value="'_add_sortie" class='btn btn-secondary' disabled>S'inscrire</button>
+            {% endif %}
+        {% endif %}
+        <a href="{{ url('main_home') }}">
+            <button class='btn btn-secondary'>Retour</button>
+        </a>
+    </div>
+{% endblock body %}
