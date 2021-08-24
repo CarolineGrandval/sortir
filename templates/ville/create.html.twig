@@ -4,8 +4,52 @@
 
 {% block body %}
 
+
     <h2 class=" d-flex justify-content-center">Créer une ville</h2>
 
+    <div class="mb-3">
+        {{ form_label(formVille.nom) }}
+        {{ form_widget(formVille.nom) }}
+        {{ form_errors(formVille.nom) }}
+    </div>
+
+    <div class="mb-3 ">
+        {{ form_label(formVille.codePostal) }}
+        {{ form_widget(formVille.codePostal) }}
+        {{ form_errors(formVille.codePostal) }}
+    </div>
+
+{#    TODO ne fonctionne plus à réparer#}
+    <div class="mb-3 d-flex justify-content-center">
+        {{ form_widget(formVille.submit) }}
+    </div>
+
+    <h2 class="mt-4">Liste des villes</h2>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Ville</th>
+            <th scope="col">Code postal</th>
+            <th scope="col">Lieux créés</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ville in pagination %}
+            <tr class="table-primary">
+                <th scope="col">{{ ville.nom }}</th>
+                <th scope="col">{{ ville.codePostal }}</th>
+                <th scope="col">
+                    <span class="js-likes">{{ ville.lieux | length }}</span>
+                    <span class="js-label">lieux</span></th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class=" d-flex justify-content-center">
+    {{ knp_pagination_render(pagination) }}
+    </div>
     <!-- affichage des messages d'erreur et de confirmation -->
     {% for group, messages in app.flashes %}
         {% for message in messages %}

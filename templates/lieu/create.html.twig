@@ -6,15 +6,6 @@
 
     <h2>Créer un lieu</h2>
 
-    <!-- affichage des messages d'erreur et de confirmation -->
-    {% for group, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ group }}" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     {{ form_start(formLieu) }}
 
     <div class="mb-3">

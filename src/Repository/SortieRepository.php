@@ -5,9 +5,12 @@ namespace App\Repository;
 use App\Entity\Rechercher;
 use App\Entity\Sortie;
 use App\Entity\User;
+use App\Service\EtatEnum;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,9 +20,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $container; // constante pour les 30 jours afin de filtrer la requête
+    private $requestStack; // garder les valeurs de la session
+    public function __construct(ManagerRegistry $registry, ContainerInterface $container, RequestStack $requestStack)
     {
         parent::__construct($registry, Sortie::class);
+        $this->container = $container;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -39,8 +46,8 @@ class SortieRepository extends ServiceEntityRepository
             ->leftJoin('s.participants', 'p')
             ->addSelect('p')
             ->andWhere('s.campus = :campus')->setParameter('campus', $search->getCampus())
-            ->andWhere('e.libelle != :annulees')->setParameter('annulees', 'Annulée')
-            ->andWhere('s.dateHeureDebut >= :date')->setParameter('date', new DateTime('-30 days'))
+            ->andWhere('e.id != :annulees')->setParameter('annulees', EtatEnum::ETAT_ANNULE)
+            ->andWhere('s.dateHeureDebut >= :date')->setParameter('date', new DateTime('-'.$this->container->getParameter('app.nbjours').' days'))
         ;
 
         // Pagination de la première page et le nombre d'éléments par page
@@ -57,6 +64,16 @@ class SortieRepository extends ServiceEntityRepository
 //        //Ajout de la requête d'exclusion
 //        $req->andWhere('e NOT IN (:eventscreatedToExclude)')
 //            ->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
+        //Créer le stockage des variables en Session
+        $session = $this->requestStack->getSession();
+        $session->set('motclef', $search->getMotclef());
+        $session->set('campus', $search->getCampus());
+        $session->set('dateDebut', $search->getDateDebut());
+        $session->set('dateFin', $search->getDateFin());
+        $session->set('organisateur',$search->isOrganisateur());
+        $session->set('inscrit',$search->isInscrit());
+        $session->set('pasInscrit',$search->isPasInscrit());
+        $session->set('passees',$search->isPassees());
 
         //par mots-clefs
         if(!empty($search->getMotclef())){
@@ -83,7 +100,7 @@ class SortieRepository extends ServiceEntityRepository
 
         //sur les sorties passées
         if ($search->isPassees()) {
-            $req->andWhere('e.libelle = :passees')->setParameter('passees', 'Passee'); //State::PASSED
+            $req->andWhere('e.id = :passees')->setParameter('passees', EtatEnum::ETAT_ANNULE);
         }
 
         //Utilisateur inscrit
@@ -105,8 +122,8 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         //Utilisateur Actif
-        $userActif = $this->createQueryBuilder('user')
-            ->where('user.actif = 1');
+        //$userActif = $this->createQueryBuilder('user')
+        //   ->where('user.actif = 1');
 
 
         //Ordonner par date
