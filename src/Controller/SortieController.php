@@ -273,10 +273,8 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route(path="", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     * @Route(path="/inscriptions/{id}", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
      * Cette méthode gère l'inscription et la désinscription en Ajax.
-     * //TODO vérifier que la MAJ s'applique UNIQUEMENt a la sortie cliquée.
-     * //TODO Test avec "boufon" et sorties Quimper : le clic sur la 2èlme sortie s'applique à la premiere !
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
@@ -296,9 +294,11 @@ class SortieController extends AbstractController
 //            $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
 
         } else {
-            $sortie->addParticipant($user);
-            $entityManager->persist($sortie);
+//            if ($sortie->getParticipants()->count() >= $sortie->getNbParticipantsMax()){ // on vérifie qu'il reste des places disponibles.
+                $sortie->addParticipant($user);
+                $entityManager->persist($sortie);
 //            $this->addFlash('success', 'Vous êtes bien inscrit à la sortie !');
+//            }
         }
         $entityManager->flush();
 
