@@ -17,25 +17,26 @@
         <li>Your controller at <code><a href="{{ 'D:/wamp/www/sortir/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'D:/wamp/www/sortir/templates/user/create.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
     </ul>#}
+    {% if is_granted('ROLE_ADMIN') %}
     <table class ="table table-bordered table-striped">
         <tr >
             <td>Pseudo</td>
             <td>Nom</td>
-            {% if is_granted('ROLE_ADMIN') %}
+
             <td>Action</td>
-            {% endif %}
         </tr>
 
 
         {% for user in users %}
             <tr>
                 <td>{{ user.pseudo }}</td><td>{{ user.prenom }} {{ user.nom }}</td>
-                {% if is_granted('ROLE_ADMIN') %}
+
                 <td><a href="{{ url('user_delete', { 'id': user.id }) }}" title="Supprimer un utilisateur">Supprimer</a></td>
-                {% endif %}
+
             </tr>
 
         {% endfor %}
     </table>
+    {% endif %}
 </div>
 {% endblock %}
