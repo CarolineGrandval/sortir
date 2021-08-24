@@ -4,7 +4,7 @@
 {% block stylesheets %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"
           rel="stylesheet"/>
-    <script src="{{ asset('js/datepicker.js') }}"></script>
+        <script src="{{ asset('js/datepicker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -21,26 +21,26 @@
             {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
             <div class="row justify-content-between custom-line">
 
-                    <div class="col-5">
-                        {{ form_row(searchForm.campus) }}
-                        {{ form_row(searchForm.motclef) }}
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form_row(searchForm.dateDebut) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(searchForm.dateFin) }}
-                            </div>
+                <div class="col-5">
+                    {{ form_row(searchForm.campus, {'id': 'campus'}) }}
+                    {{ form_row(searchForm.motclef) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(searchForm.dateDebut, {'id': 'dateDebut'}) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(searchForm.dateFin, {'id': 'dateFin'}) }}
                         </div>
                     </div>
-                    <div class="col-5">
-                        {{ form_row(searchForm.organisateur) }}
-                        {{ form_row(searchForm.inscrit) }}
-                        {{ form_row(searchForm.pasInscrit) }}
-                        {{ form_row(searchForm.passees) }}
-                    </div>
-                    <div class="col-2"><p>{{ form_widget(searchForm.submit) }}</p></div>
                 </div>
+                <div class="col-5">
+                    {{ form_row(searchForm.organisateur, {'id': 'organisateur'}) }}
+                    {{ form_row(searchForm.inscrit, {'id': 'inscrit'}) }}
+                    {{ form_row(searchForm.pasInscrit, {'id': 'pasInscrit'}) }}
+                    {{ form_row(searchForm.passees, {'id': 'passees'}) }}
+                </div>
+                <div class="col-2"><p>{{ form_widget(searchForm.submit, {'id': 'rechercher'}) }}</p></div>
+            </div>
                 {{ form_end(searchForm) }}
             </div>
         </div>
@@ -111,6 +111,7 @@
                             {# etat en cours ou fermé #}
                             {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) and app.user != sortie.organisateur %}
                                 <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
+                                <a href="{{ url('afficher-sortie',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
 {#                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>#}
                             {% else %}
                                 Afficher

@@ -30,7 +30,10 @@ class DisplaySortieController extends AbstractController
             throw createNotFoundException('Sortie non trouvée !');
         }
 
-        return $this->render('display_sortie/index.html.twig', [
+//        return $this->render('display_sortie/index.html.twig', [
+//            'sortie' => $sortie,
+//        ]);
+        return $this->render('sortie/afficher.html.twig', [
             'sortie' => $sortie,
         ]);
     }

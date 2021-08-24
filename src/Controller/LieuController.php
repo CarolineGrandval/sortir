@@ -14,7 +14,7 @@ class LieuController extends AbstractController
 {
 //    Cette méthode a été déplacée dans Sortie Controller.
     /**
-     * @Route("/lieu", name="lieu")
+     * @Route("/lieu", name="lieu_create")
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
