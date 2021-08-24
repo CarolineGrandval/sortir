@@ -48,12 +48,12 @@
                                 <a class="nav-link active" href="{{ url('edit_profile', {"id": app.user.id }) }}" title="Mon profil">Mon Profil
                                 </a>
                             </li>
-
+                            {% if is_granted('ROLE_ADMIN') %}
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{{ url('user_index')}}" title="Tous les utilisateurs" >Tous les utilisateurs
                                     </a>
                                 </li>
-
+                            {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{ url('app_logout') }}" title="Déconnexion">Se déconnecter
                                     <span class="visually-hidden">Se connecter</span>
