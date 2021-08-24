@@ -237,16 +237,24 @@ class SortieController extends AbstractController
             throw createNotFoundException('Sortie non trouvée !');
         }
 
-        //$sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
-        //$sortie.addParticipant($this.getUser());
+
         $sortie->addParticipant($utilisateur);
+
         // Enregistrement de l'entité dans la BDD
         $entityManager->persist($sortie);
         $entityManager->flush();
 
         return $this->redirectToRoute('display_sortie', ['id' => $sortie->getId()]);
     }
+    /**
+     * @Route(path="/afficherLesUtilisateurs", name="afficher_utilisateurs", methods={"GET", "POST"})
+     */
+    function tousLesUtilisateurs(Request $request, EntityManagerInterface $entityManager){
+        $users=$entityManager->getRepository("App:User");
+        $users->getUsers();
 
+        return $this->redirectToRoute('display_sortie');
+    }
     /**
      * @Route(path="/sinscrire/{id}", name="sinscrire", requirements={"id": "\d+"}, methods={"GET"})
      */
