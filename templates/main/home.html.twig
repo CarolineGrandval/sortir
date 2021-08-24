@@ -4,52 +4,52 @@
 {% block stylesheets %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"
           rel="stylesheet"/>
-        <script src="{{ asset('js/datepicker.js') }}"></script>
+    <script src="{{ asset('js/datepicker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 
-<div class="mb-3">
-    <h1>Accueil</h1>
-    <div class="row">
-         <h5 class="d-flex justify-content-end">Date du jour : {{ "now"|date("d/m/Y") }}</h5>
-         <h5 class="d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
-    </div>
     <div class="mb-3">
-        <!-- affichage des messages d'erreur et de confirmation -->
-        {% for group, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ group }}" role="alert">
-                    {{ message }}
-                </div>
+        <h1>Accueil</h1>
+        <div class="row">
+            <h5 class="d-flex justify-content-end">Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+            <h5 class="d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
+        </div>
+        <div class="mb-3">
+            <!-- affichage des messages d'erreur et de confirmation -->
+            {% for group, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ group }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
 
-        <h3>Filtrer les sorties</h3>
-        <div id="search">
-            {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
-            <div class="row justify-content-between custom-line">
+            <h3>Filtrer les sorties</h3>
+            <div id="search">
+                {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
+                <div class="row justify-content-between custom-line">
 
-                <div class="col-5">
-                    {{ form_row(searchForm.campus) }}
-                    {{ form_row(searchForm.motclef) }}
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ form_row(searchForm.dateDebut) }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form_row(searchForm.dateFin) }}
+                    <div class="col-5">
+                        {{ form_row(searchForm.campus) }}
+                        {{ form_row(searchForm.motclef) }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(searchForm.dateDebut) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(searchForm.dateFin) }}
+                            </div>
                         </div>
                     </div>
+                    <div class="col-5">
+                        {{ form_row(searchForm.organisateur) }}
+                        {{ form_row(searchForm.inscrit) }}
+                        {{ form_row(searchForm.pasInscrit) }}
+                        {{ form_row(searchForm.passees) }}
+                    </div>
+                    <div class="col-2"><p>{{ form_widget(searchForm.submit) }}</p></div>
                 </div>
-                <div class="col-5">
-                    {{ form_row(searchForm.organisateur) }}
-                    {{ form_row(searchForm.inscrit) }}
-                    {{ form_row(searchForm.pasInscrit) }}
-                    {{ form_row(searchForm.passees) }}
-                </div>
-                <div class="col-2"><p>{{ form_widget(searchForm.submit) }}</p></div>
-            </div>
                 {{ form_end(searchForm) }}
             </div>
         </div>
@@ -88,86 +88,85 @@
                         {# si organisateur alors inscrit d'office #}
                         {% if app.user == sortie.organisateur %}
                             {% set inscrit = 1 %}
-                        {%  endif %}
-                    <tr>
-                        <td>{{ sortie.nom|capitalize }}</td>
-                        <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
-                        <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
-                        <td id="inscritsPlaces">{{ sortie.participants.count() }} / {{ sortie.nbParticipantsMax }}</td>
-                        <td>{{ sortie.etat.libelle }}</td>
-                        <td id="inscr">
-                            {% if inscrit == 1 %}
-                                X
-                            {% endif %}
-                        </td>
-                        <td>
-                            {# CLIQUABLE PSEUDO #}
-                            {% if app.user == sortie.organisateur %}
-                                <a href="{{ url('edit_profile', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
-                            {% else %}
-                                <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
-                            {% endif %}
-
-                        </td>
-                        <td>
-                            {# AFFICHER #}
-                            {# etat ouvert #}
-                            {% if sortie.etat.id == 2 %}
-                                <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                            {# etat en cours ou fermé #}
-                            {% elseif (sortie.etat.id == 4 or sortie.etat.id == 3) and app.user != sortie.organisateur %}
-                                <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-{#                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>#}
-                            {% else %}
-                                Afficher
-                            {% endif %}
-                            {# MODIFIER #}
-                            {% if app.user == sortie.organisateur and sortie.etat.id == 1 %}
-                                <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie">Modifier</a>
-                            {% endif %}
-                            {# PUBLIER #}
-                            {%  if app.user == sortie.organisateur and sortie.etat.id == 1 %}
-                                <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}" title="Publier la sortie">Publier</a>
-                            {% endif %}
-
-{#                            fonctionne avcec rechargement de la page#}
-{#                             S'INSCRIRE = AFFICHER #}
-{#                            {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax and not inscrit %}#}
-{#                                <a href="{{ url('sortie_sinscrire', { 'id': sortie.id }) }}" title="S'inscrire à la sortie" class="inscrire">S'inscrire </a>#}
-
-{#                            {% endif %}#}
-{#                             SE DESISTER #}
-{#                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %}#}
-{#                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">Se désinscrire</a>#}
-{#                            {% endif %}#}
-
-
-{#                            Essai Ajax sans rechargement de la page#}
-                            {# S'INSCRIRE = AFFICHER #}
-                            {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax %}
-                                <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" title="S'inscrire à la sortie" class="inscrire">
-                                    <i class="far fa-calendar-plus"></i>
-                                    <p class="statut">
-                                    {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</p>
-                                </a>
-                            {% endif %}
-
-                            {# SE DESISTER #}
-{#                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %}#}
-{#                                <a href="{{ url('sortie_sinscrire', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">#}
-{#                                    <i class="far fa-calendar-minus"></i>#}
-{#                                    <p class="statut"></p>#}
-{#                                </a>#}
-{#                            {% endif %}#}
-
-
-                            {# ANNULER #}
-                            {% if app.user == sortie.organisateur and sortie.etat.id == 2 or is_granted('ROLE_ADMIN') and sortie.etat.id == 2 or sortie.etat.id == 3 %}
-                                <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
-                            {% endif %}
-                        </td>
-                    </tr>
                         {% endif %}
+                        <tr>
+                            <td>{{ sortie.nom|capitalize }}</td>
+                            <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
+                            <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+                            <td id="inscritsPlaces">{{ sortie.participants.count() }}
+                                / {{ sortie.nbParticipantsMax }}</td>
+                            <td>{{ sortie.etat.libelle }}</td>
+                            <td id="inscr">
+                                {% if inscrit == 1 %}
+                                    X
+                                {% endif %}
+                            </td>
+                            <td>
+                                {# CLIQUABLE PSEUDO #}
+                                {% if app.user == sortie.organisateur %}
+                                    <a href="{{ url('edit_profile', {'id': sortie.organisateur.id}) }}"
+                                       title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
+                                {% else %}
+                                    <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}"
+                                       title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
+                                {% endif %}
+
+                            </td>
+                            <td>
+                                {# AFFICHER #}
+                                {# etat ouvert #}
+                                {% if sortie.etat.id == 2 %}
+                                    <a href="{{ url('display_sortie', {'id': sortie.id}) }}"
+                                       title="Afficher une sortie">Afficher</a>
+                                    {# etat en cours ou fermé #}
+                                {% elseif (sortie.etat.id == 4 or sortie.etat.id == 3) and app.user != sortie.organisateur %}
+                                    <a href="{{ url('display_sortie', {'id': sortie.id}) }}"
+                                       title="Afficher une sortie">Afficher</a>
+                                    {# <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a> #}
+                                {% else %}
+                                    Afficher
+                                {% endif %}
+                                {# MODIFIER #}
+                                {% if app.user == sortie.organisateur and sortie.etat.id == 1 %}
+                                    <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}"
+                                       title="Modifier la sortie">Modifier</a>
+                                {% endif %}
+                                {# PUBLIER #}
+                                {% if app.user == sortie.organisateur and sortie.etat.id == 1 %}
+                                    <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}"
+                                       title="Publier la sortie">Publier</a>
+                                {% endif %}
+
+                                {# fonctionne avcec rechargement de la page #}
+                                {# S'INSCRIRE = AFFICHER #}
+                                {# {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax and not inscrit %} #}
+                                {# <a href="{{ url('sortie_sinscrire', { 'id': sortie.id }) }}" title="S'inscrire à la sortie" class="inscrire">S'inscrire </a> #}
+
+                                {# {% endif %} #}
+                                {# SE DESISTER #}
+                                {# {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %} #}
+                                {# <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">Se désinscrire</a> #}
+                                {# {% endif %} #}
+
+
+                                {#  Ajax sans rechargement de la page #}
+                                {# S'INSCRIRE ET SE DESISTER #}
+                                {% if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax %}
+                                    <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" class="inscrire">
+                                        <i class="far fa-calendar-plus"></i>
+                                        <span class="statut">
+                                            {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</span>
+                                    </a>
+                                {% endif %}
+
+                                {# ANNULER #}
+                                {% if app.user == sortie.organisateur and sortie.etat.id == 2 or is_granted('ROLE_ADMIN') and sortie.etat.id == 2 or sortie.etat.id == 3 %}
+                                    <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}"
+                                       title="Annuler la sortie">Annuler</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% else %}
                     <tr class="text-center">
                         <th class="text-center text-muted" scope="row" colspan="8">Aucune événement trouvé...</th>
@@ -177,12 +176,15 @@
             </table>
 
             <div class="d-flex justify-content-center">
-                <a href="{{ path('sortie_create') }}"><button name='create' type='submit' value='create' class="btn btn-primary mt-4">Créer une sortie</button></a>
+                <a href="{{ path('sortie_create') }}">
+                    <button name='create' type='submit' value='create' class="btn btn-primary mt-4">Créer une sortie
+                    </button>
+                </a>
             </div>
 
         </div>
     </div>
-</div>
+    </div>
 {% endblock body %}
 
 
@@ -194,14 +196,14 @@
         function onClickSinscrire(event) {
             event.preventDefault();
             const url = this.href;
-            const links = this.querySelector('p.statut')
+            const links = this.querySelector('span.statut')
             const nbInscrits = document.getElementById('inscritsPlaces')
             const inscr = document.getElementById('inscr')
             axios.get(url).then(function (response) {
                 console.log(response.data);
-                links.textContent = response.data.choix ;
+                links.textContent = response.data.choix;
                 nbInscrits.textContent = '';
-                nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces ;
+                nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces;
                 inscr.textContent = response.data.inscrit;
             })
         }

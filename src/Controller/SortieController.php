@@ -252,6 +252,8 @@ class SortieController extends AbstractController
     /**
      * @Route(path="", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
      * Cette méthode gère l'inscription et la désinscription en Ajax.
+     * //TODO vérifier que la MAJ s'applique UNIQUEMENt a la sortie cliquée.
+     * //TODO Test avec "boufon" et sorties Quimper : le clic sur la 2èlme sortie s'applique à la premiere !
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
