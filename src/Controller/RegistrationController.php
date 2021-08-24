@@ -58,13 +58,6 @@ class RegistrationController extends AbstractController
 //    }
 
     /**
-     * @Route("/logout", name="app_logout", methods={"GET"})
-     */
-    public function logout() {
-        return $this->render('security/login.html.twig');
-    }
-
-    /**
      * @Route(path="/editprofile/{id}", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function edit(Request $request, EntityManagerInterface $entityManager) {

@@ -60,7 +60,9 @@
 
     <div class="mb-3">
         {{ form_label(formSortie.ville) }}
-        {{ form_widget(formSortie.ville) }}
+{#        <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" >#}
+            {{ form_widget(formSortie.ville, {'attr': {'id': 'ville'}}) }}
+{#        </a>#}
         {{ form_errors(formSortie.ville) }}
     </div>
 
@@ -135,13 +137,13 @@
 
 {% block javascripts %}
 
-    <script>
-        $(document).ready(function () {
-            $(".btn-info").click(function () {
-                $(".cache").toggleClass("clique");
-            });
-        });
-    </script>
+{#    <script>#}
+{#        $(document).ready(function () {#}
+{#            $(".btn-info").click(function () {#}
+{#                $(".cache").toggleClass("clique");#}
+{#            });#}
+{#        });#}
+{#    </script>#}
 
     <!-- js lié au formulaire imbriqué -->
     {# <script> #}
@@ -161,4 +163,34 @@
     {# }); #}
     {# }); #}
     {# </script> #}
+
+{#    Ajax pour lier la liste des lieux au choix de la ville#}
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+
+            function onChangeAfficherLieux(event) {
+                event.preventDefault();
+                var ville = document.getElementById('ville') ;
+                // var valeurselectionnee = ville.value;
+                // var textselectionne = ville.text;
+                // console.log(ville) ;
+                // console.log(textselectionne) ;
+
+                axios.get('/lieu/afficher/' + document.getElementById('ville').valueOf('id')).then(function (response) {
+                    console.log(response.data);
+                    // links.textContent = response.data.choix ;
+                    // nbInscrits.textContent = '';
+                    // nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces ;
+                    // inscr.textContent = response.data.inscrit;
+                })
+            }
+
+
+            document.querySelectorAll('.form-select').forEach(function (link) {
+                link.addEventListener('change', onChangeAfficherLieux);
+                // alert('écouteur ok');
+            });
+
+        </script>
+
 {% endblock javascripts %}

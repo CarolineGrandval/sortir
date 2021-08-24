@@ -4,7 +4,7 @@
 {% block stylesheets %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"
           rel="stylesheet"/>
-        <script src="{{ asset('js/main.js') }}"></script>
+        <script src="{{ asset('js/datepicker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -79,25 +79,28 @@
                         {# si organisateur alors inscrit d'office #}
                         {% if app.user == sortie.organisateur %}
                             {% set inscrit = 1 %}
-                        {%  endif %}
-                    <tr>
-                        <td>{{ sortie.nom|capitalize }}</td>
-                        <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
-                        <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
-                        <td id="inscritsPlaces">{{ sortie.participants.count() }} / {{ sortie.nbParticipantsMax }}</td>
-                        <td>{{ sortie.etat.libelle }}</td>
-                        <td id="inscr">
-                            {% if inscrit == 1 %}
-                                X
-                            {% endif %}
-                        </td>
-                        <td>
-                            {# CLIQUABLE PSEUDO #}
-                            {% if app.user == sortie.organisateur %}
-                                <a href="{{ url('edit_profile', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
-                            {% else %}
-                                <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
-                            {% endif %}
+                        {% endif %}
+                        <tr id="ligne{{ sortie.id }}">
+                            <td>{{ sortie.nom|capitalize }}</td>
+                            <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
+                            <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+                            <td id="inscritsPlaces{{ sortie.id }}">{{ sortie.participants.count() }}
+                                / {{ sortie.nbParticipantsMax }}</td>
+                            <td>{{ sortie.etat.libelle }}</td>
+                            <td id="inscr{{ sortie.id }}">
+                                {% if inscrit == 1 %}
+                                    X
+                                {% endif %}
+                            </td>
+                            <td>
+                                {# CLIQUABLE PSEUDO #}
+                                {% if app.user == sortie.organisateur %}
+                                    <a href="{{ url('edit_profile', {'id': sortie.organisateur.id}) }}"
+                                       title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
+                                {% else %}
+                                    <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}"
+                                       title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
+                                {% endif %}
 
                         </td>
                         <td>
@@ -134,33 +137,21 @@
 {#                            {% endif %}#}
 
 
-{#                            Essai Ajax sans rechargement de la page#}
-                            {# S'INSCRIRE = AFFICHER #}
-                            {%  if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
-                                <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" title="S'inscrire à la sortie" class="inscrire">
-                                    <i class="far fa-calendar-plus"></i>
-                                    <p class="statut">
-                                    {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</p>
-                                </a>
-                            {% endif %}
-
-                            {# SE DESISTER #}
-{#                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %}#}
-{#                                <a href="{{ url('sortie_sinscrire', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">#}
-{#                                    <i class="far fa-calendar-minus"></i>#}
-{#                                    <p class="statut"></p>#}
-{#                                </a>#}
-{#                            {% endif %}#}
-
+                                {#  Ajax sans rechargement de la page #}
+                                {# S'INSCRIRE ET SE DESISTER #}
+                                {% if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
+                                    <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" data-sortie="{{ sortie.id }}" class="inscrire">
+                                        <i class="far fa-calendar-plus"></i>
+                                        <span class="statut">
+                                            {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</span>
+                                    </a>
+                                {% endif %}
 
                             {# ANNULER #}
                             {% if app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or is_granted('ROLE_ADMIN')) and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS')) %}
                                 <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
                             {% endif %}
-                            {# SE DESISTER #}
-{#                            {% if app.user != sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS')) and inscrit == 1 %}#}
-{#                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>#}
-{#                            {% endif %}#}
+
                         </td>
                     </tr>
                     {% endif %} {# dateEcart.days >= nbjours #}
@@ -173,7 +164,10 @@
             </table>
 
             <div class="d-flex justify-content-center">
-                <a href="{{ path('sortie_create') }}"><button name='create' type='submit' value='create' class="btn btn-primary mt-4">Créer une sortie</button></a>
+                <a href="{{ path('sortie_create') }}">
+                    <button name='create' type='submit' value='create' class="btn btn-primary mt-4">Créer une sortie
+                    </button>
+                </a>
             </div>
 
         </div>
@@ -189,15 +183,20 @@
 
         function onClickSinscrire(event) {
             event.preventDefault();
-            const url = this.href;
-            const links = this.querySelector('p.statut')
-            const nbInscrits = document.getElementById('inscritsPlaces')
-            const inscr = document.getElementById('inscr')
+            const url = this.href ;
+            // alert(url);
+            const links = this.querySelector('span.statut') ;
+            //On récupère l'id par les data-set
+            const id = this.dataset.sortie;
+            // alert('ligne'+id);
+            const ligne = document.getElementById('ligne'+id) ;
+            const nbInscrits = document.getElementById('inscritsPlaces'+id) ;
+            const inscr = document.getElementById('inscr'+id) ;
             axios.get(url).then(function (response) {
                 console.log(response.data);
-                links.textContent = response.data.choix ;
+                links.textContent = response.data.choix;
                 nbInscrits.textContent = '';
-                nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces ;
+                nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces;
                 inscr.textContent = response.data.inscrit;
             })
         }

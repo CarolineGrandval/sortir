@@ -8,7 +8,7 @@
     {% if is_granted('ROLE_ADMIN') %}
     {% endif %}
 
-    {% if app.request.attributes.get('_route') == 'app_register' %}
+    {% if app.request.attributes.get('_route') == 'ville_afficher' %}
         <h2 class="d-flex justify-content-center">Créer un nouvel utilisateur </h2>
     {% endif %}
 

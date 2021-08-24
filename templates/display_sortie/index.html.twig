@@ -29,12 +29,12 @@
         </tr>
 
 
-   {% for user in sortie.getParticipants() %}
-       <tr>
-    <td>{{ user.pseudo }}</td><td>{{ user.prenom }} {{ user.nom }}</td>
-       </tr>
+        {% for user in sortie.getParticipants() %}
+            <tr>
+                <td>{{ user.pseudo }}</td><td>{{ user.prenom }} {{ user.nom }}</td>
+            </tr>
 
-    {% endfor %}
+        {% endfor %}
     </table>
     L'utilisateur {{  app.user.pseudo }}
     {% if(sortie.getParticipants().contains(app.user)) %}

@@ -49,6 +49,11 @@
                                 </a>
                             </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ url('user_index')}}" title="Tous les utilisateurs" >Tous les utilisateurs
+                                    </a>
+                                </li>
+
                             <li class="nav-item">
                                 <a class="nav-link active" href="{{ url('app_logout') }}" title="Déconnexion">Se déconnecter
                                     <span class="visually-hidden">Se connecter</span>
@@ -64,7 +69,16 @@
 
                             {% if is_granted('ROLE_ADMIN') %}
                             <li class="nav-item"><a class="nav-link active" href="{{ url('main_home') }}" title="Campus">Campus</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="{{ url('ville_create') }}" title="Villes">Villes</a></li>
+{#                            <li class="nav-item"><a class="nav-link active" href="{{ url('ville_afficher') }}" title="Villes">Villes</a></li>#}
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Villes</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="{{ url('ville_afficher') }}">Afficher les villes</a>
+                                        <a class="dropdown-item" href="{{ url('ville_create') }}">Créer une ville</a>
+                                    </div>
+                            </li>
+
                             <li class="nav-item"><a class="nav-link active" href="{{ url('app_register') }}" title="Register">Inscription </a></li>
                         {% endif %}
 

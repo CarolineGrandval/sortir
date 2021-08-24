@@ -237,16 +237,24 @@ class SortieController extends AbstractController
             throw createNotFoundException('Sortie non trouvée !');
         }
 
-        //$sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
-        //$sortie.addParticipant($this.getUser());
+
         $sortie->addParticipant($utilisateur);
+
         // Enregistrement de l'entité dans la BDD
         $entityManager->persist($sortie);
         $entityManager->flush();
 
         return $this->redirectToRoute('display_sortie', ['id' => $sortie->getId()]);
     }
+    /**
+     * @Route(path="/afficherLesUtilisateurs", name="afficher_utilisateurs", methods={"GET", "POST"})
+     */
+    function tousLesUtilisateurs(Request $request, EntityManagerInterface $entityManager){
+        $users=$entityManager->getRepository("App:User");
+        $users->getUsers();
 
+        return $this->redirectToRoute('display_sortie');
+    }
     /**
      * @Route(path="/sinscrire/{id}", name="sinscrire", requirements={"id": "\d+"}, methods={"GET"})
      */
@@ -272,10 +280,9 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('main_home');
     }
 
-    //TODO : cette méthode essaie de gérer l'inscription ET la désinscription en Ajax
-
     /**
-     * @Route(path="", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     * @Route(path="/inscriptions/{id}", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     * Cette méthode gère l'inscription et la désinscription en Ajax.
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
@@ -295,9 +302,11 @@ class SortieController extends AbstractController
 //            $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
 
         } else {
-            $sortie->addParticipant($user);
-            $entityManager->persist($sortie);
+//            if ($sortie->getParticipants()->count() >= $sortie->getNbParticipantsMax()){ // on vérifie qu'il reste des places disponibles.
+                $sortie->addParticipant($user);
+                $entityManager->persist($sortie);
 //            $this->addFlash('success', 'Vous êtes bien inscrit à la sortie !');
+//            }
         }
         $entityManager->flush();
 
@@ -317,7 +326,5 @@ class SortieController extends AbstractController
             'nbPlaces' => $sortie->getNbParticipantsMax()
         ], 200);
 
-//        // Redirection sur le controlleur
-//        return $this->redirectToRoute('main_home');
     }
 }

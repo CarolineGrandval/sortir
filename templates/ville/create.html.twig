@@ -50,6 +50,16 @@
     <div class=" d-flex justify-content-center">
     {{ knp_pagination_render(pagination) }}
     </div>
+    <!-- affichage des messages d'erreur et de confirmation -->
+    {% for group, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ group }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form(formVille) }}
 
     <a class="d-flex justify-content-center" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info mt-4'>Retour accueil</button></a>
 {% endblock %}

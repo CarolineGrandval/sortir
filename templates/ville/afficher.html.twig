@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des villes{% endblock %}
+
+{% block body %}
+
+        <h2 class="mt-4">Liste des villes</h2>
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Ville</th>
+                <th scope="col">Code postal</th>
+                <th scope="col">Lieux</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ville in pagination %}
+                <tr class="table-primary">
+                    <th scope="col">{{ ville.nom }}</th>
+                    <th scope="col">{{ ville.codePostal }}</th>
+                    <th scope="col">
+                        <span class="js-likes">{{ ville.lieux | length }}</span>
+                        <span class="js-label">lieux</span></th>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class=" d-flex justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+    <a class="d-flex justify-content-center" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info mt-4'>Retour accueil</button></a>
+{% endblock %}

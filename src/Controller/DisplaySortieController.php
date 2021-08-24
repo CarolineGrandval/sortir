@@ -26,7 +26,6 @@ class DisplaySortieController extends AbstractController
     {
         try {
             $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
-
         } catch (NonUniqueResultException | NoResultException $e) {
             throw createNotFoundException('Sortie non trouvée !');
         }
