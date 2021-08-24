@@ -10,7 +10,6 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,12 +20,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class SortieRepository extends ServiceEntityRepository
 {
     private $container; // constante pour les 30 jours afin de filtrer la requête
-    private $requestStack; // garder les valeurs de la session
-    public function __construct(ManagerRegistry $registry, ContainerInterface $container, RequestStack $requestStack)
+    public function __construct(ManagerRegistry $registry, ContainerInterface $container)
     {
         parent::__construct($registry, Sortie::class);
         $this->container = $container;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -64,16 +61,6 @@ class SortieRepository extends ServiceEntityRepository
 //        //Ajout de la requête d'exclusion
 //        $req->andWhere('e NOT IN (:eventscreatedToExclude)')
 //            ->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
-        //Créer le stockage des variables en Session
-        $session = $this->requestStack->getSession();
-        $session->set('motclef', $search->getMotclef());
-        $session->set('campus', $search->getCampus());
-        $session->set('dateDebut', $search->getDateDebut());
-        $session->set('dateFin', $search->getDateFin());
-        $session->set('organisateur',$search->isOrganisateur());
-        $session->set('inscrit',$search->isInscrit());
-        $session->set('pasInscrit',$search->isPasInscrit());
-        $session->set('passees',$search->isPassees());
 
         //par mots-clefs
         if(!empty($search->getMotclef())){

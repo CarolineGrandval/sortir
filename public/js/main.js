@@ -20,6 +20,7 @@ function clicBoutonRechercher(event){
     inscritCheck = inscrit.checked;
     pasInscritCheck = document.getElementById("pasInscrit").checked;
     passeesCheck = document.getElementById("passees").checked;
+    var data = {};
 
 };
 
@@ -30,6 +31,7 @@ function clicBoutonRechercher(event){
 function init(){
     //Associe l'événement au bouton Rechercher de la page d'accueil
     document.querySelector('#rechercher').addEventListener('click', clicBoutonRechercher);
+    //initialisation des différentes variables
     var inscrit = document.getElementById("inscrit");
     var campus = document.getElementById("campus");
     var organisateurCheck = false;

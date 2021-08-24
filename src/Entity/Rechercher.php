@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\RechercherRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -96,8 +95,6 @@ class Rechercher
     {
         $this->dateFin = $dateFin;
     }
-
-
 
     /**
      * @return bool
