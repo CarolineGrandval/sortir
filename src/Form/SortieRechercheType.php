@@ -11,7 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvents;
 
 
 class SortieRechercheType extends AbstractType
@@ -37,8 +39,8 @@ class SortieRechercheType extends AbstractType
                 'label' => 'Mot-clefs : ',
                 'required' => false,
                 'mapped' => false,
-                'attr' => ['id' => 'motclef'],
             ])
+
             //ajout DatePicker pour date de début
             ->add('dateDebut', DateType::class, [
                 'label' => 'Entre le',
@@ -47,6 +49,7 @@ class SortieRechercheType extends AbstractType
                 'widget' => 'single_text',
                 'input'  => 'datetime_immutable'
             ])
+
             //ajout DatePicker pour date de fin
             ->add('dateFin', DateType::class, [
                 'label' => 'Et le',
@@ -55,6 +58,7 @@ class SortieRechercheType extends AbstractType
                 'required' => false,
                 'mapped' => false,
             ])
+
             //ajout CheckBox pour organisateur
             ->add('organisateur', CheckboxType::class, [
                 'label' => 'Sorties dont je suis l\'organisateur/trice',
@@ -62,6 +66,7 @@ class SortieRechercheType extends AbstractType
                 'data' => true, // Default checked
                 'mapped' => false,
             ])
+
             //ajout CheckBox déjà inscrit
             ->add('inscrit', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je suis inscrit/e',
@@ -69,6 +74,7 @@ class SortieRechercheType extends AbstractType
                 'data' => true, // Default checked
                 'mapped' => false,
             ])
+
             //ajout CheckBox pour demander inscription
             ->add('pasInscrit', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
@@ -76,15 +82,24 @@ class SortieRechercheType extends AbstractType
                 'data' => true, // Default checked
                 'mapped' => false,
             ])
+
             //ajout CheckBox pour sorties passées
             ->add('passees', CheckboxType::class, [
                 'label' => 'Sorties passées',
                 'required' => false,
                 'mapped' => false,
             ])
+
+            //ajout Bouton Rechercher
             ->add('submit', SubmitType::class, [
                 'label' => 'Rechercher',
-            ]);
+            ])
+
+            //Ajout d'un évènement au chargement de la page afin de récupérer les données renseignées
+            ->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
+                //savoir si l'objet est créé
+                $search = $event->getData();
+            });
     }
 
     public function configureOptions(OptionsResolver $resolver)
