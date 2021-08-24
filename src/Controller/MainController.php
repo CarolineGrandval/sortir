@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Rechercher;
 use App\Entity\User;
 use App\Form\SortieRechercheType;
+use App\Repository\CampusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ class MainController extends AbstractController
      * @Route(path="{page}", requirements={"page": "\d+"}, defaults={"page": 1}, name="home", methods={"GET","POST"})
      *
      */
-    public function list(Request $request, EntityManagerInterface $entityManager, SessionInterface $session)
+    public function list(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, CampusRepository $campusRepository)
     {
 
         /** @var User $user */
@@ -51,8 +52,11 @@ class MainController extends AbstractController
                 //Savoir si l'objet Recherche existe
                 if($session->has('Rechercher')){
                     $search = $session->get('Rechercher');
-                    //dd($search->getCampus());
-                    //$searchForm = $this->createForm('App\Form\SortieRechercheType', $search);
+                    //réassocier l'entité Campus à l'entité Rechercher
+                    $campus = $campusRepository->find($search->getCampus()->getId());
+                    $search->setCampus($campus);
+                    //Renvoit le nouveau formulaire
+                    $searchForm = $this->createForm('App\Form\SortieRechercheType', $search);
                 }
             }
 

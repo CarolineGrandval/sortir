@@ -51,17 +51,19 @@ class SortieRepository extends ServiceEntityRepository
         $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
         $req->setMaxResults($nbElementsByPage);
 
-//        //Requete sur les sorties pas créés par l'utilisateur
-//        $eventsCreatedToExclude = $this->createQueryBuilder('s')
-//            ->join('s.etat', 'e')
-//            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
-//            ->andWhere('e.libelle= :created')->setParameter('created', 'Créée')
-//            ->getQuery()->getResult();
-//
-//        //Ajout de la requête d'exclusion
-//        $req->andWhere('e NOT IN (:eventscreatedToExclude)')
-//            ->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
+        //Requete sur les sorties pas créées par l'utilisateur
+        $eventsCreatedToExclude = $this->createQueryBuilder('s')
+            ->innerJoin('s.etat', 'e')
+            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
+            ->andWhere('e.id = :creation')->setParameter('creation', EtatEnum::ETAT_CREATION)
+            ->getQuery()->getResult();
 
+        //Ajout de la requête d'exclusion des sorties en création mais pas par l'utilisateur
+        if(!empty($eventsCreatedToExclude)){
+            $req->andWhere('s NOT IN (:eventscreatedToExclude)')->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
+        }
+
+        
         //par mots-clefs
         if(!empty($search->getMotclef())){
             $req->andWhere('s.nom LIKE :motclef')
@@ -101,17 +103,15 @@ class SortieRepository extends ServiceEntityRepository
                 ->innerJoin('e.participants', 'p')
                 ->where('p = :signedUpUser')->setParameter('signedUpUser', $user)
                 ->getQuery()->getResult();
-
+            //Vérification de la présence de données
             if(!empty($sortiesPasInscrit)){
-                $req->andWhere('e NOT IN (:sortiesPasInscrit)')
-                    ->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
+                $req->andWhere('e NOT IN (:sortiesPasInscrit)')->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
             }
         }
 
         //Utilisateur Actif
         //$userActif = $this->createQueryBuilder('user')
         //   ->where('user.actif = 1');
-
 
         //Ordonner par date
         $req->orderBy('s.dateHeureDebut', 'DESC');
