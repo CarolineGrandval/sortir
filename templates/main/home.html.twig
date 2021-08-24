@@ -111,8 +111,6 @@
                             {# etat en cours ou fermé #}
                             {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) and app.user != sortie.organisateur %}
                                 <a href="{{ url('display_sortie', {'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                                <a href="{{ url('afficher-sortie',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-{#                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie">Se désister</a>#}
                             {% else %}
                                 Afficher
                             {% endif %}
@@ -141,9 +139,11 @@
                                 {# S'INSCRIRE ET SE DESISTER #}
                                 {% if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
                                     <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" data-sortie="{{ sortie.id }}" class="inscrire">
+                                        <p>
                                         <i class="far fa-calendar-plus"></i>
                                         <span class="statut">
                                             {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</span>
+                                        </p>
                                     </a>
                                 {% endif %}
 
@@ -157,7 +157,7 @@
                     {% endif %} {# dateEcart.days >= nbjours #}
                 {% else %}
                     <tr class="text-center">
-                        <th class="text-center text-muted" scope="row" colspan="8">Aucune événement trouvé...</th>
+                        <th class="text-center text-muted" scope="row" colspan="8">Aucun événement trouvé...</th>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -181,17 +181,18 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
 
+        //Requête Ajax pour inscrire ou désinscrire dynamiquement un utilisateur à la sortie.
         function onClickSinscrire(event) {
             event.preventDefault();
             const url = this.href ;
-            // alert(url);
             const links = this.querySelector('span.statut') ;
             //On récupère l'id par les data-set
             const id = this.dataset.sortie;
-            // alert('ligne'+id);
             const ligne = document.getElementById('ligne'+id) ;
             const nbInscrits = document.getElementById('inscritsPlaces'+id) ;
             const inscr = document.getElementById('inscr'+id) ;
+
+            //Exécution de la requête Ajax
             axios.get(url).then(function (response) {
                 console.log(response.data);
                 links.textContent = response.data.choix;
@@ -200,7 +201,7 @@
                 inscr.textContent = response.data.inscrit;
             })
         }
-
+            //Ajout d'un écouteur d'événement sur le lien cliqué.
         document.querySelectorAll('a.inscrire').forEach(function (link) {
             link.addEventListener('click', onClickSinscrire);
         });
