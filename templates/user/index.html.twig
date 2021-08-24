@@ -9,18 +9,19 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Liste des utilisateurs inscrits ✅</h1>
+    <h1>Liste des utilisateurs inscrits</h1>
 
     {% if is_granted('ROLE_ADMIN') %}
-    <table class ="table table-bordered table-striped">
+    <table class ="table table-bordered table-striped mt-4">
+        <thead>
         <tr >
             <td>Pseudo</td>
             <td>Nom</td>
 
             <td>Action</td>
         </tr>
-
-
+        </thead>
+        <tbody>
         {% for user in users %}
             <tr>
                 <td>{{ user.pseudo }}</td><td>{{ user.prenom }} {{ user.nom }}</td>
@@ -28,7 +29,7 @@
                 <td><a href="{{ url('user_delete', { 'id': user.id }) }}" title="Supprimer un utilisateur">Supprimer</a></td>
 
             </tr>
-
+        </tbody>
         {% endfor %}
     </table>
     {% endif %}

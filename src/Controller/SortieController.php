@@ -6,10 +6,12 @@ use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\User;
+use App\Service\EtatEnum;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,7 +75,7 @@ class SortieController extends AbstractController
         try {
             $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
         } catch (NonUniqueResultException | NoResultException $e) {
-            throw createNotFoundException('Sortie non trouvée !');
+            throw $this->createNotFoundException('User Not Found !');
         }
 
         return $this->render('sortie/afficher.html.twig', [
@@ -202,14 +204,22 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException('User Not Found !');
         }
 
-        $etat = $entityManager->find(Etat::class, 6); // état changé à "annulée"
-        $sortie->setEtat($etat);
-        // Enregistrement de l'entité dans la BDD
-        $entityManager->persist($sortie);
-        $entityManager->flush();
+        //On vérifie le rôle de l'utilisateur : doit être organisateur ou admin pour supprimer la sortie.
+        //Seules les sorties en création ou ouvertes peuvent être annulées.
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($user == $sortie->getOrganisateur() || $this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN') &&
+            $sortie->getEtat()->getId() == 1 or $sortie->getEtat()->getId() == 2 or $sortie->getEtat()->getId() == 3) {
+            $etat = $entityManager->find(Etat::class, 6); // état changé à "annulée"
+            $sortie->setEtat($etat);
+            // Enregistrement de l'entité dans la BDD
+            $entityManager->persist($sortie);
+            $entityManager->flush();
 
-        // Ajout d'un message de confirmation
-        $this->addFlash('success', 'La sortie a bien été annulée');
+            // Ajout d'un message de confirmation
+            $this->addFlash('success', 'La sortie a bien été annulée');
+        }
+
         // Redirection sur le controlleur
         return $this->redirectToRoute('main_home');
     }
@@ -269,8 +279,9 @@ class SortieController extends AbstractController
     /**
      * @Route(path="/afficherLesUtilisateurs", name="afficher_utilisateurs", methods={"GET", "POST"})
      */
-    function tousLesUtilisateurs(Request $request, EntityManagerInterface $entityManager){
-        $users=$entityManager->getRepository("App:User");
+    function tousLesUtilisateurs(Request $request, EntityManagerInterface $entityManager)
+    {
+        $users = $entityManager->getRepository("App:User");
         $users->getUsers();
 
         return $this->redirectToRoute('display_sortie');
@@ -301,9 +312,9 @@ class SortieController extends AbstractController
 //        return $this->redirectToRoute('main_home');
 //    }
 
+//Cette méthode gère l'inscription et la désinscription en Ajax.
     /**
      * @Route(path="/inscriptions/{id}", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
-     * Cette méthode gère l'inscription et la désinscription en Ajax.
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
@@ -317,14 +328,19 @@ class SortieController extends AbstractController
         }
 
         //Si le participant n'est pas inscrit, on l'inscrit. S'il est déjà inscrit, on le désinscrit.
-        if ($sortie->isInscrit($user)) {
-            $sortie->removeParticipant($user);
-            $entityManager->persist($sortie);
-        } else {
-            if ($sortie->getParticipants()->count() < $sortie->getNbParticipantsMax()){ // on vérifie qu'il reste des places disponibles.
-                $sortie->addParticipant($user);
+        if ($sortie->getEtat()->getId() == EtatEnum::ETAT_OUVERT or $sortie->getEtat()->getId() == EtatEnum::ETAT_FERME) {
+            if ($sortie->isInscrit($user)) {
+                $sortie->removeParticipant($user);
                 $entityManager->persist($sortie);
+            } else {
+                // on vérifie qu'il reste des places disponibles et que la date limite d'inscription n'est pas passée.
+                $date = getdate();
+                if ($sortie->getParticipants()->count() < $sortie->getNbParticipantsMax() && $sortie->getDateLimiteInscription() > $date) {
+                    $sortie->addParticipant($user);
+                    $entityManager->persist($sortie);
+                }
             }
+
         }
         $entityManager->flush();
 

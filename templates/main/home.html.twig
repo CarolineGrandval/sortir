@@ -109,10 +109,8 @@
                             {% if sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') %}
                                 <a href="{{ url('sortie_afficher',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
                             {# etat en cours ou fermé #}
-                            {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) and app.user != sortie.organisateur %}
+                            {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) %}
                                 <a href="{{ url('sortie_afficher',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                            {% else %}
-                                Afficher
                             {% endif %}
                             {# MODIFIER #}
                             {% if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
@@ -148,8 +146,11 @@
                                 {% endif %}
 
                             {# ANNULER #}
-                            {% if app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or is_granted('ROLE_ADMIN')) and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS')) %}
-                                <a href="{{ url('sortie_annuler', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
+                            {% if (app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT')
+                                or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME'))) or
+                                (is_granted('ROLE_ADMIN') and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')
+                                or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT'))) %}
+                                <a href="{{ url('sortie_motifannulation', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
                             {% endif %}
 
                         </td>
