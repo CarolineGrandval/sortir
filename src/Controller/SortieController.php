@@ -66,6 +66,22 @@ class SortieController extends AbstractController
     }
 
     /**
+     * @Route("/affichersortie", name="afficher")
+     */
+    function afficher_Sortie(Request $request, EntityManagerInterface $entityManager)
+    {
+        try {
+            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
+        } catch (NonUniqueResultException | NoResultException $e) {
+            throw createNotFoundException('Sortie non trouvée !');
+        }
+
+        return $this->render('sortie/afficher.html.twig', [
+            'sortie' => $sortie,
+        ]);
+    }
+
+    /**
      * @Route(path="/modifier/{id}", name="modifier", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function modifier(Request $request, EntityManagerInterface $entityManager)
