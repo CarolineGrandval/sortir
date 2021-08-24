@@ -216,6 +216,7 @@ class SortieController extends AbstractController
 
 //    /**
 //     * @Route(path="/desister/{id}", name="desister", requirements={"id": "\d+"}, methods={"GET"})
+//      Cette méthode fonctionne sans Ajax
 //     */
 //    public function desister(Request $request, EntityManagerInterface $entityManager)
 //    {
@@ -276,6 +277,7 @@ class SortieController extends AbstractController
     }
 //    /**
 //     * @Route(path="/sinscrire/{id}", name="sinscrire", requirements={"id": "\d+"}, methods={"GET"})
+//      Cette méthode fonctionne sans Ajax
 //     */
 //    public function sinscrire(Request $request, EntityManagerInterface $entityManager)
 //    {

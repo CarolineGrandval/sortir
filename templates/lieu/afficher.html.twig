@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Affichage ajax
+{% endblock %}
+
+{% block stylesheets %}
+    {# <script src="{{ asset('js/ajaxJQuery.js') }}"></script> #}
+{% endblock %}
+
+{% block body %}
+
+    <ul>
+        {% for ville in liste %}
+            <li>{{ ville.nom }}</li>
+{#            <p>{{ ville.codePostal }}</p>#}
+{#            <a href="#" class="btn btn-link">#}
+{#                <i class="far fa-thumbs-up"></i>#}
+{#                <span class="js-likes">{{ ville.lieux | length }}</span>#}
+{#                <span class="js-label">lieux</span>#}
+{#            </a>#}
+            <a href="{{ url('lieu_afficher_lieux_ville', {'id': ville.id}) }}" class="infos">
+                <button>Afficher les infos</button>
+                <p class="cp"> </p>
+                <p class="listeLieux"> </p>
+            </a>
+            <ul id="liste">
+
+            </ul>
+
+        {% endfor %}
+    </ul>
+
+    <div id="result">
+        <ul>
+
+        </ul>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{{ asset('js/infosVilleAjax.js') }}"></script>
+
+{% endblock %}

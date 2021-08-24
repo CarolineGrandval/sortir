@@ -8,12 +8,12 @@
     {% if is_granted('ROLE_ADMIN') %}
     {% endif %}
 
-    {% if app.request.attributes.get('_route') == 'ville_afficher' %}
-        <h2 class="d-flex justify-content-center">Créer un nouvel utilisateur </h2>
+    {% if app.request.attributes.get('_route') == 'app_register' %}
+        <h1 class="d-flex justify-content-center">Créer un nouvel utilisateur </h1>
     {% endif %}
 
     {% if app.request.attributes.get('_route') == 'edit_profile' %}
-        <h2 class="d-flex justify-content-center">Modifiez votre profil {{ app.user.pseudo }}</h2>
+        <h1 class="d-flex justify-content-center">Modifiez votre profil {{ app.user.pseudo }}</h1>
     {% endif %}
 
     <!-- affichage du formulaire -->
@@ -89,7 +89,7 @@
     {{ form_end(registrationForm) }}
 
 <div class="mb-3 d-flex justify-content-center">
-    <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-info'>Retour accueil</button></a>
+    <a class="navbar-brand" href="{{ url('main_home') }}"><button value='annuler' class='btn btn-secondary'>Retour accueil</button></a>
 </div>
 
 {% endblock %}
