@@ -10,7 +10,6 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,12 +20,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class SortieRepository extends ServiceEntityRepository
 {
     private $container; // constante pour les 30 jours afin de filtrer la requête
-    private $requestStack; // garder les valeurs de la session
-    public function __construct(ManagerRegistry $registry, ContainerInterface $container, RequestStack $requestStack)
+    public function __construct(ManagerRegistry $registry, ContainerInterface $container)
     {
         parent::__construct($registry, Sortie::class);
         $this->container = $container;
-        $this->requestStack = $requestStack;
     }
 
     /**
@@ -54,27 +51,19 @@ class SortieRepository extends ServiceEntityRepository
         $req->setFirstResult((($page < 1 ? 1 : $page) -1)  * $nbElementsByPage);
         $req->setMaxResults($nbElementsByPage);
 
-//        //Requete sur les sorties pas créés par l'utilisateur
-//        $eventsCreatedToExclude = $this->createQueryBuilder('s')
-//            ->join('s.etat', 'e')
-//            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
-//            ->andWhere('e.libelle= :created')->setParameter('created', 'Créée')
-//            ->getQuery()->getResult();
-//
-//        //Ajout de la requête d'exclusion
-//        $req->andWhere('e NOT IN (:eventscreatedToExclude)')
-//            ->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
-        //Créer le stockage des variables en Session
-        $session = $this->requestStack->getSession();
-        $session->set('motclef', $search->getMotclef());
-        $session->set('campus', $search->getCampus());
-        $session->set('dateDebut', $search->getDateDebut());
-        $session->set('dateFin', $search->getDateFin());
-        $session->set('organisateur',$search->isOrganisateur());
-        $session->set('inscrit',$search->isInscrit());
-        $session->set('pasInscrit',$search->isPasInscrit());
-        $session->set('passees',$search->isPassees());
+        //Requete sur les sorties pas créées par l'utilisateur
+        $eventsCreatedToExclude = $this->createQueryBuilder('s')
+            ->innerJoin('s.etat', 'e')
+            ->andWhere('s.organisateur != :organisateur ')->setParameter('organisateur', $user)
+            ->andWhere('e.id = :creation')->setParameter('creation', EtatEnum::ETAT_CREATION)
+            ->getQuery()->getResult();
 
+        //Ajout de la requête d'exclusion des sorties en création mais pas par l'utilisateur
+        if(!empty($eventsCreatedToExclude)){
+            $req->andWhere('s NOT IN (:eventscreatedToExclude)')->setParameter('eventscreatedToExclude', $eventsCreatedToExclude);
+        }
+
+        
         //par mots-clefs
         if(!empty($search->getMotclef())){
             $req->andWhere('s.nom LIKE :motclef')
@@ -114,17 +103,15 @@ class SortieRepository extends ServiceEntityRepository
                 ->innerJoin('e.participants', 'p')
                 ->where('p = :signedUpUser')->setParameter('signedUpUser', $user)
                 ->getQuery()->getResult();
-
+            //Vérification de la présence de données
             if(!empty($sortiesPasInscrit)){
-                $req->andWhere('e NOT IN (:sortiesPasInscrit)')
-                    ->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
+                $req->andWhere('e NOT IN (:sortiesPasInscrit)')->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
             }
         }
 
         //Utilisateur Actif
         //$userActif = $this->createQueryBuilder('user')
         //   ->where('user.actif = 1');
-
 
         //Ordonner par date
         $req->orderBy('s.dateHeureDebut', 'DESC');
