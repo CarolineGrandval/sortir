@@ -43,8 +43,8 @@
         {% else %}
             n'est pas inscrit à cette sortie.
             {% if(sortie.getEtat().getLibelle()=='Ouvert' or sortie.getEtat().getLibelle()=='En cours') %}
-            {# L'utilsateur  ne peut s'inscrire que si il n'est pas déjà inscrit à cette sortie et si l'état de la sortie est "Ouvert"(correspondant à l'id 2)
-             ou "En cours" (correspondant à l(id 4) dans le cas contraire il es disabled #}
+            {# L'utilisateur  ne peut s'inscrire que si il n'est pas déjà inscrit à cette sortie et si l'état de la sortie est "Ouvert"(correspondant à l'id 2)
+             ou "En cours" (correspondant à l'id 4) dans le cas contraire il es disabled #}
             <a href="{{ path('sortie_add_sortie', { 'id': sortie.id }) }}">
                 <button name='add_sortie' type ='submit' value="'_add_sortie" class='btn btn-secondary'>S'inscrire</button>
             </a>
