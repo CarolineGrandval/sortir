@@ -74,8 +74,15 @@ class FichierTelecharger
             $actif_column = $this->getColumnNameByValue($entete, 'actif');
             $pseudo_column = $this->getColumnNameByValue($entete, 'pseudo');
             //récupere la longueur du fichier
-            $donneesLigne = fgetcsv($ouvertureFichier, 0, ',');
-dd($donneesLigne);
+            $i=1 ;//Compteur de ligne
+            while(!feof($ouvertureFichier)){
+                $donneesLigne = fgetcsv($ouvertureFichier, 1024, ',');
+
+                $i++;
+            }
+
+            //$donneesLigne = fgetcsv($ouvertureFichier, 0, ',');
+//dd($donneesLigne);
 
 
 //

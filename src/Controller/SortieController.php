@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/sortie", name="sortie_")
+ * @Route("/", name="sortie_")
  */
 class SortieController extends AbstractController
 {
     /**
-     * @Route("/create", name="create")
+     * @Route("sortie/create", name="create")
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
@@ -128,7 +128,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/affichersortie", name="afficher")
+     * @Route("sortie/affichersortie", name="afficher")
      */
     function afficher_Sortie(Request $request, EntityManagerInterface $entityManager)
     {
@@ -144,7 +144,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route(path="/modifier/{id}", name="modifier", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @Route(path="sortie/modifier/{id}", name="modifier", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function modifier(Request $request, EntityManagerInterface $entityManager)
     {
@@ -190,7 +190,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route(path="/publier/{id}", name="publier", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @Route(path="sortie/publier/{id}", name="publier", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function publier(Request $request, EntityManagerInterface $entityManager)
     {
@@ -213,7 +213,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route(path="/motifannulation/{id}", name="motifannulation", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @Route(path="sortie/motifannulation/{id}", name="motifannulation", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function motifannulation(Request $request, EntityManagerInterface $entityManager)
     {
@@ -254,7 +254,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route(path="/annuler/{id}", name="annuler", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @Route(path="sortie/annuler/{id}", name="annuler", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     public function annuler(Request $request, EntityManagerInterface $entityManager)
     {
@@ -312,7 +312,7 @@ class SortieController extends AbstractController
 //    }
 
     /**
-     * @Route(path="/ajouter/{id}", name="add_sortie", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @Route(path="sortie/ajouter/{id}", name="add_sortie", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
     function ajouter_Utilisateur(Request $request, EntityManagerInterface $entityManager)
     {
@@ -333,18 +333,18 @@ class SortieController extends AbstractController
         $entityManager->persist($sortie);
         $entityManager->flush();
 
-        return $this->redirectToRoute('display_sortie', ['id' => $sortie->getId()]);
+        return $this->redirectToRoute('sortie_afficher', ['id' => $sortie->getId()]);
     }
 
     /**
-     * @Route(path="/afficherLesUtilisateurs", name="afficher_utilisateurs", methods={"GET", "POST"})
+     * @Route(path="sortie/afficherLesUtilisateurs", name="afficher_utilisateurs", methods={"GET", "POST"})
      */
     function tousLesUtilisateurs(Request $request, EntityManagerInterface $entityManager)
     {
         $users = $entityManager->getRepository("App:User");
         $users->getUsers();
 
-        return $this->redirectToRoute('display_sortie');
+        return $this->redirectToRoute('sortie_afficher');
     }
 //    /**
 //     * @Route(path="/sinscrire/{id}", name="sinscrire", requirements={"id": "\d+"}, methods={"GET"})
@@ -374,7 +374,7 @@ class SortieController extends AbstractController
 
 //Cette méthode gère l'inscription et la désinscription en Ajax.
     /**
-     * @Route(path="/inscriptions/{id}", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     * @Route(path="sortie/inscriptions/{id}", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
