@@ -1,45 +1,44 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil - Sortons casqués{% endblock title %}
-{#{% block stylesheets %}#}
-{#    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css"#}
-{#          rel="stylesheet"/>#}
-{#{% endblock %}#}
+{# {% block stylesheets %} #}
+{# <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" #}
+{# rel="stylesheet"/> #}
+{# {% endblock %} #}
 
 {% block body %}
 
-<div class="mb-3">
-    <h1>Accueil</h1>
-    <div class="row">
-         <h5 class="d-flex justify-content-end">Date du jour : {{ "now"|date("d/m/Y") }}</h5>
-         <h5 class="d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
-    </div>
     <div class="mb-3">
-        <h3>Filtrer les sorties</h3>
-        <div id="search">
-            {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
-            <div class="row justify-content-between custom-line">
-
-                <div class="col-5">
-                    {{ form_row(searchForm.campus) }}
-                    {{ form_row(searchForm.motclef) }}
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ form_row(searchForm.dateDebut) }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form_row(searchForm.dateFin) }}
+        <h1>Accueil</h1>
+        <div class="row">
+            <h5 class="d-flex justify-content-end">Date du jour : {{ "now"|date("d/m/Y") }}</h5>
+            <h5 class="d-flex justify-content-end">Participant : {{ app.user.pseudo }}</h5>
+        </div>
+        <div class="mb-3">
+            <h3>Filtrer les sorties</h3>
+            <div id="search">
+                {{ form_start(searchForm, { 'attr': {'class': 'form'} }) }}
+                <div class="row justify-content-between custom-line">
+                    <div class="col-5">
+                        {{ form_row(searchForm.campus) }}
+                        {{ form_row(searchForm.motclef) }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(searchForm.dateDebut) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(searchForm.dateFin) }}
+                            </div>
                         </div>
                     </div>
+                    <div class="col-5">
+                        {{ form_row(searchForm.organisateur) }}
+                        {{ form_row(searchForm.inscrit) }}
+                        {{ form_row(searchForm.pasInscrit) }}
+                        {{ form_row(searchForm.passees) }}
+                    </div>
+                    <div class="col-2"><p>{{ form_widget(searchForm.submit) }}</p></div>
                 </div>
-                <div class="col-5">
-                    {{ form_row(searchForm.organisateur) }}
-                    {{ form_row(searchForm.inscrit) }}
-                    {{ form_row(searchForm.pasInscrit) }}
-                    {{ form_row(searchForm.passees) }}
-                </div>
-                <div class="col-2"><p>{{ form_widget(searchForm.submit) }}</p></div>
-            </div>
                 {{ form_end(searchForm) }}
             </div>
         </div>
@@ -83,8 +82,7 @@
                             <td>{{ sortie.nom|capitalize }}</td>
                             <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
                             <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
-                            <td id="inscritsPlaces{{ sortie.id }}">{{ sortie.participants.count() }}
-                                / {{ sortie.nbParticipantsMax }}</td>
+                            <td id="inscritsPlaces{{ sortie.id }}">{{ sortie.participants.count() }} / {{ sortie.nbParticipantsMax }}</td>
                             <td>{{ sortie.etat.libelle }}</td>
                             <td id="inscr{{ sortie.id }}">
                                 {% if inscrit == 1 %}
@@ -94,66 +92,65 @@
                             <td>
                                 {# CLIQUABLE PSEUDO #}
                                 {% if app.user == sortie.organisateur %}
-                                    <a href="{{ url('edit_profile', {'id': sortie.organisateur.id}) }}"
-                                       title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
+                                    <a href="{{ url('edit_profile', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
                                 {% else %}
-                                    <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}"
-                                       title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
+                                    <a href="{{ url('afficher_profil', {'id': sortie.organisateur.id}) }}" title="Afficher pseudo">{{ sortie.organisateur.pseudo }}</a>
                                 {% endif %}
 
-                        </td>
-                        <td>
-                            {# AFFICHER #}
-                            {# etat ouvert #}
-                            {% if sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') %}
-                                <a href="{{ url('sortie_afficher',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                            {# etat en cours ou fermé #}
-                            {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) %}
-                                <a href="{{ url('sortie_afficher',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
-                            {% endif %}
-                            {# MODIFIER #}
-                            {% if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
-                                <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie">Modifier</a>
-                            {% endif %}
-                            {# PUBLIER #}
-                            {%  if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
-                                <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}" title="Publier la sortie">Publier</a>
-                            {% endif %}
+                            </td>
+                            <td>
+                                {# AFFICHER #}
+                                {# etat ouvert #}
+                                {% if sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') %}
+                                    <a href="{{ url('sortie_afficher',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
+                                    {# etat en cours ou fermé #}
+                                {% elseif (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_ENCOURS') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')) %}
+                                    <a href="{{ url('sortie_afficher',{'id': sortie.id}) }}" title="Afficher une sortie">Afficher</a>
+                                {% endif %}
+                                {# MODIFIER #}
+                                {% if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
+                                    <a href="{{ url('sortie_modifier', { 'id': sortie.id }) }}" title="Modifier la sortie">Modifier</a>
+                                {% endif %}
+                                {# PUBLIER #}
+                                {% if app.user == sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') %}
+                                    <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}" title="Publier la sortie">Publier</a>
+                                {% endif %}
 
-{#                            fonctionne avcec rechargement de la page#}
-{#                             S'INSCRIRE = AFFICHER #}
-{#                            {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax and not inscrit %}#}
-{#                                <a href="{{ url('sortie_sinscrire', { 'id': sortie.id }) }}" title="S'inscrire à la sortie" class="inscrire">S'inscrire </a>#}
+                                {# fonctionne avcec rechargement de la page #}
+                                {# S'INSCRIRE = AFFICHER #}
+                                {# {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax and not inscrit %} #}
+                                {# <a href="{{ url('sortie_sinscrire', { 'id': sortie.id }) }}" title="S'inscrire à la sortie" class="inscrire">S'inscrire </a> #}
 
-{#                            {% endif %}#}
-{#                             SE DESISTER #}
-{#                            {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %}#}
-{#                                <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">Se désinscrire</a>#}
-{#                            {% endif %}#}
+                                {# {% endif %} #}
+                                {# SE DESISTER #}
+                                {# {% if app.user != sortie.organisateur and (sortie.etat.id == 2 or sortie.etat.id == 3) and inscrit %} #}
+                                {# <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">Se désinscrire</a> #}
+                                {# {% endif %} #}
 
 
-                                {#  Ajax sans rechargement de la page #}
+                                {# Ajax sans rechargement de la page #}
                                 {# S'INSCRIRE ET SE DESISTER #}
                                 {% if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
-                                    <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" data-sortie="{{ sortie.id }}" class="inscrire">
+                                    <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}"
+                                       data-sortie="{{ sortie.id }}" class="inscrire">
                                         <p>
-                                        <i class="far fa-calendar-plus"></i>
-                                        <span class="statut">
+                                            <i class="far fa-calendar-plus"></i>
+                                            <span class="statut">
                                             {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</span>
                                         </p>
                                     </a>
                                 {% endif %}
 
-                            {# ANNULER #}
-                            {% if (app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT')
-                                or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME'))) or
-                                (is_granted('ROLE_ADMIN') and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')
-                                or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT'))) %}
-                                <a href="{{ url('sortie_motifannulation', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
-                            {% endif %}
+                                {# ANNULER #}
+                                {% if (app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT')
+                                    or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME'))) or
+                                    (is_granted('ROLE_ADMIN') and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')
+                                    or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT'))) %}
+                                    <a href="{{ url('sortie_motifannulation', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
+                                {% endif %}
 
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     {% endif %} {# dateEcart.days >= nbjours #}
                 {% else %}
                     <tr class="text-center">
@@ -172,7 +169,7 @@
 
         </div>
     </div>
-</div>
+    </div>
 {% endblock body %}
 
 
@@ -184,13 +181,13 @@
         //Requête Ajax pour inscrire ou désinscrire dynamiquement un utilisateur à la sortie.
         function onClickSinscrire(event) {
             event.preventDefault();
-            const url = this.href ;
-            const links = this.querySelector('span.statut') ;
+            const url = this.href;
+            const links = this.querySelector('span.statut');
             //On récupère l'id par les data-set
             const id = this.dataset.sortie;
-            const ligne = document.getElementById('ligne'+id) ;
-            const nbInscrits = document.getElementById('inscritsPlaces'+id) ;
-            const inscr = document.getElementById('inscr'+id) ;
+            const ligne = document.getElementById('ligne' + id);
+            const nbInscrits = document.getElementById('inscritsPlaces' + id);
+            const inscr = document.getElementById('inscr' + id);
 
             //Exécution de la requête Ajax
             axios.get(url).then(function (response) {
@@ -201,7 +198,8 @@
                 inscr.textContent = response.data.inscrit;
             })
         }
-            //Ajout d'un écouteur d'événement sur le lien cliqué.
+
+        //Ajout d'un écouteur d'événement sur le lien cliqué.
         document.querySelectorAll('a.inscrire').forEach(function (link) {
             link.addEventListener('click', onClickSinscrire);
         });

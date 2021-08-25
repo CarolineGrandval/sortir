@@ -6,6 +6,8 @@
 parameters:
     #nombre de jours de filtres pour les sorties
     app.nbjours: 30
+    #téléchargement de fichier
+    upload_directory: '%kernel.project_dir%/public/uploads'
 
 services:
     # default configuration for services in *this* file
@@ -22,6 +24,8 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
-
+    App\Service\FichierTelecharger:
+        arguments:
+            $dossierCible: '%upload_directory%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
