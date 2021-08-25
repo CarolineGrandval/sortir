@@ -34,7 +34,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('main_home');
+            return $this->redirectToRoute('sortie_home');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -86,7 +86,7 @@ class RegistrationController extends AbstractController
             $this->addFlash('success', 'Votre profil a bien été modifié !');
 
             // Redirection sur le controlleur
-            return $this->redirectToRoute('main_home', ['id' => $user->getId()]);
+            return $this->redirectToRoute('sortie_home', ['id' => $user->getId()]);
         }
 
         return $this->render('registration/register.html.twig', [

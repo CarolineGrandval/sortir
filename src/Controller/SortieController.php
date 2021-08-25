@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Etat;
 use App\Entity\Lieu;
+use App\Entity\Rechercher;
 use App\Entity\Sortie;
 use App\Entity\User;
+use App\Repository\CampusRepository;
 use App\Service\EtatEnum;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -65,6 +68,63 @@ class SortieController extends AbstractController
             'formSortie' => $formSortie->createView(),
 //            'formLieu' => $formLieu->createView(),
         ]);
+    }
+    /**
+     * @Route(path="{page}", requirements={"page": "\d+"}, defaults={"page": 1}, name="home", methods={"GET","POST"})
+     *
+     */
+    public function list(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, CampusRepository $campusRepository)
+    {
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        //Instanciation de l'objet Rechercher Request $request, EventRepository $eventRepository, Security $security, SessionInterface $session
+        $search = new Rechercher();
+
+        //si utilisateur connecté
+        if (!empty($user)){
+            //ajout par défaut du Campus de l'utilisateur
+            $search->setCampus($user->getCampus());
+            $search->setOrganisateur(true);
+            $search->setPasInscrit(true);
+            $search->setInscrit(true);
+            //Création du formulaire
+            $searchForm = $this->createForm('App\Form\SortieRechercheType', $search);
+            $searchForm->handleRequest($request);
+
+            //Récupération et initialisation des attributs de Recherche
+            if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+                //Créer le stockage des variables en Session
+                $session->set('Rechercher', $search);
+            }
+            //si changement de page
+            else {
+                //Savoir si l'objet Recherche existe
+                if($session->has('Rechercher')){
+                    $search = $session->get('Rechercher');
+                    //réassocier l'entité Campus à l'entité Rechercher
+                    $campus = $campusRepository->find($search->getCampus()->getId());
+                    $search->setCampus($campus);
+                    //Renvoit le nouveau formulaire
+                    $searchForm = $this->createForm('App\Form\SortieRechercheType', $search);
+                }
+            }
+
+            //pagination
+            $page = $request->get('page', 1);
+
+            //Envoi de la requete
+            $sorties = $entityManager->getRepository('App:Sortie')->search($page,10, $search, $user);
+
+            //Requete d'inscription aux sorties en fonction de l'utilisateur connecté
+            $inscrits = $entityManager->getRepository('App:Sortie')->inscritSortie($search, $user);
+
+            //Création formulaire avec des données
+            return $this->render('sortie/home.html.twig', ['searchForm' => $searchForm->createView(), 'sorties' => $sorties, 'inscrits' => $inscrits]);
+        }
+
+        return  $this->redirectToRoute('app_login');
     }
 
     /**
@@ -149,7 +209,7 @@ class SortieController extends AbstractController
         // Ajout d'un message de confirmation
         $this->addFlash('success', 'La sortie a bien été publiée !');
         // Redirection sur le controlleur
-        return $this->redirectToRoute('main_home');
+        return $this->redirectToRoute('sortie_home');
     }
 
     /**
@@ -221,7 +281,7 @@ class SortieController extends AbstractController
         }
 
         // Redirection sur le controlleur
-        return $this->redirectToRoute('main_home');
+        return $this->redirectToRoute('sortie_home');
     }
 
 //    /**
@@ -248,7 +308,7 @@ class SortieController extends AbstractController
 //        $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
 //
 //        // Redirection sur le controlleur
-//        return $this->redirectToRoute('main_home');
+//        return $this->redirectToRoute('sortie_home');
 //    }
 
     /**
@@ -309,7 +369,7 @@ class SortieController extends AbstractController
 //        $this->addFlash('success', 'Vous êtes bien inscrit à la sortie !');
 //
 //        // Redirection sur le controlleur
-//        return $this->redirectToRoute('main_home');
+//        return $this->redirectToRoute('sortie_home');
 //    }
 
 //Cette méthode gère l'inscription et la désinscription en Ajax.
