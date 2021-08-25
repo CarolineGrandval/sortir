@@ -30,7 +30,6 @@
                         </div>
                         {# Lien permettant de supprimer une image (sera géré en Ajax) #}
                         <a href="{{ path('user_delete_image', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" methods="DELETE">Supprimer la photo</a>
-{#                        <a href="{{ path('user_delete_image', { "id": image.id }) }}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}">Supprimer la photo</a>#}
                     </figure>
                 </div>
         {% endfor %}

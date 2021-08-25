@@ -90,18 +90,18 @@
 
 
     <!-- ajouter un lieu en formulaire imbriqué / méthode M. Racine mais pas adapté-->
-    {# <div class="mb-3" style="text-align: right;"> #}
-    {# <div class="col-xs-4"> #}
-    {# {{ form_row(formLieu.nom) }} #}
-    {# {{ form_row(formLieu.ville) }} #}
-    {# {{ form_row(formLieu.rue) }} #}
-    {# {{ form_row(formLieu.longitude) }} #}
-    {# {{ form_row(formLieu.latitude) }} #}
-    {# <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/> #}
-    {# </div> #}
-    {# <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a> #}
-    {# </div> #}
-    {# </div> #}
+{#     <div class="mb-3" style="text-align: right;">#}
+{#     <div class="col-xs-4">#}
+{#     {{ form_row(formLieu.nom) }}#}
+{#     {{ form_row(formLieu.ville) }}#}
+{#     {{ form_row(formLieu.rue) }}#}
+{#     {{ form_row(formLieu.longitude) }}#}
+{#     {{ form_row(formLieu.latitude) }}#}
+{#     <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/>#}
+{#     </div>#}
+{#     <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a>#}
+{#     </div>#}
+{#     </div>#}
 
     <div class="mb-3 cache">
         {{ form_label(formSortie.motifAnnulation) }}
@@ -140,6 +140,13 @@
         <button value='annuler' class='btn btn-secondary'>Retour accueil</button>
     </a>
     </div>
+
+
+
+{#    TEST MODALE#}
+
+
+
 
 {% endblock %}
 
