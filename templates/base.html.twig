@@ -29,7 +29,7 @@
         <div class="container-fluid">
 
             <div class="d-flex">
-                <a class="navbar-brand" href="{{ url('main_home') }}">
+                <a class="navbar-brand" href="{{ url('sortie_home') }}">
                     <img class="me-md-5" src="{{ asset('img/logo.png') }}" alt="Logo Sortir" width="145em"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
@@ -41,7 +41,7 @@
             <div class="collapse navbar-collapse " id="navbarColor01">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url('main_home') }}" title="Home">Accueil
+                        <a class="nav-link active" href="{{ url('sortie_home') }}" title="Home">Accueil
                             <span class="visually-hidden">Accueil</span>
                         </a>
                     </li>
@@ -56,7 +56,7 @@
                         {% if is_granted('ROLE_ADMIN') %}
 
                             {# Gérer les campus #}
-                            <li class="nav-item"><a class="nav-link " href="{{ url('main_home') }}" title="Campus">Campus</a>
+                            <li class="nav-item"><a class="nav-link " href="{{ url('sortie_home') }}" title="Campus">Campus</a>
                             </li>
 
                             {# Gérer les villes #}
