@@ -6,6 +6,8 @@
 parameters:
     #nombre de jours de filtres pour les sorties
     app.nbjours: 30
+    mailer_user: 'esujittapa.3244@gmail.com'
+    mailer_password: 'Hv6he92kMLRY'
 
     images_directory: '%kernel.project_dir%/public/uploads'
 
@@ -24,6 +26,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+    MaillotF\Papercut\PapercutBridgeBundle\Service\PapercutService: '@papercut.service'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
