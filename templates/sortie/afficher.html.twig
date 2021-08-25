@@ -44,7 +44,7 @@
         </tr>
         {% for user in sortie.getParticipants() %}
             <tr>
-                <td><a href="{{ url('edit_profile', {'id': user.id}) }}" title="Afficher pseudo">{{ user.pseudo }}</a></td>
+                <td><a href="{{ url('afficher_profil', {'id': user.id}) }}" title="Afficher pseudo">{{ user.pseudo }}</a></td>
                 <td>{{ user.prenom }} {{ user.nom }}</td>
             </tr>
         {% endfor %}
