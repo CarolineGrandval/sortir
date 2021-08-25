@@ -107,10 +107,12 @@ class RegistrationController extends AbstractController
                 $img = new Image();
                 $img->setName($fichier);
 
-                //Tester de vider le tableau pour remplacer / ne pas oublier de supprimer le chemin d'acces ?
+                //Si l'utilisateur a déjà une photo de profil, Vider le tableau pour remplacer l'image
                 $tabImages = $user->getImages();
                 if (!empty($tabImages)){
-
+                    foreach ($tabImages as $im){
+                        $user->removeImage($im);
+                    }
                 }
 
                 $user->addImage($img);
