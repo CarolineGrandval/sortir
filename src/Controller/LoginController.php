@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ContainerAijzbV3\get_Console_Command_EventDispatcherDebug_LazyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,11 +32,9 @@ class LoginController extends AbstractController
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout(AuthenticationUtils $authenticationUtils): Response
+    public function logout(): Response
     {
-        $lastUsername=$authenticationUtils->getLastUsername();
-        return $this->render('security/login.html.twig',['last_username' => $lastUsername]);
-        //throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        return $this->render('security/login.html.twig');
     }
 
 }
