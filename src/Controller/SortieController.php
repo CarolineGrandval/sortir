@@ -283,32 +283,6 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_home');
     }
 
-//    /**
-//     * @Route(path="/desister/{id}", name="desister", requirements={"id": "\d+"}, methods={"GET"})
-//      Cette méthode fonctionne sans Ajax
-//     */
-//    public function desister(Request $request, EntityManagerInterface $entityManager)
-//    {
-//        /** @var User $user */
-//        $user = $this->getUser();
-//
-//        try {
-//            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
-//        } catch (NonUniqueResultException | NoResultException $e) {
-//            throw $this->createNotFoundException('La sortie n\'a pas été trouvé !');
-//        }
-//        // Enlever le participant de la sortie
-//        $sortie->removeParticipant($user);
-//        // Enregistrement de l'entité dans la BDD
-//        $entityManager->persist($sortie);
-//        $entityManager->flush();
-//
-//        // Ajout d'un message de confirmation de désistement
-//        $this->addFlash('success', 'Vous êtes désinscrit de la sortie !');
-//
-//        // Redirection sur le controlleur
-//        return $this->redirectToRoute('sortie_home');
-//    }
 
     /**
      * @Route(path="sortie/ajouter/{id}", name="add_sortie", requirements={"id": "\d+"}, methods={"GET", "POST"})
@@ -332,48 +306,12 @@ class SortieController extends AbstractController
         $entityManager->persist($sortie);
         $entityManager->flush();
 
-        return $this->redirectToRoute('display_sortie', ['id' => $sortie->getId()]);
+        return $this->redirectToRoute('sortie_afficher', ['id' => $sortie->getId()]);
     }
 
-    /**
-     * @Route(path="/afficherLesUtilisateurs", name="afficher_utilisateurs", methods={"GET", "POST"})
-     */
-    function tousLesUtilisateurs(Request $request, EntityManagerInterface $entityManager)
-    {
-        $users = $entityManager->getRepository("App:User");
-        $users->getUsers();
-
-        return $this->redirectToRoute('display_sortie');
-    }
-//    /**
-//     * @Route(path="/sinscrire/{id}", name="sinscrire", requirements={"id": "\d+"}, methods={"GET"})
-//      Cette méthode fonctionne sans Ajax
-//     */
-//    public function sinscrire(Request $request, EntityManagerInterface $entityManager)
-//    {
-//        /** @var User $user */
-//        $user = $this->getUser();
-//
-//        try {
-//            $sortie = $entityManager->getRepository('App:Sortie')->find((int)$request->get('id'));
-//        } catch (NonUniqueResultException | NoResultException $e) {
-//            throw $this->createNotFoundException('La sortie n\'a pas été trouvée !');
-//        }
-//
-//        //Si le participant n'est pas inscrit, on l'inscrit. S'il est déjà inscrit, on le désinscrit.
-//        $sortie->addParticipant($user);
-//        $sortie->removeParticipant($user);
-//        $entityManager->persist($sortie);
-//        $entityManager->flush();
-//        $this->addFlash('success', 'Vous êtes bien inscrit à la sortie !');
-//
-//        // Redirection sur le controlleur
-//        return $this->redirectToRoute('sortie_home');
-//    }
-
-//Cette méthode gère l'inscription et la désinscription en Ajax.
     /**
      * @Route(path="sortie/inscriptions/{id}", name="inscriptions", requirements={"id": "\d+"}, methods={"GET"})
+     * Cette méthode gère l'inscription et la désinscription en Ajax.
      */
     public function inscriptions(Request $request, EntityManagerInterface $entityManager)
     {
@@ -399,7 +337,6 @@ class SortieController extends AbstractController
                     $entityManager->persist($sortie);
                 }
             }
-
         }
         $entityManager->flush();
 
