@@ -12,8 +12,30 @@
         <h1 class="d-flex justify-content-center">Créer un nouvel utilisateur </h1>
     {% endif %}
 
+
     {% if app.request.attributes.get('_route') == 'edit_profile' %}
         <h1 class="d-flex justify-content-center">Modifiez votre profil {{ app.user.pseudo }}</h1>
+
+        {# //Si on est en modification, afficher l'image de profil. #}
+        <div class="d-flex justify-content-center mt-3 ">
+
+        {% for image in user.images %}
+                <div class="zoom">
+                    <figure>
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset('/uploads/'~image.name) }}" alt="photo de profil">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <P>Votre photo de profil</P>
+                        </div>
+                        {# Lien permettant de supprimer une image (sera géré en Ajax) #}
+                        <a href="{{ path('user_delete_image', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" methods="DELETE">Supprimer la photo</a>
+{#                        <a href="{{ path('user_delete_image', { "id": image.id }) }}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}">Supprimer la photo</a>#}
+                    </figure>
+                </div>
+        {% endfor %}
+        </div>
+
     {% endif %}
 
     <!-- affichage du formulaire -->
@@ -56,29 +78,16 @@
     </div>
 
     <div class="mb-3">
-{#        {{ form_label(registrationForm.plainPassword) }}#}
+        {# {{ form_label(registrationForm.plainPassword) }} #}
         {{ form_widget(registrationForm.plainPassword) }}
         {{ form_errors(registrationForm.plainPassword) }}
     </div>
 
-    <div class="mb-3 cache">
-        {{ form_row(registrationForm.photo) }}
+    <div class="mb-3">
+        {# {{ form_label(registrationForm.plainPassword) }} #}
+        {{ form_widget(registrationForm.image) }}
+        {{ form_errors(registrationForm.image) }}
     </div>
-
-    <!-- photo de profil -->
-    {% if app.user %}
-        {#        <p>{{ app.user.photo |imagine_filter('carre') }}</p>#}
-{#        {{ user.nom }}#}
-
-{#    <img src="{{ asset(user.photo) }}">#}
-
-    {% endif %}
-
-{#    <div class="mb-3">#}
-{#        {{ form_label(registrationForm.photo) }}#}
-{#        {{ form_widget(registrationForm.photo) }}#}
-{#        {{ form_errors(registrationForm.photo) }}#}
-{#    </div>#}
 
     {% if not is_granted("ROLE_ADMIN") %}
     {% endif %}
@@ -88,8 +97,14 @@
     </div>
     {{ form_end(registrationForm) }}
 
-<div class="mb-3 d-flex justify-content-center">
-    <a class="navbar-brand" href="{{ url('sortie_home') }}"><button value='annuler' class='btn btn-secondary'>Retour accueil</button></a>
-</div>
+    <div class="mb-3 d-flex justify-content-center">
+        <a class="navbar-brand" href="{{ url('sortie_home') }}">
+            <button value='annuler' class='btn btn-secondary'>Retour accueil</button>
+        </a>
+    </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/images.js') }}"></script>
 {% endblock %}
