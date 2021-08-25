@@ -71,7 +71,6 @@ class SortieController extends AbstractController
     }
     /**
      * @Route(path="{page}", requirements={"page": "\d+"}, defaults={"page": 1}, name="home", methods={"GET","POST"})
-     *
      */
     public function list(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, CampusRepository $campusRepository)
     {
