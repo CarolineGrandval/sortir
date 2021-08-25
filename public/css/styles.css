@@ -80,3 +80,18 @@ footer {
 .clique {
     display: block;
 }
+
+.zoom {
+    /*height:400px;*/
+}
+.zoom p {
+    /*text-align:center;*/
+}
+.zoom img {
+    width:20%;
+    transition-duration: 1s;
+}
+.zoom img:hover {
+    width:50%;
+    transition-duration: 1s;
+}

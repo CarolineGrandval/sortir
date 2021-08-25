@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,6 +10,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -28,9 +30,29 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
+            // On récupère l'image transmise
+            $images = $form->get('image')->getData();
+
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier unique
+                $fichier = md5(uniqid()).'.'.$image->guessExtension();
+
+
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('images_directory'),
+                    $fichier
+                );
+                // On crée l'image dans la base de données
+                $img = new Image();
+                $img->setName($fichier);
+                $user->addImage($img);
+                $entityManager->persist($user);
+            }
+
             // encode the plain password
             $user->setPassword($passwordEncoder->hashPassword($user, $user->getPlainPassword()));
-
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -43,19 +65,8 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/login", name="app_login", methods={"GET", "POST"})
-//     */
-//    public function login(AuthenticationUtils $authenticationUtils): Response
-//    {
-//        // Récupération des erreurs de traitement de connexion
-//        $error = $authenticationUtils->getLastAuthenticationError();
-//
-//        // Récupération de l'identifiant de l'utilisateur
-//        $lastUsername = $authenticationUtils->getLastUsername();
-//
-//        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-//    }
+
+//TODO : réunir cette méthode en une seule
 
     /**
      * @Route(path="/editprofile/{id}", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
@@ -78,6 +89,34 @@ class RegistrationController extends AbstractController
         // Vérifier les données du formulaire
         if ($formEdit->isSubmitted() && $formEdit->isValid()) {
 
+
+            // On récupère l'image transmise
+            $images = $formEdit->get('image')->getData();
+
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()).'.'.$image->guessExtension();
+
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('images_directory'),
+                    $fichier
+                );
+
+                // On crée l'image dans la base de données
+                $img = new Image();
+                $img->setName($fichier);
+
+                //Tester de vider le tableau pour remplacer / ne pas oublier de supprimer le chemin d'acces ?
+                $tabImages = $user->getImages();
+                if (!empty($tabImages)){
+
+                }
+
+                $user->addImage($img);
+                $entityManager->persist($user);
+            }
+
             // Enregistrement de l'entité dans la BDD
             $entityManager->persist($user);
             $entityManager->flush();
@@ -91,6 +130,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $formEdit->createView(),
+            'user' => $user, //ligne ajoutée pour récupérer la photo du user
         ]);
     }
 
@@ -105,6 +145,34 @@ class RegistrationController extends AbstractController
         return $this->render('user/affiche.html.twig', [
             'user' => $user,
         ]);
-
     }
+
+    /**
+     * @Route("/delete/image/{id}", name="user_delete_image", methods={"DELETE"})
+     */
+    public function deleteImage(Image $image, Request $request){
+        $data = json_decode($request->getContent(), true);
+
+        // On vérifie si le token est valide
+        if($this->isCsrfTokenValid('delete'.$image->getId(), $data['_token'])){
+            // On récupère le nom de l'image
+            $nom = $image->getName();
+
+            // On supprime l'entrée de la base
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($image);
+            $em->flush();
+
+            // On supprime le fichier
+            if (!empty($nom) && file_exists($this->getParameter('images_directory').'/'.$nom)){
+                unlink($this->getParameter('images_directory').'/'.$nom);
+            }
+
+            // On répond en json
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalide'], 400);
+        }
+    }
+
 }

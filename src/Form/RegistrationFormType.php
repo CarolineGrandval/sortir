@@ -71,10 +71,12 @@ class RegistrationFormType extends AbstractType
             'second_options' => ['label' => 'Confirmez le mot de passe : '],
         ]);
 
-        $builder->add('photo', FileType::class, [
-            'label' => 'Photo de profil : ',
-            'required' => false,
-        ]);
+        $builder->add('image', FileType::class,[
+        'label' => false,
+        'multiple' => true,
+        'mapped' => false,
+        'required' => false
+    ]);
 
         $builder->add('submit', SubmitType::class, [
             'label' => 'Valider',

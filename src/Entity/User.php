@@ -103,14 +103,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Campus $campus;
 
     /**
-     * @ORM\Column(type="binary", nullable=true)
-     */
-    private $photo;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Sortie::class, mappedBy="participants")
      */
     private $sorties;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="utilisateur", cascade={"persist", "remove"}, fetch="EAGER")
+     */
+    private Collection $images ;
 
     /**
      * User constructor.
@@ -119,10 +119,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->sortiesOrganisees = new ArrayCollection();
+        $this->images = new ArrayCollection();
         $this->actif = true;
         $this->administrateur = false;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_USER'; //TODO : ne fonctionne pas
         $this->sorties = new ArrayCollection();
     }
 
@@ -334,18 +335,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
-    public function getPhoto()
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto($photo): self
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
-
     /**
      * @return string
      */
@@ -396,5 +385,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection|Image[]
+     */
+    public function getImages() : Collection
+    {
+//         return $this->images;
+        return new ArrayCollection($this->images->getValues());
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setUtilisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->contains($image)) {
+            $this->images->removeElement($image);
+            // set the owning side to null (unless already changed)
+            if ($image->getUtilisateur() === $this) {
+                $image->setUtilisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
 

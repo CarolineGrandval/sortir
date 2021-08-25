@@ -7,6 +7,8 @@ parameters:
     #nombre de jours de filtres pour les sorties
     app.nbjours: 30
 
+    images_directory: '%kernel.project_dir%/public/uploads'
+
 services:
     # default configuration for services in *this* file
     _defaults:
