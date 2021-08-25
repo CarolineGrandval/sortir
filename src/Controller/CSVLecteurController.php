@@ -18,11 +18,11 @@ class CSVLecteurController extends AbstractController
         $formFichier = $this->createForm('App\Form\AjoutFichierType');
         $formFichier->handleRequest($request);
         //Tester que le fichier n'est pas initialisé
-
+        //dd($formFichier['upload_file']->getData());
 
             //Si le formulaire a été envoyé
             if($formFichier->isSubmitted() && $formFichier->isValid()){
-                dd($formFichier['upload_file']->getData());
+
                 //savoir si un fichier est présent
                 $fichier = $formFichier['upload_file']->getData();
 

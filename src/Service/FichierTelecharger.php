@@ -63,20 +63,21 @@ class FichierTelecharger
             }
             //vérification de la présence des données
             $entete = fgetcsv($ouvertureFichier,0,',');
-            dd($entete);
 
-//            //Récupère la première ligne avec les noms de colonnes
-//            $entete = fgetcsv($ouvertureFichier,0,',');
-//
-//            //Trouver Chaque colonne
-//            $mail_column = $this->getColumnNameByValue($entete, 'mail');
-//            $nom_column = $this->getColumnNameByValue($entete, 'nom');
-//            $prenom_column = $this->getColumnNameByValue($entete, 'prenom');
-//            $telephone_column = $this->getColumnNameByValue($entete, 'telephone');
-//            $password_column = $this->getColumnNameByValue($entete, 'password');
-//            $administrateur_column = $this->getColumnNameByValue($entete, 'administrateur');
-//            $actif_column = $this->getColumnNameByValue($entete, 'actif');
-//            $pseudo_column = $this->getColumnNameByValue($entete, 'pseudo');
+            //trouver chaque colonne
+            $mail_column = $this->getColumnNameByValue($entete, 'mail');
+            $nom_column = $this->getColumnNameByValue($entete, 'nom');
+            $prenom_column = $this->getColumnNameByValue($entete, 'prenom');
+            $telephone_column = $this->getColumnNameByValue($entete, 'telephone');
+            $password_column = $this->getColumnNameByValue($entete, 'password');
+            $administrateur_column = $this->getColumnNameByValue($entete, 'administrateur');
+            $actif_column = $this->getColumnNameByValue($entete, 'actif');
+            $pseudo_column = $this->getColumnNameByValue($entete, 'pseudo');
+            //récupere la longueur du fichier
+            $donneesLigne = fgetcsv($ouvertureFichier, 0, ',');
+dd($donneesLigne);
+
+
 //
 //            //récupère les informations de la deuxième ligne
 //            $donneesLigne = fgetcsv($ouvertureFichier, 0, ',');
