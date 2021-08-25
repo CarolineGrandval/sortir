@@ -35,10 +35,38 @@ class UserController extends AbstractController
         $this->addFlash('success', 'L\'utilisateur a été supprimé');
 
         // Redirection sur le controlleur
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('user_afficher');
     }
+
     /**
-     * @Route("/index", name="index")
+     * @Route(path="/desactiver/{id}", name="desactiver", requirements={"id": "\d+"}, methods={"GET", "POST"})
+     * @IsGranted("ROLE_ADMIN")
+     * Cette méthode active ou désactive les utilisateurs.
+     */
+    public function desactiver(Request $request, EntityManagerInterface $entityManager){
+        try{
+            $user = $entityManager->getRepository('App:User')->find((int)$request->get('id'));
+
+            if ($user->getActif()){
+                $user->setActif(false);
+                $this->addFlash('success', 'L\'utilisateur a été désactivé');
+
+            }else{
+                $user->setActif(true);
+                $this->addFlash('success', 'L\'utilisateur a été réactivé');
+            }
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }catch (NonUniqueResultException | NoResultException $e) {
+            throw $this->createNotFoundException('User Not Found !');
+        }
+
+        // Redirection sur le controlleur
+        return $this->redirectToRoute('user_afficher');
+    }
+
+    /**
+     * @Route("/afficher", name="afficher")
      * @IsGranted("ROLE_ADMIN")
      */
     public function index(EntityManagerInterface $entityManager): Response

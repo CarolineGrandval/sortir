@@ -17,16 +17,19 @@
         <tr >
             <td>Pseudo</td>
             <td>Nom</td>
-
-            <td>Action</td>
+            <td>Actions</td>
         </tr>
         </thead>
+
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.pseudo }}</td><td>{{ user.prenom }} {{ user.nom }}</td>
-
+                <td>{{ user.pseudo }}</td>
+                <td>{{ user.prenom }} {{ user.nom }}</td>
                 <td><a href="{{ url('user_delete', { 'id': user.id }) }}" title="Supprimer un utilisateur">Supprimer</a></td>
+                <td><a href="{{ url('user_desactiver', { 'id': user.id }) }}" title="Désactiver un utilisateur">
+                     <span class="statut"> {% if user.actif %} Désactiver {% else %} Activer {% endif %}</span>
+                    </a></td>
 
             </tr>
         </tbody>
