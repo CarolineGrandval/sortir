@@ -17,6 +17,29 @@
     {{ form_start(formSortie) }}
 
     <div class="mb-3">
+        {{ form_label(formSortie.ville) }}
+        {#        <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" >#}
+        {{ form_widget(formSortie.ville, {'attr': {'id': 'ville'}}) }}
+        {#        </a>#}
+        {{ form_errors(formSortie.ville) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.lieu) }}
+        {{ form_widget(formSortie.lieu, {'attr': {'class': 'lieu'}}) }}
+        {{ form_errors(formSortie.lieu) }}
+    </div>
+
+    <div class="mb-3">
+        <ul id="infosLieuSelect" style="list-style-type: none">
+            <li id="nomLieu"></li>
+            <li id="rueLieu"></li>
+            <li id="longLieu"></li>
+            <li id="latLieu"></li>
+        </ul>
+    </div>
+
+    <div class="mb-3">
         {{ form_label(formSortie.nom) }}
         {{ form_widget(formSortie.nom) }}
         {{ form_errors(formSortie.nom) }}
@@ -58,28 +81,7 @@
         {{ form_errors(formSortie.campus) }}
     </div>
 
-    <div class="mb-3">
-        {{ form_label(formSortie.ville) }}
-{#        <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" >#}
-            {{ form_widget(formSortie.ville, {'attr': {'id': 'ville'}}) }}
-{#        </a>#}
-        {{ form_errors(formSortie.ville) }}
-    </div>
 
-    <div class="mb-3">
-        {{ form_label(formSortie.lieu) }}
-        {{ form_widget(formSortie.lieu, {'attr': {'class': 'lieu'}}) }}
-        {{ form_errors(formSortie.lieu) }}
-    </div>
-
-    <div class="mb-3">
-        <ul id="infosLieuSelect" style="list-style-type: none">
-            <li id="nomLieu"></li>
-            <li id="rueLieu"></li>
-            <li id="longLieu"></li>
-            <li id="latLieu"></li>
-        </ul>
-    </div>
 
     <!-- formulaire ajouter un lieu // méthode avec js mais ne fonctionne pas -->
     {# <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button> #}
@@ -140,13 +142,6 @@
         <button value='annuler' class='btn btn-secondary'>Retour accueil</button>
     </a>
     </div>
-
-
-
-{#    TEST MODALE#}
-
-
-
 
 {% endblock %}
 

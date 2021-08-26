@@ -71,7 +71,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route(path="/editprofile/{id}", name="edit_profile", requirements={"id": "\d+"}, methods={"GET", "POST"})
      */
-    public function edit(Request $request, EntityManagerInterface $entityManager) {
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder) {
 
         // Récupération de l'entité à modifier
         try {
@@ -89,10 +89,20 @@ class RegistrationController extends AbstractController
         // Vérifier les données du formulaire
         if ($formEdit->isSubmitted() && $formEdit->isValid()) {
 
+            //Si le mot de passe saisi est valide mais ne correspond pas à celui enregistré en base, le modifier.
+            $mdpSoumis = $formEdit['plainPassword']->getData();
+            $mdpSoumisHash = $passwordEncoder->hashPassword($user, $mdpSoumis);
+            $mdpEnBase = $user->getPassword();
+
+            if ($mdpSoumisHash !== $mdpEnBase){
+                $user->setPlainPassword($mdpSoumis);
+                $user->setPassword($passwordEncoder->hashPassword($user, $user->getPlainPassword()));
+                $entityManager->persist($user);
+                $this->addFlash('success', 'La modification de votre mot de passe a bien été prise en compte');
+            }
 
             // On récupère l'image transmise
             $images = $formEdit->get('image')->getData();
-
             foreach($images as $image){
                 // On génère un nouveau nom de fichier
                 $fichier = md5(uniqid()).'.'.$image->guessExtension();

@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}
+    {% if app.request.attributes.get('_route') == 'app_register' %}
+        Nouvel utilisateur{% else %}Mon profil
+    {% endif %}
+{% endblock %}
 
 
 {% block body %}

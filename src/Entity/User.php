@@ -27,21 +27,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=80)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(max=80, maxMessage="Le nom doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Regex(
+     *     pattern="/[a-zA-Z'-]$/",
+     *     match=true,
+     *     message="Le nom ne peut pas contenir de nombres ou de caractères spéciaux")
      */
     private ?string $nom;
 
     /**
      * @ORM\Column(type="string", length=80)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(max=80, maxMessage="Le prénom doit contenir au maximum {{ limit }} caractères")
+     * @Assert\Regex(pattern="/[a-zA-Z'-]$/", match=true, message="Le prénom ne peut pas contenir de nombres ou de caractères spéciaux")
      */
     private ?string $prenom;
 
     /**
      * @ORM\Column(type="string", length=20)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(max=20, maxMessage="Le téléphone doit contenir au maximum {{ limit }} caractères")
      * @Assert\Regex(pattern="/^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/", message="le format du numéro de téléphone n'est pas valide.")
      */
@@ -49,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(max=180, maxMessage="Le mail doit contenir au maximum {{ limit }} caractères")
      * @Assert\Email(message="Le mail fourni n'a pas un format valide")
      */
@@ -71,6 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\NotBlank(message="Le mot de passe est requis !", groups={"register"})
      * @Assert\Length(min=8, max=50, minMessage="Le mot de passe doit contenir au minimum {{ limit }} caractères", maxMessage="Le mot de passe doit contenir au maximum {{ limit }} caractères", groups={"register"})
+     * @Assert\Regex(pattern="/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/", message="Le mot de passe doit contenir au minimum 6 caractères dont 1 chiffr, 1 majuscule, 1 minuscule, 1 caractère spécial.")
      */
     private ?string $plainPassword;
 
@@ -86,7 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Le pseudo est obligatoire")
      * @Assert\Length(min=3, minMessage="Le pseudo doit contenir au moins {{ limit }} caractères", max=50, maxMessage="Le pseudo doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $pseudo;

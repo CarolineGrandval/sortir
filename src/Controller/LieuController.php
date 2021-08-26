@@ -47,7 +47,7 @@ class LieuController extends AbstractController
             $this->addFlash('success', 'Nouveau lieu ajouté !');
 
             // Redirection sur le controlleur
-            return $this->redirectToRoute('lieu_create');
+            return $this->redirectToRoute('sortie_create');
         }
 
         return $this->render('lieu/create.html.twig', [
