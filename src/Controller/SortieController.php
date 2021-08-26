@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\CampusRepository;
 use App\Service\EtatEnum;
 use DateTimeInterface;
+use Doctrine\DBAL\Driver\AbstractDB2Driver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -223,11 +224,11 @@ class SortieController extends AbstractController
             $sortie->setDateHeureDebut($dateDebut);
             $sortie->setDateLimiteInscription($dateInscr);
         } catch (NonUniqueResultException | NoResultException $e) {
-            throw $this->createNotFoundException('User Not Found !');
+            throw $this->createNotFoundException('Sortie Not Found !');
         }
 
         // Création du formulaire
-        $formSortie = $this->createForm('App\Form\SortieType', $sortie);
+        $formSortie = $this->createForm('App\Form\SortieAnnulationType', $sortie);
 
         // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
         $formSortie->handleRequest($request);
@@ -266,6 +267,7 @@ class SortieController extends AbstractController
         //Seules les sorties en création ou ouvertes peuvent être annulées.
         /** @var User $user */
         $user = $this->getUser();
+
         if ($user == $sortie->getOrganisateur() || $this->container->get('security.authorization_checker')->isGranted('ROLE_ADMIN') &&
             $sortie->getEtat()->getId() == 1 or $sortie->getEtat()->getId() == 2 or $sortie->getEtat()->getId() == 3) {
             $etat = $entityManager->find(Etat::class, 6); // état changé à "annulée"
@@ -331,7 +333,9 @@ class SortieController extends AbstractController
             } else {
                 // on vérifie qu'il reste des places disponibles et que la date limite d'inscription n'est pas passée.
                 $date = getdate();
-                if ( (($sortie->getParticipants()->count()) < ($sortie->getNbParticipantsMax())) && ($sortie->getDateLimiteInscription() > $date)) {
+                //TODO : attention, on peut s'inscrire via l'url même si la date d'inscr est dépassée
+                //TODO : renvoyer une erreur si le nb max de participant est atteint et qu'on essaie de s'incrire. Ou En twig, changer le lien par "complet"
+                if ( ($sortie->getParticipants()->count()) < $sortie->getNbParticipantsMax() && $sortie->getDateLimiteInscription() > $date) {
                     $sortie->addParticipant($user);
                     $entityManager->persist($sortie);
                 }

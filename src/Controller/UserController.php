@@ -22,6 +22,7 @@ class UserController extends AbstractController
     /**
      * @Route(path="/delete/{id}", name="delete", requirements={"id": "\d+"}, methods={"GET", "POST"})
      * @IsGranted("ROLE_ADMIN")
+     * Suppression d'un utilisateur et de ses sorties.
      */
     public function delete(Request $request, EntityManagerInterface $entityManager){
         try{
@@ -49,10 +50,12 @@ class UserController extends AbstractController
 
             if ($user->getActif()){
                 $user->setActif(false);
+                $user->setRoles([]);
                 $this->addFlash('success', 'L\'utilisateur a été désactivé');
 
             }else{
                 $user->setActif(true);
+                $user->setRoles(['ROLE_USER']);
                 $this->addFlash('success', 'L\'utilisateur a été réactivé');
             }
             $entityManager->persist($user);
