@@ -2,8 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -16,15 +14,15 @@ class FichierTelecharger
     /*
      * Constructeur
      */
-    public function __construct($dossierCible, SluggerInterface $frappeur) //, ValidationFactory $validator
+    public function __construct($dossierCible, SluggerInterface $frappeur)
     {
         $this->dossierCible = $dossierCible;
         $this->frappeur = $frappeur;
-        //$this->validator = $validator;
     }
 
     public function telecharger(UploadedFile $fichier)
     {
+        $donnees = [];
         ini_set("auto_detect_line_endings", true);
         //nom du fichier d'origine
         $nomFichierOrigine = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
@@ -44,25 +42,25 @@ class FichierTelecharger
             if($ouvertureFichier  === false){
                 throw new \Exception('Le fichier ne peut pas être ouvert pour lecture.');
             }
-            dd("passe");
             //Vérification de la cohérence des données
-            $verif = $this->validationDonnees($ouvertureFichier, $csvExtension);
-            dd($verif);
-            if(!$verif){
-                dd("passeVerif");
+            $donnees = $this->validationDonnees($ouvertureFichier, $csvExtension);
+            //si tableau vide
+            if(empty($donnees)){
                 //fermer le fichier et libère la mémoire
                 fclose($ouvertureFichier);
                 unlink($test);
-
                 throw new \Exception('Le fichier n\'est pas cohérent !');
             }
-
-            return $fichier;
+            //fermer le fichier et libère la mémoire
+            fclose($ouvertureFichier);
+            unlink($test);
+            //sinon retourne le tableau
+            return $donnees;
 
         } catch (FileException $fe){
             throw new \Exception('Le fichier n\'a pas été trouvé !');
         }
-        return $fichier;
+        return $donnees;
     }
 
     public function getTargetDirectory(){
@@ -71,6 +69,15 @@ class FichierTelecharger
 
     private function validationDonnees($ouvertureFichier, $csvExtension){
         $validate = false;
+        $mail_column = '';
+        $pseudo_column = '';
+        $nom_column = '';
+        $prenom_column = '';
+        $telephone_column = '';
+        $password_column = '';
+        $administrateur_column = '';
+        $actif_column = '';
+        $campus_column = '';
 
         //vérification de la présence des données
         $entete = fgetcsv($ouvertureFichier,0,';');
@@ -102,9 +109,12 @@ class FichierTelecharger
                 case "pseudo":
                     $pseudo_column = "pseudo";
                     break;
+                case "campus":
+                    $campus_column = "campus";
+                    break;
+                default:
             }
         }
-
 
         //Création du tableau de validation
         $tableauValidation = [
@@ -116,35 +126,24 @@ class FichierTelecharger
             'telephone_column' => $telephone_column,
             'password_column' => $password_column,
             'administrateur_column' => $administrateur_column,
-            'actif_column' => $actif_column
+            'actif_column' => $actif_column,
+            'campus_column' => $campus_column
         ];
 
         //taille du tableau renseigné
         if(sizeof(array_filter($tableauValidation)) == sizeof($tableauValidation)){
             $validate = true;
         }
-        $user = null;
+        //initialisation du tableau à vide
+        $donneesTableau = [];
+        //si la validation des colonnes est ok
         if($validate){
-            while(!feof($ouvertureFichier)){
-                $data = fgetcsv($ouvertureFichier, 0, ";");
-                while ($data !== FALSE){
-                    $user = new User();
-                    $user->setMail($data[0]);
-                    $user->setPseudo($data[1]);
-                    $user->setNom($data[2]);
-                    $user->setPrenom($data[3]);
-                    $user->setTelephone($data[4]);
-                    $user->setPassword($data[5]);
-                    $user->setAdministrateur(false);
-                    $user->setActif(true);
-
-//                    $entityManager->persist($user);
-//                    $entityManager->flush();
-
-                }
+            while($donneesLignes = fgetcsv($ouvertureFichier, 1000, ",")){
+                array_push($donneesTableau, $donneesLignes);
             }
+
         }
-        return $user;
+        return $donneesTableau;
     }
 
 }
