@@ -1,7 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Téléchargement de fichier{% endblock %}
 
 {% block body %}
-    {{ form(formFichier) }}
+
+    <div class="container container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                {{ form_start(formFichier, { attr: { 'accept-charset' : 'utf-8' }}) }}
+                <div class="form-group">
+                    {{ form_label(formFichier.upload_file) }}
+                    {{ form_widget(formFichier.upload_file) }}
+                    {{ form_errors(formFichier.upload_file) }}
+                </div>
+                <div class="form-group mt-3">
+                    {{ form_widget(formFichier.submit, {'label': "Télécharger", 'attr' : { 'class': 'btn btn-primary' }}) }}
+                    <a href="{{ url('sortie_home') }}"><button class='btn btn-secondary mx-lg-2'>Retour accueil</button></a>
+                </div>
+                {{ form_rest(formFichier) }}
+                {{ form_end(formFichier) }}
+            </div>
+        </div>
+    </div>
+
 {% endblock body %}

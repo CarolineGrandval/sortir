@@ -16,6 +16,7 @@
         "jms/serializer-bundle": "^3.10",
         "knplabs/knp-paginator-bundle": "^5.6",
         "liip/imagine-bundle": "^2.6",
+        "maillotf/papercut-bridge-bundle": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/apache-pack": "^1.0",

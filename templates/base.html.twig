@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>{% block title %}Sortir !{% endblock %}</title>
     <link rel="icon" href="{{ asset('img/logo.png') }}">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-    {# <link rel="icon" href="{{ asset('img/favicon.png') }}"> #}
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
@@ -61,7 +59,8 @@
 
                             {# Gérer les villes #}
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
+                                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#"
+                                   role="button"
                                    aria-haspopup="true" aria-expanded="false">Villes</a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ url('ville_afficher') }}">Afficher les villes</a>
@@ -71,11 +70,14 @@
 
                             {# Gérer les utilisateurs #}
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
+                                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#"
+                                   role="button"
                                    aria-haspopup="true" aria-expanded="false">Utilisateurs</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ url('user_afficher') }}">Afficher les utilisateurs</a>
-                                    <a class="dropdown-item" href="{{ url('app_register') }}" title="Register">Nouvel utilisateur</a>
+                                    <a class="dropdown-item" href="{{ url('user_afficher') }}">Afficher les
+                                        utilisateurs</a>
+                                    <a class="dropdown-item" href="{{ url('app_register') }}" title="Register">Nouvel
+                                        utilisateur</a>
                                 </div>
                             </li>
 
@@ -83,7 +85,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ url('app_logout') }}" title="Déconnexion">Se déconnecter
-{#                                <span class="visually-hidden">Se connecter</span>#}
+                                {# <span class="visually-hidden">Se connecter</span> #}
                             </a>
                         </li>
                     {% endif %}
@@ -93,7 +95,6 @@
                             <a class="nav-link active" href="{{ url('app_login') }}" title="Connexion">Se connecter</a>
                         </li>
                     {% endif %}
-
 
 
                 </ul>
