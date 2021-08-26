@@ -61,10 +61,9 @@
                 {% for sortie in sorties %}
                     {# Récupérer les différentes variables afin de faire des filtres en conséquence #}
                     {% set dateDebut = sortie.dateHeureDebut|date('Y-m-d') %}
-                    {% set dateDuJour = "now"|date('Y-m-d') %}
-                    {% set dateEcart = date(dateDuJour).diff(date(dateDebut)) %}
+                    {% set dateUnMoisAvant = "now"|date_modify("-"~nbjours~" day")|date('Y-m-d') %}
                     {# Affichage des sorties de moins de 30 jours #}
-                    {% if dateEcart.days >= nbjours %}
+                    {% if dateUnMoisAvant >= dateDebut %}
                     {% else %}
                         {% set inscrit = 0 %}
                         {# resultat de requete inscription sortie de l'utilisateur #}

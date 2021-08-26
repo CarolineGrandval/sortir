@@ -74,7 +74,8 @@ class UserController extends AbstractController
      */
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $users=$entityManager->getRepository("App:User")->findAll();
+        //Order by pseudo de tous les utilisateurs
+        $users=$entityManager->getRepository('App:User')->findBy([],array('pseudo' => 'ASC'));
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
