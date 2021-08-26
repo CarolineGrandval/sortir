@@ -89,7 +89,7 @@ class SortieRepository extends ServiceEntityRepository
 
         //sur les sorties passées
         if ($search->isPassees()) {
-            $req->andWhere('e.id = :passees')->setParameter('passees', EtatEnum::ETAT_ANNULE);
+            $req->andWhere('e.id = :passees')->setParameter('passees', EtatEnum::ETAT_TERMINE);
         }
 
         //Utilisateur inscrit
@@ -99,25 +99,25 @@ class SortieRepository extends ServiceEntityRepository
 
         //Utilisateur pas inscrit
         if ($search->isPasInscrit()) {
-            $sortiesPasInscrit = $this->createQueryBuilder('e')
-                ->innerJoin('e.participants', 'p')
+            $sortiesPasInscrit = $this->createQueryBuilder('s')
+                ->innerJoin('s.participants', 'p')
                 ->where('p = :signedUpUser')->setParameter('signedUpUser', $user)
                 ->getQuery()->getResult();
             //Vérification de la présence de données
             if(!empty($sortiesPasInscrit)){
-                $req->andWhere('e NOT IN (:sortiesPasInscrit)')->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
+                $req->andWhere('s NOT IN (:sortiesPasInscrit)')->setParameter('sortiesPasInscrit', $sortiesPasInscrit);
             }
         }
 
         //Utilisateurs Actifs
-        $usersActifs = $this->createQueryBuilder('s')
-                        ->innerJoin('s.participants', 'p')
-                        ->addSelect('p')
-                        ->where('p.actif = 1')
-                        ->getQuery()->getResult();
-        if(!empty($usersActifs)){
-            $req->andWhere('p IN (:usersActifs)')->setParameter('usersActifs', $usersActifs);
-        }
+//        $usersActifs = $this->createQueryBuilder('s')
+//                        ->innerJoin('s.participants', 'p')
+//                        ->addSelect('p')
+//                        ->where('p.actif = 1')
+//                        ->getQuery()->getResult();
+//        if(!empty($usersActifs)){
+//            $req->andWhere('p IN (:usersActifs)')->setParameter('usersActifs', $usersActifs);
+//        }
 
         //Ordonner par date
         $req->orderBy('s.dateHeureDebut', 'DESC');

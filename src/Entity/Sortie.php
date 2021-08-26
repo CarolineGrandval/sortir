@@ -39,8 +39,8 @@ class Sortie
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
-     * @Assert\GreaterThanOrEqual(1, message="La sortie doit durer au moins une heure !")
-     * @Assert\LessThanOrEqual(24, message="La sortie doit durer au maximum 24 heures !")
+     * @Assert\GreaterThanOrEqual(60, message="La sortie doit durer au moins une heure !")
+     * @Assert\LessThanOrEqual(1440, message="La sortie doit durer au maximum 24 heures !")
      */
     private ?int $duree;
 

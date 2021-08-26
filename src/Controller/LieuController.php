@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -39,6 +40,19 @@ class LieuController extends AbstractController
         // Vérifier les données du formulaire
         if ($formLieu->isSubmitted() && $formLieu->isValid()) {
 
+            //Vérification présence dans BDD
+            $lieuBDD = $entityManager->getRepository('App:Lieu')->findByNom($lieu->getNomLieu());
+            //si le lieu existe en BDD
+            if(!empty($lieuBDD)){
+                //si lieu correspond au lieu crééé
+                if($lieu->getNomLieu() == $lieuBDD[0]->getNomLieu()){
+                    // Ajout d'un message de refus
+                    $this->addFlash('danger', 'Le lieu existe déjà !');
+                    // Redirection sur le controlleur
+                    return $this->redirectToRoute('sortie_create');
+                }
+            }
+
             // Enregistrement de l'entité dans la BDD
             $entityManager->persist($lieu);
             $entityManager->flush();
@@ -47,7 +61,7 @@ class LieuController extends AbstractController
             $this->addFlash('success', 'Nouveau lieu ajouté !');
 
             // Redirection sur le controlleur
-            return $this->redirectToRoute('lieu');
+            return $this->redirectToRoute('sortie_create');
         }
 
         return $this->render('lieu/create.html.twig', [

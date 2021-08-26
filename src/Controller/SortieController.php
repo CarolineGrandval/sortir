@@ -28,7 +28,7 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/create", name="create")
      */
-    public function create(Request $request, EntityManagerInterface $entityManager)
+    public function create(Request $request, EntityManagerInterface $entityManager, SessionInterface $session)
     {
         $user = $this->getUser();
         $etat = $entityManager->find(Etat::class, 1); // par défaut, l'état est mis à "créée"
@@ -38,7 +38,6 @@ class SortieController extends AbstractController
         $sortie->setOrganisateur($user);
         $sortie->setEtat($etat);
         $sortie->setCampus($this->getUser()->getCampus());
-//        $lieu = new Lieu();
 
         // Création du formulaire
         $formSortie = $this->createForm('App\Form\SortieType', $sortie);

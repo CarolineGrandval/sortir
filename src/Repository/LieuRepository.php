@@ -29,6 +29,17 @@ class LieuRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * Ajout d'une requête sur le lieu via le nom
+     * @param $nomLieu
+     * @return int|mixed|string
+     */
+    public function findByNom($nomLieu){
+        return $this->createQueryBuilder('lieu')
+            ->andWhere('lieu.nomLieu = :nom')->setParameter('nom', $nomLieu)
+            ->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Lieu[] Returns an array of Lieu objects
     //  */
