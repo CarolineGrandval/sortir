@@ -6,31 +6,31 @@
     <h2 class="d-flex justify-content-center">Afficher une sortie</h2>
     <br><br>
     <div class=" d-flex justify-content-center">
-        <div class="col-6">
+        <div class="col-10">
             <table class="table table-hover ">
                 <tr>
-                    <td>Nom de la sortie : {{ sortie.nom }}</td> {# colonne #}
-                    <td>Campus: {{ sortie.getCampus().nom }}</td>
+                    <td>Nom de la sortie : </td><td>{{ sortie.nom }}</td> {# colonne #}
+                    <td>Campus : </td><td>{{ sortie.getCampus().nom }}</td>
                 </tr> {# ligne #}
                 <tr>
-                    <td>Date et heure de la sortie: {{ sortie.dateHeureDebut|date("d/m/Y H:i:s") }}</td> {# colonne #}
-                    <td>Lieu: {{ sortie.getLieu().nomLieu }}</td> {# colonne #}
+                    <td>Date et heure de la sortie : </td><td>{{ sortie.dateHeureDebut|date("d/m/Y H:i:s") }}</td> {# colonne #}
+                    <td>Lieu : </td><td>{{ sortie.getLieu().nomLieu }}</td> {# colonne #}
                 </tr> {# ligne #}
                 <tr>
-                    <td>Date limite d'inscription: {{  sortie.dateLimiteInscription|date("m/d/Y") }}</td> {# colonne #}
-                    <td>Rue: {{ sortie.getLieu().rue }}</td> {# colonne #}
+                    <td>Date limite d'inscription : </td><td>{{  sortie.dateLimiteInscription|date("m/d/Y") }}</td> {# colonne #}
+                    <td>Rue : </td><td>{{ sortie.getLieu().rue }}</td> {# colonne #}
                 </tr> {# ligne #}
                 <tr>
-                    <td>Nombre de places: {{ sortie.nbParticipantsMax }}</td> {# colonne #}
-                    <td>Code postal: {{ sortie.getLieu().getVille().codePostal}}</td> {# colonne #}
+                    <td>Nombre de places :</td><td> {{ sortie.nbParticipantsMax }}</td> {# colonne #}
+                    <td>Code postal :</td><td> {{ sortie.getLieu().getVille().codePostal}}</td> {# colonne #}
                 </tr> {# ligne #}
                 <tr>
-                    <td>Durée: {{ sortie.duree }} minutes</td> {# colonne #}
-                    <td>Latitude: {{ sortie.getLieu().latitude }}</td> {# colonne #}
+                    <td>Durée : </td><td>{{ sortie.duree }} minutes</td> {# colonne #}
+                    <td>Latitude : </td><td>{{ sortie.getLieu().latitude }}</td> {# colonne #}
                 </tr> {# ligne #}
                 <tr>
-                    <td>Description et Infos: {{ sortie.infosSortie }}</td> {# colonne #}
-                    <td>Longitude: {{ sortie.getLieu().longitude }}</td> {# colonne #}
+                    <td>Description et Infos :</td><td> {{ sortie.infosSortie }}</td> {# colonne #}
+                    <td>Longitude : </td><td>{{ sortie.getLieu().longitude }}</td> {# colonne #}
                 </tr> {# ligne #}
             </table>
         </div>

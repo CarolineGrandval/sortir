@@ -129,6 +129,11 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
+    /**
+     * @param string $emailFormData
+     * @param \Swift_Mailer $mailer
+     * @return RedirectResponse
+     */
     private function processSendingPasswordResetEmail(string $emailFormData, \Swift_Mailer $mailer): RedirectResponse
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
