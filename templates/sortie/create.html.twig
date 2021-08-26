@@ -17,6 +17,29 @@
     {{ form_start(formSortie) }}
 
     <div class="mb-3">
+        {{ form_label(formSortie.ville) }}
+        {#        <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" >#}
+        {{ form_widget(formSortie.ville, {'attr': {'id': 'ville'}}) }}
+        {#        </a>#}
+        {{ form_errors(formSortie.ville) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(formSortie.lieu) }}
+        {{ form_widget(formSortie.lieu, {'attr': {'class': 'lieu'}}) }}
+        {{ form_errors(formSortie.lieu) }}
+    </div>
+
+    <div class="mb-3">
+        <ul id="infosLieuSelect" style="list-style-type: none">
+            <li id="nomLieu"></li>
+            <li id="rueLieu"></li>
+            <li id="longLieu"></li>
+            <li id="latLieu"></li>
+        </ul>
+    </div>
+
+    <div class="mb-3">
         {{ form_label(formSortie.nom) }}
         {{ form_widget(formSortie.nom) }}
         {{ form_errors(formSortie.nom) }}
@@ -58,28 +81,7 @@
         {{ form_errors(formSortie.campus) }}
     </div>
 
-    <div class="mb-3">
-        {{ form_label(formSortie.ville) }}
-{#        <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" >#}
-            {{ form_widget(formSortie.ville, {'attr': {'id': 'ville'}}) }}
-{#        </a>#}
-        {{ form_errors(formSortie.ville) }}
-    </div>
 
-    <div class="mb-3">
-        {{ form_label(formSortie.lieu) }}
-        {{ form_widget(formSortie.lieu, {'attr': {'class': 'lieu'}}) }}
-        {{ form_errors(formSortie.lieu) }}
-    </div>
-
-    <div class="mb-3">
-        <ul id="infosLieuSelect" style="list-style-type: none">
-            <li id="nomLieu"></li>
-            <li id="rueLieu"></li>
-            <li id="longLieu"></li>
-            <li id="latLieu"></li>
-        </ul>
-    </div>
 
     <!-- formulaire ajouter un lieu // méthode avec js mais ne fonctionne pas -->
     {# <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button> #}
@@ -90,18 +92,18 @@
 
 
     <!-- ajouter un lieu en formulaire imbriqué / méthode M. Racine mais pas adapté-->
-    {# <div class="mb-3" style="text-align: right;"> #}
-    {# <div class="col-xs-4"> #}
-    {# {{ form_row(formLieu.nom) }} #}
-    {# {{ form_row(formLieu.ville) }} #}
-    {# {{ form_row(formLieu.rue) }} #}
-    {# {{ form_row(formLieu.longitude) }} #}
-    {# {{ form_row(formLieu.latitude) }} #}
-    {# <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/> #}
-    {# </div> #}
-    {# <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a> #}
-    {# </div> #}
-    {# </div> #}
+{#     <div class="mb-3" style="text-align: right;">#}
+{#     <div class="col-xs-4">#}
+{#     {{ form_row(formLieu.nom) }}#}
+{#     {{ form_row(formLieu.ville) }}#}
+{#     {{ form_row(formLieu.rue) }}#}
+{#     {{ form_row(formLieu.longitude) }}#}
+{#     {{ form_row(formLieu.latitude) }}#}
+{#     <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/>#}
+{#     </div>#}
+{#     <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a>#}
+{#     </div>#}
+{#     </div>#}
 
     <div class="mb-3 cache">
         {{ form_label(formSortie.motifAnnulation) }}

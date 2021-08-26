@@ -331,7 +331,7 @@ class SortieController extends AbstractController
             } else {
                 // on vérifie qu'il reste des places disponibles et que la date limite d'inscription n'est pas passée.
                 $date = getdate();
-                if ($sortie->getParticipants()->count() < $sortie->getNbParticipantsMax() && $sortie->getDateLimiteInscription() > $date) {
+                if ( (($sortie->getParticipants()->count()) < ($sortie->getNbParticipantsMax())) && ($sortie->getDateLimiteInscription() > $date)) {
                     $sortie->addParticipant($user);
                     $entityManager->persist($sortie);
                 }
@@ -352,8 +352,7 @@ class SortieController extends AbstractController
             'inscrit' => $inscrit,
             'choix' => $choix,
             'nbInscrits' => $sortie->getParticipants()->count(),
-            'nbPlaces' => $sortie->getNbParticipantsMax()
+            'nbPlaces' => $sortie->getNbParticipantsMax(),
         ], 200);
-
     }
 }

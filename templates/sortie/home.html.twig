@@ -130,12 +130,10 @@
                                 {# Ajax sans rechargement de la page #}
                                 {# S'INSCRIRE ET SE DESISTER #}
                                 {% if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
-                                    <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}"
-                                       data-sortie="{{ sortie.id }}" class="inscrire">
+                                    <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" data-sortie="{{ sortie.id }}" class="inscrire">
                                         <p>
-                                            <i class="far fa-calendar-plus"></i>
-                                            <span class="statut">
-                                            {% if inscrit == 1 %} Se désinscrire {% else %} S'inscrire {% endif %}</span>
+                                            {% if inscrit == 1 %}  <i class="far fa-calendar-minus"></i>{% else %} <i class="far fa-calendar-plus"></i> {% endif %}
+                                            <span class="statut">{% if inscrit == 1 %}Se désinscrire{% else %} S'inscrire{% endif %}</span>
                                         </p>
                                     </a>
                                 {% endif %}
@@ -180,13 +178,15 @@
         //Requête Ajax pour inscrire ou désinscrire dynamiquement un utilisateur à la sortie.
         function onClickSinscrire(event) {
             event.preventDefault();
-            const url = this.href;
-            const links = this.querySelector('span.statut');
+            const url = this.href ;
+            const links = this.querySelector('span.statut') ;
+            const icone = this.querySelector('i');
+
             //On récupère l'id par les data-set
             const id = this.dataset.sortie;
-            const ligne = document.getElementById('ligne' + id);
-            const nbInscrits = document.getElementById('inscritsPlaces' + id);
-            const inscr = document.getElementById('inscr' + id);
+            const ligne = document.getElementById('ligne'+id) ;
+            const nbInscrits = document.getElementById('inscritsPlaces'+id) ;
+            const inscr = document.getElementById('inscr'+id) ;
 
             //Exécution de la requête Ajax
             axios.get(url).then(function (response) {
@@ -195,14 +195,20 @@
                 nbInscrits.textContent = '';
                 nbInscrits.textContent = response.data.nbInscrits + ' / ' + response.data.nbPlaces;
                 inscr.textContent = response.data.inscrit;
+                //Actualiser l'icone dynamiquement (s'effectue au rechargement de la page).
+                if (icone.classList.contains('fa-calendar-plus')) {
+                    icone.classList.replace('fa-calendar-plus', 'fa-calendar-minus');
+                }else {
+                    icone.classList.replace('fa-calendar-minus', 'fa-calendar-plus');
+                }
             })
         }
-
         //Ajout d'un écouteur d'événement sur le lien cliqué.
         document.querySelectorAll('a.inscrire').forEach(function (link) {
             link.addEventListener('click', onClickSinscrire);
         });
 
     </script>
+
 
 {% endblock %}
