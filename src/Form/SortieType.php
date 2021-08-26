@@ -42,7 +42,7 @@ class SortieType extends AbstractType
                 'label' => 'Date et heure de début : ',
                 'required' => true,
                 'widget' => 'single_text',
-                'input' => 'datetime_immutable'
+                'input' => 'datetime_immutable',
             ])
             ->add('duree', IntegerType::class, [
                 'label' => 'Durée : ',
@@ -52,7 +52,7 @@ class SortieType extends AbstractType
                 'label' => 'Date et heure de fin d\'inscription : ',
                 'required' => true,
                 'widget' => 'single_text',
-                'input' => 'datetime_immutable'
+                'input' => 'datetime_immutable',
             ])
             ->add('infosSortie', TextareaType::class, [
                 'label' => 'Description et infos : ',
@@ -96,13 +96,6 @@ class SortieType extends AbstractType
             },
             'choice_label' => 'nomLieu',
         ]);
-
-        $builder->
-        add('motifAnnulation', TextareaType::class, [
-            'label' => 'Motif d\'annulation : ',
-            'required' => false,
-        ]);
-
 
         $builder->add('submit', SubmitType::class, [
             'label' => 'Enregistrer',

@@ -98,7 +98,6 @@ class RegistrationController extends AbstractController
                 $user->setPlainPassword($mdpSoumis);
                 $user->setPassword($passwordEncoder->hashPassword($user, $user->getPlainPassword()));
                 $entityManager->persist($user);
-                $this->addFlash('success', 'La modification de votre mot de passe a bien été prise en compte');
             }
 
             // On récupère l'image transmise

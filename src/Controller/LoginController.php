@@ -2,13 +2,18 @@
 
 namespace App\Controller;
 
-use ContainerAijzbV3\get_Console_Command_EventDispatcherDebug_LazyService;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 
+/**
+ * @method null loadUserByIdentifier(string $identifier)
+ */
 class LoginController extends AbstractController
 {
 

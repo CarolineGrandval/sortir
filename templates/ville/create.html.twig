@@ -4,12 +4,29 @@
 
 {% block body %}
 
-
     <h1 class="d-flex justify-content-center">Créer une ville</h1>
 
-    {{ form(formVille) }}
+    {{ form_start(formVille) }}
+    <div>
+        {{ form_label(formVille.nom) }}
+        {{ form_widget(formVille.nom) }}
+        {{ form_errors(formVille.nom) }}
+    </div>
+    <div>
+        {{ form_label(formVille.codePostal) }}
+        {{ form_widget(formVille.codePostal) }}
+        {{ form_errors(formVille.codePostal) }}
+    </div>
+
+    <div class="mb-3 d-flex justify-content-center mt-4">
+        {{ form_widget(formVille.submit) }}
+    </div>
+
+    {{ form_end(formVille, {'render_rest': false}) }}
 
     <div class="mb-3 d-flex justify-content-center">
-        <a class="navbar-brand" href="{{ url('sortie_home') }}"><button value='annuler' class='btn btn-secondary'>Retour accueil</button></a>
+        <a class="navbar-brand" href="{{ url('sortie_home') }}">
+            <button value='annuler' class='btn btn-secondary'>Retour accueil</button>
+        </a>
     </div>
 {% endblock %}

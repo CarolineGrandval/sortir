@@ -31,14 +31,14 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Date de la sortie obligatoire")
      * @Assert\GreaterThan("today", message="La date de début doit être dans le futur !")
      */
     private ?DateTimeInterface $dateHeureDebut = null;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Durée obligatoire")
      * @Assert\GreaterThanOrEqual(1, message="La sortie doit durer au moins une heure !")
      * @Assert\LessThanOrEqual(24, message="La sortie doit durer au maximum 24 heures !")
      */
@@ -46,7 +46,7 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="Date limite d'inscription obligatoire")
      * @Assert\LessThanOrEqual(propertyPath="dateHeureDebut", message="La date de fin des inscriptions doit être avant la date de début de sortie")
      */
     private ?DateTimeInterface $dateLimiteInscription = null;
@@ -54,7 +54,7 @@ class Sortie
     /**
      * @ORM\Column(type="text", length=5000)
      *
-     * @Assert\NotBlank(message="Veuillez donner une description de la sortie ")
+     * @Assert\NotBlank(message="Veuillez donner une description de la sortie")
      * @Assert\Length(min=2, minMessage="La description doit contenir au minimum {{ limit }} caractères", max=5000, maxMessage="La description doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $infosSortie;
@@ -66,7 +66,8 @@ class Sortie
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank(message="Veuillez indiquer un nombre maximal de participants à la sortie ")
+     * @Assert\NotBlank(message="Veuillez indiquer un nombre maximal de participants")
+     * @Assert\Positive(message="Le nombre de participant doit être supérieur à zéro")
      */
     private ?int $nbParticipantsMax;
 
@@ -128,7 +129,7 @@ class Sortie
      * @param string $nom
      * @return $this
      */
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -148,7 +149,7 @@ class Sortie
      * @param int $duree
      * @return $this
      */
-    public function setDuree(int $duree): self
+    public function setDuree(?int $duree): self
     {
         $this->duree = $duree;
 

@@ -109,15 +109,15 @@ class SortieRepository extends ServiceEntityRepository
             }
         }
 
-        //Utilisateurs Actifs
-        $usersActifs = $this->createQueryBuilder('s')
-                        ->innerJoin('s.participants', 'p')
-                        ->addSelect('p')
-                        ->where('p.actif = 1')
-                        ->getQuery()->getResult();
-        if(!empty($usersActifs)){
-            $req->andWhere('p IN (:usersActifs)')->setParameter('usersActifs', $usersActifs);
-        }
+//        //Utilisateurs Actifs
+//        $usersActifs = $this->createQueryBuilder('s')
+//                        ->innerJoin('s.participants', 'p')
+//                        ->addSelect('p')
+//                        ->where('p.actif = 1')
+//                        ->getQuery()->getResult();
+//        if(!empty($usersActifs)){
+//            $req->andWhere('p IN (:usersActifs)')->setParameter('usersActifs', $usersActifs);
+//        }
 
         //Ordonner par date
         $req->orderBy('s.dateHeureDebut', 'DESC');
