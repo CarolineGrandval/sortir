@@ -79,7 +79,7 @@
                         {% endif %}
                         <tr id="ligne{{ sortie.id }}">
                             <td>{{ sortie.nom|capitalize }}</td>
-                            <td>{{ sortie.dateHeureDebut|date('d/m/Y H:m:s') }}</td>
+                            <td>{{ sortie.dateHeureDebut|date('d/m/Y H:i:s') }}</td>
                             <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
                             <td id="inscritsPlaces{{ sortie.id }}">{{ sortie.participants.count() }} / {{ sortie.nbParticipantsMax }}</td>
                             <td>{{ sortie.etat.libelle }}</td>
