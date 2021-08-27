@@ -3,18 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Lieu;
 use App\Entity\Rechercher;
 use App\Entity\Sortie;
 use App\Entity\User;
 use App\Repository\CampusRepository;
 use App\Service\EtatEnum;
-use DateTimeInterface;
-use Doctrine\DBAL\Driver\AbstractDB2Driver;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +48,17 @@ class SortieController extends AbstractController
 
         // Vérifier les données du formulaire
         if ($formSortie->isSubmitted() && $formSortie->isValid()) {
+            //Interval de 23h59
+            $interval = new DateInterval('PT86340S');  //23H59MIN
+            //Récupération de la date de fin d'inscription
+            $dateInc = $formSortie['dateLimiteInscription']->getData();
+            //Mise au format adéquat
+            $myDateTime = date_format($dateInc, 'Y-m-d H:i:s');
+            $myDate = date_create_from_format('Y-m-d H:i:s', $myDateTime);
+            //Ajout à la date de l'interval souhaité
+            $dateForm = date_add($myDate,$interval);
+            //modif de la date au niveau de l'entité
+            $sortie->setDateLimiteInscription($dateForm);
 
             // Enregistrement de l'entité dans la BDD
             $entityManager->persist($sortie);
