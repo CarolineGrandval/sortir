@@ -72,14 +72,13 @@ class SortieRepository extends ServiceEntityRepository
 
         //par date de début
         if (!is_null($search->getDateDebut())) {
-            $req->andWhere('s.dateHeureDebut > :dateDebut or s.dateHeureDebut = :dateDebut')
-                ->setParameter('dateDebut', $search->getDateDebut());
+            $req->andWhere('DATE(s.dateHeureDebut) > DATE(:dateDebut) or DATE(s.dateHeureDebut) = DATE(:dateDebut)')->setParameter('dateDebut', $search->getDateDebut());
         }
 
+
         //par date de fin
-        if (!is_null($search->getDateFin())) {
-            $req->andWhere('s.dateHeureDebut < :dateFin or s.dateHeureDebut = :dateFin')
-                ->setParameter('dateFin', $search->getDateFin());
+        if ($search->getDateFin() !== null) {  //!is_null($search->getDateDebut())
+            $req->andWhere('DATE(s.dateHeureDebut) < DATE(:dateFin) or DATE(s.dateHeureDebut) = DATE(:dateFin)')->setParameter('dateFin', $search->getDateFin());
         }
 
         //si organisateur de la sortie
@@ -120,7 +119,7 @@ class SortieRepository extends ServiceEntityRepository
 //        }
 
         //Ordonner par date
-        $req->orderBy('s.dateHeureDebut', 'DESC');
+        $req->orderBy('s.dateHeureDebut', 'ASC');
 
         //Retourne la requête selon les filtres ajoutés
         return $req->getQuery()->getResult();

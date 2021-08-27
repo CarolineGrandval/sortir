@@ -28,6 +28,11 @@ class VilleRepository extends ServiceEntityRepository
         return $req->getQuery()->getResult();
     }
 
+    public function findByNom($nomVille){
+        return $this->createQueryBuilder('ville')
+            ->andWhere('ville.nom = :nom')->setParameter('nom', $nomVille)
+            ->getQuery()->getResult();
+    }
     // /**
     //  * @return Ville[] Returns an array of Ville objects
     //  */

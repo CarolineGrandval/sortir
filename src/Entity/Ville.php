@@ -6,6 +6,7 @@ use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=VilleRepository::class)
@@ -21,11 +22,13 @@ class Ville
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le nom de la ville est obligatoire")
      */
     private string $nom;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Le code postal est obligatoire")
      */
     private int $codePostal;
 
@@ -33,7 +36,7 @@ class Ville
     /**
      * @ORM\OneToMany(targetEntity=Lieu::class, mappedBy="ville", fetch="EAGER")
      */
-    private Collection $lieux;
+    private ?Collection $lieux;
 
 
     /**
@@ -93,7 +96,7 @@ class Ville
     /**
      * @return Collection|Lieu[]
      */
-    public function getLieux(): Collection
+    public function getLieux(): ?Collection
     {
         return $this->lieux;
     }

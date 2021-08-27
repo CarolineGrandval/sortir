@@ -96,21 +96,25 @@
     </div>
 
     <!-- Si on arrive par la route modifier-->
-    <!-- Publier -->
     <div class="mb-3 d-flex justify-content-center">
-    {% if app.request.attributes.get('_route') == 'sortie_modifier' %}
-        <a href="{{ url('sortie_publier', { "id": id }) }}">
-            <button name='publier' value='publier' class='btn btn-primary'>Publier</button>
-        </a>
-        <!-- Annuler -->
-        <a href="{{ url('sortie_motifannulation', { "id": id }) }}">
-            <button id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button>
-        </a>
-    {% endif %}
+        {% if app.request.attributes.get('_route') == 'sortie_modifier' %}
+            <!-- Publier -->
+            <div class="mb-3 d-flex justify-content-center">
+                <a href="{{ url('sortie_publier', { "id": id }) }}">
+                    <button name='publier' value='publier' class='btn btn-primary mx-lg-2'>Publier</button>
+                </a>
+            </div>
+            <!-- Annuler -->
+            <a href="{{ url('sortie_motifannulation', { "id": id }) }}">
+                <button id="btnAnnulerSortie" name='annuler' value='annuler' class='btn btn-danger'>Annuler</button>
+            </a>
+        {% endif %}
 
-    <a class="navbar-brand" href="{{ url('sortie_home') }}">
-        <button value='annuler' class='btn btn-secondary'>Retour accueil</button>
-    </a>
+        <div class="mb-3 d-flex justify-content-center">
+            <a class="navbar-brand" href="{{ url('sortie_home') }}">
+                <button value='annuler' class='btn btn-secondary mx-lg-2'>Retour accueil</button>
+            </a>
+        </div>
     </div>
 
 {% endblock %}
