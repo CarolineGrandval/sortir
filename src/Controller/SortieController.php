@@ -39,11 +39,9 @@ class SortieController extends AbstractController
 
         // Création du formulaire
         $formSortie = $this->createForm('App\Form\SortieType', $sortie);
-//        $formLieu = $this->createForm('App\Form\LieuType', $lieu);
 
         // Récupérer les données envoyées par le navigateur et les transmettre au formulaire
         $formSortie->handleRequest($request);
-//        $formLieu->handleRequest($request);
 
         // Vérifier les données du formulaire
         if ($formSortie->isSubmitted() && $formSortie->isValid()) {
@@ -61,12 +59,10 @@ class SortieController extends AbstractController
 
             // Enregistrement de l'entité dans la BDD
             $entityManager->persist($sortie);
-//            $entityManager->persist($lieu);
             $entityManager->flush();
 
             // Ajout d'un message de confirmation
             $this->addFlash('success', 'La sortie a bien été créée !');
-//            $this->addFlash('success', 'Lieu successfully added !');
 
             // Redirection sur le controlleur
             return $this->redirectToRoute('sortie_create');
@@ -74,7 +70,6 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/create.html.twig', [
             'formSortie' => $formSortie->createView(),
-//            'formLieu' => $formLieu->createView(),
         ]);
     }
     /**
@@ -339,9 +334,8 @@ class SortieController extends AbstractController
                 $entityManager->persist($sortie);
             } else {
                 // on vérifie qu'il reste des places disponibles et que la date limite d'inscription n'est pas passée.
-                $date = getdate();
                 if ( ($sortie->getParticipants()->count()) < $sortie->getNbParticipantsMax() &&
-                    ($sortie->getDateLimiteInscription()->getTimestamp()  -  (new \DateTime())->getTimestamp()) > 0) {
+                    ($sortie->getDateLimiteInscription()->getTimestamp()  -  (new \DateTime())->getTimestamp()) >= 0) {
                     $sortie->addParticipant($user);
                     $entityManager->persist($sortie);
                 }
