@@ -324,7 +324,6 @@ class SortieController extends AbstractController
         } catch (NonUniqueResultException | NoResultException $e) {
             throw $this->createNotFoundException('La sortie n\'a pas été trouvée !');
         }
-
         //Si le participant n'est pas inscrit, on l'inscrit. S'il est déjà inscrit, on le désinscrit.
         if ($sortie->getEtat()->getId() == EtatEnum::ETAT_OUVERT or $sortie->getEtat()->getId() == EtatEnum::ETAT_FERME) {
             if ($sortie->isInscrit($user)) {
@@ -333,9 +332,8 @@ class SortieController extends AbstractController
             } else {
                 // on vérifie qu'il reste des places disponibles et que la date limite d'inscription n'est pas passée.
                 $date = getdate();
-                //TODO : attention, on peut s'inscrire via l'url même si la date d'inscr est dépassée
-                //TODO : renvoyer une erreur si le nb max de participant est atteint et qu'on essaie de s'incrire. Ou En twig, changer le lien par "complet"
-                if ( ($sortie->getParticipants()->count()) < $sortie->getNbParticipantsMax() && $sortie->getDateLimiteInscription() > $date) {
+                if ( ($sortie->getParticipants()->count()) < $sortie->getNbParticipantsMax() &&
+                    ($sortie->getDateLimiteInscription()->getTimestamp()  -  (new \DateTime())->getTimestamp()) > 0) {
                     $sortie->addParticipant($user);
                     $entityManager->persist($sortie);
                 }

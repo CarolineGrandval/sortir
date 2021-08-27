@@ -16,12 +16,12 @@
             </thead>
             <tbody>
             {% for ville in pagination %}
-                <tr class="table-primary">
-                    <th scope="col">{{ ville.nom }}</th>
-                    <th scope="col">{{ ville.codePostal }}</th>
-                    <th scope="col">
-                        <span class="js-likes">{{ ville.lieux | length }}</span>
-                        <span class="js-label">lieux</span></th>
+                <tr>
+                    <td scope="col">{{ ville.nom }}</td>
+                    <td scope="col">{{ ville.codePostal }}</td>
+                    <td scope="col">
+                        <span>{{ ville.lieux | length }}</span>
+                        <span>lieux</span></td>
                 </tr>
             {% endfor %}
             </tbody>

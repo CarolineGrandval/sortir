@@ -115,6 +115,14 @@
                                     <a href="{{ url('sortie_publier', { 'id': sortie.id }) }}" title="Publier la sortie">Publier</a>
                                 {% endif %}
 
+                                {# ANNULER #}
+                                {% if (app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT')
+                                    or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME'))) or
+                                    (is_granted('ROLE_ADMIN') and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')
+                                    or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT'))) %}
+                                    <a href="{{ url('sortie_motifannulation', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
+                                {% endif %}
+
                                 {# fonctionne avcec rechargement de la page #}
                                 {# S'INSCRIRE = AFFICHER #}
                                 {# {%  if app.user != sortie.organisateur and sortie.etat.id == 2 and sortie.participants.count() <= sortie.nbParticipantsMax and not inscrit %} #}
@@ -126,24 +134,20 @@
                                 {# <a href="{{ url('sortie_desister', { 'id': sortie.id }) }}" title="Se désinscrire de la sortie" class="inscrire">Se désinscrire</a> #}
                                 {# {% endif %} #}
 
-
                                 {# Ajax sans rechargement de la page #}
                                 {# S'INSCRIRE ET SE DESISTER #}
                                 {% if app.user != sortie.organisateur and sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT') and sortie.participants.count() <= sortie.nbParticipantsMax %}
                                     <a href="{{ url('sortie_inscriptions', { 'id': sortie.id }) }}" data-sortie="{{ sortie.id }}" class="inscrire">
                                         <p>
-                                            {% if inscrit == 1 %}  <i class="far fa-calendar-minus"></i>{% else %} <i class="far fa-calendar-plus"></i> {% endif %}
-                                            <span class="statut">{% if inscrit == 1 %}Se désinscrire{% else %} S'inscrire{% endif %}</span>
+                                            {% if sortie.nbParticipantsMax > sortie.participants | length %}
+                                                {% if inscrit == 1 %}  <i class="far fa-calendar-minus"></i>{% else %} <i class="far fa-calendar-plus"></i> {% endif %}
+                                                <span class="statut">{% if inscrit == 1 %}Se désinscrire{% else %} S'inscrire{% endif %}</span>
+                                            {% endif %}
+                                            {% if sortie.nbParticipantsMax == sortie.participants | length %}
+                                                {% if inscrit == 1 %}  <i class="far fa-calendar-minus"></i> <span class="statut">Se désinscrire{% endif %}
+                                            {% endif %}
                                         </p>
                                     </a>
-                                {% endif %}
-
-                                {# ANNULER #}
-                                {% if (app.user == sortie.organisateur and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT')
-                                    or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME'))) or
-                                    (is_granted('ROLE_ADMIN') and (sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_CREATION') or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_FERME')
-                                    or sortie.etat.id is constant('App\\Service\\EtatEnum::ETAT_OUVERT'))) %}
-                                    <a href="{{ url('sortie_motifannulation', { 'id': sortie.id }) }}" title="Annuler la sortie">Annuler</a>
                                 {% endif %}
 
                             </td>
@@ -199,6 +203,10 @@
                     icone.classList.replace('fa-calendar-plus', 'fa-calendar-minus');
                 }else {
                     icone.classList.replace('fa-calendar-minus', 'fa-calendar-plus');
+                }
+            }).catch(function (error){
+                if (error.reponse.status === 403){
+                    window.alert("Vous ne pouvez pas vous inscrire sans être connecté")
                 }
             })
         }
