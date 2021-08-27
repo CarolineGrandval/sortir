@@ -48,6 +48,7 @@ class Sortie
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(message="Date limite d'inscription obligatoire")
      * @Assert\LessThanOrEqual(propertyPath="dateHeureDebut", message="La date de fin des inscriptions doit être avant la date de début de sortie")
+     * @Assert\GreaterThan("today", message="La date doit être dans le futur !")
      */
     private ?DateTimeInterface $dateLimiteInscription = null;
 

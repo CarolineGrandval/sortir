@@ -81,30 +81,6 @@
         {{ form_errors(formSortie.campus) }}
     </div>
 
-
-
-    <!-- formulaire ajouter un lieu // méthode avec js mais ne fonctionne pas -->
-    {# <button class="btn-info" type="button" name="ajoutLieu" id="btnAjoutLieu">Ajouter un lieu</button> #}
-
-    {# <div id="ajoutFormLieu" class="cache"> #}
-    {# {{ form(formLieu) }} #}
-    {# </div> #}
-
-
-    <!-- ajouter un lieu en formulaire imbriqué / méthode M. Racine mais pas adapté-->
-{#     <div class="mb-3" style="text-align: right;">#}
-{#     <div class="col-xs-4">#}
-{#     {{ form_row(formLieu.nom) }}#}
-{#     {{ form_row(formLieu.ville) }}#}
-{#     {{ form_row(formLieu.rue) }}#}
-{#     {{ form_row(formLieu.longitude) }}#}
-{#     {{ form_row(formLieu.latitude) }}#}
-{#     <a href="#" style="width:100%;" class="js-wishes-remove btn-danger btn">Remove Wish</a><hr/>#}
-{#     </div>#}
-{#     <a href="#" class="js-wishes-add btn-secondary btn">Ajouter un lieu</a>#}
-{#     </div>#}
-{#     </div>#}
-
     <!-- bouton submit -->
     <div class="mb-3 d-flex justify-content-center">
         {{ form_widget(formSortie.submit) }}
@@ -141,33 +117,6 @@
 
 
 {% block javascripts %}
-
-{#    <script>#}
-{#        $(document).ready(function () {#}
-{#            $(".btn-info").click(function () {#}
-{#                $(".cache").toggleClass("clique");#}
-{#            });#}
-{#        });#}
-{#    </script>#}
-
-    <!-- js lié au formulaire imbriqué -->
-    {# <script> #}
-    {# jQuery(document).ready(function() { #}
-    {# let $wrapper = $('.js-lieu-wrapper'); #}
-    {# $wrapper.on('click', '.js-lieu-add', function(e) { #}
-    {# e.preventDefault(); #}
-    {# let prototype = $wrapper.data('prototype'); #}
-    {# let index = $wrapper.data('index'); #}
-    {# let newForm = ((index === 0) ? '<hr/>' : '') + prototype.replace(/__name__/g, index) + '<a href="#" style="width:100%;" class="js-lieu-remove btn-danger btn">Remove Wish</a><hr/>'; #}
-    {# newForm += '<span class="mb-3 mt-3"></span>'; #}
-    {# $wrapper.data('index', index + 1); #}
-    {# $(this).before(newForm); #}
-    {# }); #}
-    {# $wrapper.on('click', '.js-lieu-remove', function(e) { #}
-    {# alert("A vous de jouer !"); #}
-    {# }); #}
-    {# }); #}
-    {# </script> #}
 
 {#    Ajax pour afficher les infos du lieu sélectionné   #}
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
