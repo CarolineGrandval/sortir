@@ -32,7 +32,6 @@ class VilleController extends AbstractController
             $formVille = $this->createForm('App\Form\VilleType', $ville);
             $formVille->handleRequest($request);
 
-
             if ($formVille->isSubmitted() && $formVille->isValid()) {
                 $entityManager->persist($ville);
                 $entityManager->flush();
