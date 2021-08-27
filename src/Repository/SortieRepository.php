@@ -120,7 +120,7 @@ class SortieRepository extends ServiceEntityRepository
 //        }
 
         //Ordonner par date
-        $req->orderBy('s.dateHeureDebut', 'DESC');
+        $req->orderBy('s.dateHeureDebut', 'ASC');
 
         //Retourne la requête selon les filtres ajoutés
         return $req->getQuery()->getResult();

@@ -32,15 +32,26 @@ class VilleController extends AbstractController
             $formVille = $this->createForm('App\Form\VilleType', $ville);
             $formVille->handleRequest($request);
 
-
             if ($formVille->isSubmitted() && $formVille->isValid()) {
+                //Recherche de la présence dans la BDD
+                $villeBDD =$entityManager->getRepository('App:Ville')->findByNom($ville->getNom());
+
+                //si une ville existe déjà
+                if(!empty($villeBDD)){
+                    // Ajout d'un message de refus
+                    $this->addFlash('danger', 'La ville existe déjà !');
+                    // Redirection sur le controlleur
+                    return $this->redirectToRoute('ville_create');
+                }
+                //Place dans la file d'attente et enregistre dans la BDD
                 $entityManager->persist($ville);
                 $entityManager->flush();
+                //Message
                 $this->addFlash('success', 'Ville ajoutée !');
+                //Retour sur la page
                 return $this->redirectToRoute('ville_create');
             }
-
-            //Envoi à la vue
+            //Envoie à la vue
             return $this->render('ville/create.html.twig', [
                 'formVille' => $formVille->createView() //, 'pagination' => $pagination,
             ]);
