@@ -142,4 +142,5 @@ class SortieRepository extends ServiceEntityRepository
         //retourne le tableau du résultat de la requête
         return $req->getQuery()->getResult();
     }
+
 }
