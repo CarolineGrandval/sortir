@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LieuRepository::class)
@@ -24,12 +25,16 @@ class Lieu
     /**
      * @Groups("lieux_list")
      * @ORM\Column(name="nom_lieu", type="string", length=50)
+     * @Assert\NotBlank(message="Le nom du lieu est obligatoire")
+     * @Assert\Length(max=50, maxMessage="Le nom du lieu doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $nomLieu;
 
     /**
      * @Groups("lieux_list")
      * @ORM\Column(type="string", length=250)
+     * @Assert\NotBlank(message="Le nom de la rue est obligatoire")
+     * @Assert\Length(max=250, maxMessage="Le nom de la rue doit contenir au maximum {{ limit }} caractères")
      */
     private ?string $rue;
 

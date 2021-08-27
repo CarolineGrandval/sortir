@@ -28,6 +28,11 @@ class VilleRepository extends ServiceEntityRepository
         return $req->getQuery()->getResult();
     }
 
+    /**
+     * Requête sur le nom de ville
+     * @param $nomVille
+     * @return int|mixed|string
+     */
     public function findByNom($nomVille){
         return $this->createQueryBuilder('ville')
             ->andWhere('ville.nom = :nom')->setParameter('nom', $nomVille)

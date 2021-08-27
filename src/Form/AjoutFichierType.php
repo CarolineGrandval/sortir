@@ -27,13 +27,10 @@ class AjoutFichierType extends AbstractType
                             'text/x-csv',
                             'text/csv', //CSV
                             'text/plain',
-//                            'application/octet-stream',
                             'application/vnd.ms-excel',
                             'application/x-csv',
                             'application/csv',
                             'application/excel',
-//                            'application/vnd.msexcel',
-//                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                         ],
                         'mimeTypesMessage' => "Ce document n'est pas valide.",
                     ])
@@ -42,7 +39,6 @@ class AjoutFichierType extends AbstractType
 
             //ajout Bouton Rechercher
             ->add('submit', SubmitType::class, [
-            //'label' => 'Exporter',
             ]);
     }
 

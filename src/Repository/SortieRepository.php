@@ -33,6 +33,7 @@ class SortieRepository extends ServiceEntityRepository
      * @param Rechercher $search
      * @param User $user
      * @return array
+     * @throws \Exception
      */
     public function search(int $page = 1, int $nbElementsByPage = 10, Rechercher $search, User $user): array{
 

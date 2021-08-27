@@ -21,7 +21,6 @@ class CSVLecteurController extends AbstractController
         $formFichier = $this->createForm('App\Form\AjoutFichierType');
         $formFichier->handleRequest($request);
 
-
             //Si le formulaire a été envoyé
             if($formFichier->isSubmitted() && $formFichier->isValid()){
 
@@ -49,6 +48,7 @@ class CSVLecteurController extends AbstractController
                             //Entité Campus
                             $campus = $entityManager->getRepository('App:Campus')->find($donnees[8]);
                             $user->setCampus($campus);
+                            //TODO vérif si l'utilisateur n'existe pas déjà
                             //Insertion dans file d'attente, ensuite dans BDD
                             $entityManager->persist($user);
                             $entityManager->flush();
