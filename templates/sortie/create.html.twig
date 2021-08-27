@@ -18,9 +18,9 @@
 
     <div class="mb-3">
         {{ form_label(formSortie.ville) }}
-        {#        <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" >#}
+        {# <a href="{{ path('lieu_afficher_ville', {'id': 'x'}) }}" class="villeChoisie" > #}
         {{ form_widget(formSortie.ville, {'attr': {'id': 'ville'}}) }}
-        {#        </a>#}
+        {# </a> #}
         {{ form_errors(formSortie.ville) }}
     </div>
 
@@ -89,10 +89,10 @@
     {{ form_end(formSortie) }}
 
     <div class="mb-3 d-flex justify-content-center">
-    <!-- Ajouter un lieu -->
-    <a href="{{ path('lieu_create') }}">
-        <button id="btnAjoutLieu" name='lieu' value='lieu' class='btn btn-info'>Créer un lieu</button>
-    </a>
+        <!-- Ajouter un lieu -->
+        <a href="{{ path('lieu_create') }}">
+            <button id="btnAjoutLieu" name='lieu' value='lieu' class='btn btn-info'>Créer un lieu</button>
+        </a>
     </div>
 
     <!-- Si on arrive par la route modifier-->
@@ -122,38 +122,38 @@
 
 {% block javascripts %}
 
-{#    Ajax pour afficher les infos du lieu sélectionné   #}
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script>
+    {# Ajax pour afficher les infos du lieu sélectionné #}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
 
-            function onChangeAfficherInfosLieu(event) {
-                event.preventDefault();
-                var idLieu = document.getElementById('sortie_lieu').value ; // on récupère l'id du lieu choisi
+        function onChangeAfficherInfosLieu(event) {
+            event.preventDefault();
+            var idLieu = document.getElementById('sortie_lieu').value; // on récupère l'id du lieu choisi
 
-                axios.get('/lieu/afficherInfos/'+idLieu).then(function (response) {
-                    console.log(response.data);
-                    const ul = document.getElementById('infosLieuSelect');
+            axios.get('/lieu/afficherInfos/' + idLieu).then(function (response) {
+                console.log(response.data);
+                const ul = document.getElementById('infosLieuSelect');
 
-                    //On affiche les lieux du lieu.
-                    var liNom = document.getElementById('nomLieu');
-                    liNom.textContent = 'Nom du lieu : ' + response.data.nom ;
-                    var liRue = document.getElementById('rueLieu');
-                    liRue.textContent = 'Rue : ' + response.data.rue ;
-                    var liLong = document.getElementById('longLieu');
-                    liLong.textContent = 'Longitude : ' + response.data.longitude ;
-                    var liLat = document.getElementById('latLieu');
-                    liLat.textContent = 'Latitude : ' + response.data.latitude ;
-                    ul.appendChild(liNom);
-                    ul.appendChild(liRue);
-                    ul.appendChild(liLong);
-                    ul.appendChild(liLat);
-                })
-            }
+                //On affiche les lieux du lieu.
+                var liNom = document.getElementById('nomLieu');
+                liNom.textContent = 'Nom du lieu : ' + response.data.nom;
+                var liRue = document.getElementById('rueLieu');
+                liRue.textContent = 'Rue : ' + response.data.rue;
+                var liLong = document.getElementById('longLieu');
+                liLong.textContent = 'Longitude : ' + response.data.longitude;
+                var liLat = document.getElementById('latLieu');
+                liLat.textContent = 'Latitude : ' + response.data.latitude;
+                ul.appendChild(liNom);
+                ul.appendChild(liRue);
+                ul.appendChild(liLong);
+                ul.appendChild(liLat);
+            })
+        }
 
-            document.querySelectorAll('.lieu').forEach(function (link) {
-                link.addEventListener('change', onChangeAfficherInfosLieu);
-            });
+        document.querySelectorAll('.lieu').forEach(function (link) {
+            link.addEventListener('change', onChangeAfficherInfosLieu);
+        });
 
-        </script>
+    </script>
 
 {% endblock javascripts %}

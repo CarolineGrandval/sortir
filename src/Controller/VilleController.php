@@ -60,7 +60,7 @@ class VilleController extends AbstractController
         if($request->attributes->get('_route') == 'ville_afficher'){
             //Récupération de toutes les villes enregistrées en base pour affichage - avec pagination
             $pagination = $paginator->paginate(
-                $queryBuilder = $entityManager->getRepository('App:Ville')->findAllWithPagination(),
+                $entityManager->getRepository('App:Ville')->findAllWithPagination(),
                 $request->query->getInt('page', 1), 6
             );
 

@@ -141,7 +141,6 @@ class FichierTelecharger
             while($donneesLignes = fgetcsv($ouvertureFichier, 1000, ",")){
                 array_push($donneesTableau, $donneesLignes);
             }
-
         }
         return $donneesTableau;
     }

@@ -1,10 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil - Sortons casqués{% endblock title %}
-{# {% block stylesheets %} #}
-{# <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" #}
-{# rel="stylesheet"/> #}
-{# {% endblock %} #}
 
 {% block body %}
 
@@ -169,7 +165,7 @@
 
         </div>
     </div>
-    </div>
+
 {% endblock body %}
 
 
@@ -201,7 +197,7 @@
                 //Actualiser l'icone dynamiquement (s'effectue au rechargement de la page).
                 if (icone.classList.contains('fa-calendar-plus')) {
                     icone.classList.replace('fa-calendar-plus', 'fa-calendar-minus');
-                }else {
+                } else {
                     icone.classList.replace('fa-calendar-minus', 'fa-calendar-plus');
                 }
             }).catch(function (error){
@@ -210,6 +206,7 @@
                 }
             })
         }
+
         //Ajout d'un écouteur d'événement sur le lien cliqué.
         document.querySelectorAll('a.inscrire').forEach(function (link) {
             link.addEventListener('click', onClickSinscrire);
